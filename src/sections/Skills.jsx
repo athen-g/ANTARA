@@ -7,7 +7,8 @@ import { useScrollReveal } from "../hooks/useScrollReveal";
 import { useLanguage } from "../context/LanguageContext";
 
 export function Skills() {
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
+  const skillsWatermark = language === 'ja' ? 'मार्ग' : '道';
   const containerRef = useRef(null);
   const watermarkRef = useRef(null);
 
@@ -67,8 +68,9 @@ export function Skills() {
       <div 
         ref={watermarkRef}
         className="absolute top-1/4 left-[35%] text-[26vw] select-none pointer-events-none z-10 kanji-watermark leading-none"
+        style={{ fontFamily: language === 'ja' ? "'Noto Serif Devanagari', serif" : 'inherit' }}
       >
-        道
+        {skillsWatermark}
       </div>
 
       <div className="relative max-w-7xl mx-auto z-20">

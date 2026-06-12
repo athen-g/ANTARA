@@ -4,7 +4,7 @@ import BrushStroke from "../components/BrushStroke";
 import { useLanguage } from "../context/LanguageContext";
 
 export function Process() {
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
   const containerRef = useRef(null);
   const pathRef = useRef(null);
   const [isMobile, setIsMobile] = useState(false);
@@ -156,40 +156,59 @@ export function Process() {
           {/* Torii Gates List */}
           {steps.map((step, idx) => {
             const stepTitle = stepTranslations[idx]?.title || "";
+            const isSanskritGates = language === 'ja';
+            const stepSyllable = isSanskritGates
+              ? (idx === 0 ? 'दृ' : idx === 1 ? 'रच' : idx === 2 ? 'सिध' : 'मुक')
+              : step.kanji;
+            
             return (
               <div 
                 key={step.id} 
                 className="torii-gate-wrapper flex flex-col items-center z-10 select-none group"
               >
-                {/* Torii SVG element */}
+                {/* Torii/Torana SVG element */}
                 <div className="relative w-[100px] h-[160px] flex items-center justify-center text-[var(--vermillion)] hover:scale-105 transition-transform duration-300">
-                  <svg 
-                    viewBox="0 0 100 160" 
-                    className="w-full h-full fill-none stroke-current" 
-                    strokeWidth="2.2"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    {/* Vertical Columns slanted slightly inwards */}
-                    <line x1="28" y1="28" x2="25" y2="160" />
-                    <line x1="72" y1="28" x2="75" y2="160" />
-                    
-                    {/* Straight lintel support beam (Nuki) */}
-                    <line x1="16" y1="62" x2="84" y2="62" />
-                    
-                    {/* Central lintel support block (Gakuzuka) */}
-                    <line x1="50" y1="36" x2="50" y2="62" strokeWidth="1.5" />
-                    
-                    {/* Top curved main beam (Kasagi) with detailed curvature */}
-                    <path 
-                      d="M 5,22 C 25,29 75,29 95,22 L 95,34 C 75,40 25,40 5,34 Z" 
-                      fill="currentColor" 
-                      stroke="none" 
-                    />
-                  </svg>
+                  {isSanskritGates ? (
+                    /* Sanskrit temple Torana arch */
+                    <svg 
+                      viewBox="0 0 100 160" 
+                      className="w-full h-full fill-none stroke-current" 
+                      strokeWidth="2.2"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <line x1="30" y1="52" x2="30" y2="160" />
+                      <line x1="70" y1="52" x2="70" y2="160" />
+                      <path d="M 15,52 C 30,30 70,30 85,52" fill="none" />
+                      <path d="M 30,72 C 40,62 60,62 70,72" fill="none" />
+                      <path d="M 50,15 L 44,35 L 56,35 Z" fill="currentColor" stroke="none" />
+                      <line x1="50" y1="15" x2="50" y2="35" />
+                    </svg>
+                  ) : (
+                    /* Japanese Torii gate */
+                    <svg 
+                      viewBox="0 0 100 160" 
+                      className="w-full h-full fill-none stroke-current" 
+                      strokeWidth="2.2"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <line x1="28" y1="28" x2="25" y2="160" />
+                      <line x1="72" y1="28" x2="75" y2="160" />
+                      <line x1="16" y1="62" x2="84" y2="62" />
+                      <line x1="50" y1="36" x2="50" y2="62" strokeWidth="1.5" />
+                      <path 
+                        d="M 5,22 C 25,29 75,29 95,22 L 95,34 C 75,40 25,40 5,34 Z" 
+                        fill="currentColor" 
+                        stroke="none" 
+                      />
+                    </svg>
+                  )}
 
-                  {/* Floating Kanji watermark inside the Gate */}
-                  <span className="absolute top-[68px] font-display font-black text-xl text-[var(--text-3)] group-hover:text-[var(--gold)] transition-colors duration-300">
-                    {step.kanji}
+                  {/* Floating Kanji/Devanagari watermark inside the Gate */}
+                  <span 
+                    className="absolute top-[68px] font-black text-xl text-[var(--text-3)] group-hover:text-[var(--gold)] transition-colors duration-300"
+                    style={{ fontFamily: isSanskritGates ? "'Noto Serif Devanagari', serif" : 'inherit' }}
+                  >
+                    {stepSyllable}
                   </span>
 
                   {/* Micro Red Thread intersection */}

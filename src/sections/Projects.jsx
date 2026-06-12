@@ -6,7 +6,8 @@ import BrushStroke from "../components/BrushStroke";
 import { useLanguage } from "../context/LanguageContext";
 
 export function Projects() {
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
+  const projectsWatermark = language === 'ja' ? 'शिल्प' : '匠';
   const triggerRef = useRef(null);
   const scrollRef = useRef(null);
   const watermarkRef = useRef(null);
@@ -105,8 +106,9 @@ export function Projects() {
       <div 
         ref={watermarkRef}
         className="absolute top-1/3 left-[40%] text-[26vw] select-none pointer-events-none z-10 kanji-watermark leading-none"
+        style={{ fontFamily: language === 'ja' ? "'Noto Serif Devanagari', serif" : 'inherit' }}
       >
-        匠
+        {projectsWatermark}
       </div>
 
       {isMobile || reducedMotion ? (

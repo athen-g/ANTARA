@@ -2,6 +2,19 @@
 
 All notable changes made to the **ANTARA** portfolio during this session:
 
+## [1.3.0] - 2026-06-12
+
+### Added
+- **Marathi Translation Support**: Replaced Sanskrit (`sa`) language support with Marathi (`mr`) translations.
+- **Dynamic Name Translation**: Localized the co-founder name on the Hero section to render "Atharva Ghule" (English), "अथर्व घुले" (Marathi), and "アタルヴァ グーレ" (Japanese) depending on the selected language.
+- **Visual Overlap & Layout Fixes**: 
+  - Adjusted Devanagari and Katakana name line-height, letter-spacing, and font-size dynamically to avoid clipping/overlapping on all screens.
+  - Animate Devanagari/Katakana names as single blocks to preserve Unicode conjunct structures and ensure correct rendering on language swap.
+  - Locked tags on work cards to remain in English only.
+- **Dynamic Cross-Cultural Design Swapping**:
+  - **Japanese Mode (`ja`)**: Automatically shifts Japanese watermarks (`創`, `間`, `匠`, `縁`), Torii gate pathways, and Kanji steps to Sanskrit counterparts (Devanagari watermarks `सृ`, `म`, `शिल्प`, `योग`, temple archways, and Sanskrit root characters `दृ`, `रच`, `सिध`, `मुक`).
+  - **Marathi Mode (`mr`)**: Automatically shifts Sanskrit/Devanagari watermarks and dividers (`ॐ` icons, lotus circles, rotating yantra mandalas, Sanskrit quote) to Japanese Zen counterparts (Katakana/Kanji background particles, `禅` / `和` icons, Japanese Kamon flower watermarks, and translation quote `創造 · 技巧 · 調和`).
+
 ## [1.2.0] - 2026-06-12
 
 ### Added

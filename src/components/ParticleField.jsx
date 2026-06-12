@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import vertexShader from "../shaders/particles.glsl?raw";
+import { useLanguage } from "../context/LanguageContext";
 
 // Fragment shader to sample from the character texture atlas and apply theme-based coloring
 const fragmentShader = `
@@ -31,6 +32,7 @@ const fragmentShader = `
 `;
 
 export function ParticleField() {
+  const { language } = useLanguage();
   const mountRef = useRef(null);
   const [reducedMotion, setReducedMotion] = useState(false);
 
@@ -65,8 +67,13 @@ export function ParticleField() {
     ctx.fillStyle = "rgba(0,0,0,0)";
     ctx.fillRect(0, 0, 256, 256);
 
-    const chars = ["अ", "ब", "क", "ड", "ग", "ह", "ज", "ल", "म", "न", "प", "र", "स", "त", "ॐ", "अ"];
-    ctx.font = "normal 44px 'Noto Serif Devanagari', serif";
+    const isJapaneseParticles = language === 'mr';
+    const chars = isJapaneseParticles
+      ? ["ア", "イ", "ウ", "エ", "オ", "カ", "キ", "ク", "ケ", "コ", "サ", "シ", "ス", "セ", "ソ", "和"]
+      : ["अ", "ब", "क", "ड", "ग", "ह", "ज", "ल", "म", "न", "प", "र", "स", "त", "ॐ", "अ"];
+    ctx.font = isJapaneseParticles
+      ? "normal 44px sans-serif"
+      : "normal 44px 'Noto Serif Devanagari', serif";
     ctx.fillStyle = "#ffffff"; // Draw in pure white to allow color tinting in shader
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
@@ -235,7 +242,7 @@ export function ParticleField() {
       material.dispose();
       texture.dispose();
     };
-  }, [reducedMotion]);
+  }, [reducedMotion, language]);
 
   if (reducedMotion) return null;
 

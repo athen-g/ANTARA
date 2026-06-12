@@ -51,9 +51,13 @@ function CountUp({ target, suffix = '', isVisible }) {
 }
 
 export default function About() {
-  const { t } = useLanguage()
+  const { language, t } = useLanguage()
   const { ref: sectionRef, isVisible } = useScrollReveal({ threshold: 0.1 })
   const { ref: pillsRef, isVisible: pillsVisible } = useScrollReveal({ threshold: 0.2 })
+
+  const aboutKanjiWatermark = language === 'ja' ? 'म' : '間'
+  const aboutOmSymbol = language === 'mr' ? '禅' : 'ॐ'
+  const aboutQuote = language === 'mr' ? '創造 · 技巧 · 調和' : t('about.sanskritQuote')
 
   return (
     <section
@@ -88,7 +92,7 @@ export default function About() {
           top: '10%',
           left: '50%',
           transform: 'translateX(-50%)',
-          fontFamily: 'Syne, sans-serif',
+          fontFamily: language === 'ja' ? "'Noto Serif Devanagari', serif" : 'Syne, sans-serif',
           fontWeight: 900,
           fontSize: 'clamp(140px, 22vw, 300px)',
           lineHeight: 1,
@@ -100,7 +104,7 @@ export default function About() {
           animation: 'pulseSlow 4s ease-in-out infinite',
         }}
       >
-        間
+        {aboutKanjiWatermark}
       </div>
 
       <div
@@ -131,7 +135,7 @@ export default function About() {
               <div
                 aria-hidden="true"
                 style={{
-                  fontFamily: "'Noto Serif Devanagari', serif",
+                  fontFamily: language === 'mr' ? 'sans-serif' : "'Noto Serif Devanagari', serif",
                   fontWeight: 400,
                   fontSize: 'clamp(100px, 16vw, 200px)',
                   lineHeight: 1,
@@ -140,7 +144,7 @@ export default function About() {
                   userSelect: 'none',
                 }}
               >
-                ॐ
+                {aboutOmSymbol}
               </div>
 
               <BrushStroke variant="horizontal" isVisible={isVisible} delay={400} opacity={0.2} />
@@ -261,14 +265,14 @@ export default function About() {
           <div
             aria-hidden="true"
             style={{
-              fontFamily: "'Noto Serif Devanagari', serif",
+              fontFamily: language === 'mr' ? 'sans-serif' : "'Noto Serif Devanagari', serif",
               fontSize: '13px',
               color: 'var(--gold)',
               opacity: 0.45,
               letterSpacing: '0.1em',
             }}
           >
-            {t('about.sanskritQuote')}
+            {aboutQuote}
           </div>
         </div>
       </div>

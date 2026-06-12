@@ -161,7 +161,7 @@ export default function Navbar() {
         {/* Language selector squares */}
         <div style={{ display: 'flex', gap: '6px', marginRight: '4px' }}>
           {[
-            { lang: 'sa', label: 'अ' },
+            { lang: 'mr', label: 'अ' },
             { lang: 'en', label: 'a' },
             { lang: 'ja', label: 'ア' },
           ].map(({ lang: l, label }) => (
@@ -175,7 +175,7 @@ export default function Navbar() {
                 borderRadius: '2px',
                 background: language === l ? 'rgba(232, 160, 32, 0.08)' : 'transparent',
                 color: language === l ? 'var(--gold)' : 'var(--text-2)',
-                fontFamily: l === 'sa' ? "'Noto Serif Devanagari', serif" : (l === 'ja' ? 'sans-serif' : 'Inter, sans-serif'),
+                fontFamily: l === 'mr' ? "'Noto Serif Devanagari', serif" : (l === 'ja' ? 'sans-serif' : 'Inter, sans-serif'),
                 fontSize: '11px',
                 fontWeight: language === l ? '800' : '500',
                 display: 'flex',
@@ -196,7 +196,7 @@ export default function Navbar() {
                 }
               }}
               data-cursor="hover"
-              aria-label={`Switch language to ${l === 'sa' ? 'Sanskrit' : (l === 'ja' ? 'Japanese' : 'English')}`}
+              aria-label={`Switch language to ${l === 'mr' ? 'Marathi' : (l === 'ja' ? 'Japanese' : 'English')}`}
             >
               {label}
             </button>

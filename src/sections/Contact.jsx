@@ -114,6 +114,9 @@ function ToriiSocialBtn({ social }) {
 export default function Contact() {
   const { language, t } = useLanguage()
   const { ref: sectionRef, isVisible } = useScrollReveal({ threshold: 0.08 })
+  
+  const contactWatermark = language === 'ja' ? 'योग' : '縁'
+  const submittedIcon = language === 'mr' ? '禅' : 'ॐ'
   const [formState, setFormState] = useState({ name: '', email: '', message: '' })
   const [submitted, setSubmitted] = useState(false)
 
@@ -161,7 +164,7 @@ export default function Contact() {
           top: '8%',
           left: '50%',
           transform: 'translateX(-50%)',
-          fontFamily: 'Syne, sans-serif',
+          fontFamily: language === 'ja' ? "'Noto Serif Devanagari', serif" : 'Syne, sans-serif',
           fontWeight: 900,
           fontSize: 'clamp(120px, 22vw, 280px)',
           lineHeight: 1,
@@ -173,7 +176,7 @@ export default function Contact() {
           animation: 'pulseSlow 4s ease-in-out infinite',
         }}
       >
-        縁
+        {contactWatermark}
       </div>
 
       <div
@@ -331,14 +334,14 @@ export default function Contact() {
                 <div
                   aria-hidden="true"
                   style={{
-                    fontFamily: "'Noto Serif Devanagari', serif",
+                    fontFamily: language === 'mr' ? 'sans-serif' : "'Noto Serif Devanagari', serif",
                     fontSize: '48px',
                     color: 'var(--gold)',
                     opacity: 0.6,
                     marginBottom: '16px',
                   }}
                 >
-                  ॐ
+                  {submittedIcon}
                 </div>
                 <p
                   style={{

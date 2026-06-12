@@ -18,7 +18,7 @@ export default function ProjectCard({ project, index }) {
   const [hovered, setHovered] = useState(false)
   const { id, title, url, tags, description, accent } = project
 
-  const activeTags = (tags && typeof tags === 'object' && !Array.isArray(tags)) ? (tags[language] || tags.en) : (tags || [])
+  const activeTags = tags || []
   const activeDescription = (description && typeof description === 'object') ? (description[language] || description.en) : (description || '')
 
   return (

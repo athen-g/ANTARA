@@ -191,8 +191,18 @@ export default function Hero({ loaderDone, prefersReducedMotion }) {
 
   const [roleIndex, setRoleIndex]  = useState(0)
   const [roleVisible, setRoleVisible] = useState(true)
+  const [revealDone, setRevealDone] = useState(false)
 
   const mouse = useMousePosition()
+
+  const firstName = t('hero.firstName') || 'ATHARVA'
+  const lastName = t('hero.lastName') || 'GHULE'
+  const isEnglish = language === 'en'
+  const nameFont = language === 'mr' ? "'Noto Serif Devanagari', serif" : (language === 'ja' ? 'sans-serif' : 'Syne, sans-serif')
+  const nameSize = language === 'en' ? 'clamp(72px, 13vw, 175px)' : 'clamp(48px, 9vw, 110px)'
+  const nameLineHeight = language === 'mr' ? 1.35 : (language === 'ja' ? 1.15 : 0.85)
+  const nameLetterSpacing = language === 'en' ? '-0.04em' : 'normal'
+  const heroWatermark = language === 'ja' ? 'सृ' : '創'
 
   // WebGL noise background
   useNoiseBackground(canvasRef)
@@ -281,6 +291,8 @@ export default function Hero({ loaderDone, prefersReducedMotion }) {
         '-=0.3'
       )
     }
+
+    tl.call(() => setRevealDone(true))
   }, [loaderDone, prefersReducedMotion])
 
   // Mouse parallax on kanji watermark
@@ -334,7 +346,7 @@ export default function Hero({ loaderDone, prefersReducedMotion }) {
           position: 'absolute',
           top: '5%',
           right: 'clamp(16px, 5vw, 80px)',
-          fontFamily: 'Syne, sans-serif',
+          fontFamily: language === 'ja' ? "'Noto Serif Devanagari', serif" : 'Syne, sans-serif',
           fontWeight: 900,
           fontSize: 'clamp(140px, 25vw, 320px)',
           lineHeight: 1,
@@ -346,7 +358,7 @@ export default function Hero({ loaderDone, prefersReducedMotion }) {
           transition: 'transform 0.6s cubic-bezier(0.16,1,0.3,1)',
         }}
       >
-        創
+        {heroWatermark}
       </div>
 
       {/* Main content */}
@@ -369,64 +381,103 @@ export default function Hero({ loaderDone, prefersReducedMotion }) {
         <div
           style={{
             marginBottom: '24px',
-            lineHeight: 0.85,
+            lineHeight: nameLineHeight,
           }}
         >
           {/* ATHARVA */}
           <div
             ref={atharvaRef}
-            aria-label="Atharva"
+            aria-label={firstName}
             style={{ display: 'flex', gap: '0.01em', overflow: 'hidden' }}
           >
-            {'ATHARVA'.split('').map((char, i) => (
+            {isEnglish ? (
+              firstName.split('').map((char, i) => (
+                <span
+                  key={i}
+                  className="hero-letter"
+                  aria-hidden="true"
+                  style={{
+                    fontFamily: nameFont,
+                    fontWeight: 900,
+                    fontSize: nameSize,
+                    lineHeight: nameLineHeight,
+                    letterSpacing: nameLetterSpacing,
+                    color: 'var(--text-1)',
+                    display: 'inline-block',
+                    clipPath: (revealDone || prefersReducedMotion) ? 'none' : 'polygon(0% 110%, 100% 110%, 100% 110%, 0% 110%)',
+                    willChange: 'clip-path, transform',
+                  }}
+                >
+                  {char}
+                </span>
+              ))
+            ) : (
               <span
-                key={i}
                 className="hero-letter"
-                aria-hidden="true"
                 style={{
-                  fontFamily: 'Syne, sans-serif',
+                  fontFamily: nameFont,
                   fontWeight: 900,
-                  fontSize: 'clamp(72px, 13vw, 175px)',
-                  lineHeight: 0.85,
-                  letterSpacing: '-0.04em',
+                  fontSize: nameSize,
+                  lineHeight: nameLineHeight,
+                  letterSpacing: nameLetterSpacing,
                   color: 'var(--text-1)',
                   display: 'inline-block',
-                  clipPath: 'polygon(0% 110%, 100% 110%, 100% 110%, 0% 110%)',
+                  clipPath: (revealDone || prefersReducedMotion) ? 'none' : 'polygon(0% 110%, 100% 110%, 100% 110%, 0% 110%)',
                   willChange: 'clip-path, transform',
                 }}
               >
-                {char}
+                {firstName}
               </span>
-            ))}
+            )}
           </div>
 
           {/* GHULE — outlined */}
           <div
             ref={ghuleRef}
-            aria-label="Ghule"
+            aria-label={lastName}
             style={{ display: 'flex', gap: '0.01em', overflow: 'hidden' }}
           >
-            {'GHULE'.split('').map((char, i) => (
+            {isEnglish ? (
+              lastName.split('').map((char, i) => (
+                <span
+                  key={i}
+                  className="hero-letter"
+                  aria-hidden="true"
+                  style={{
+                    fontFamily: nameFont,
+                    fontWeight: 900,
+                    fontSize: nameSize,
+                    lineHeight: nameLineHeight,
+                    letterSpacing: nameLetterSpacing,
+                    WebkitTextStroke: '1px var(--gold)',
+                    color: 'transparent',
+                    display: 'inline-block',
+                    clipPath: (revealDone || prefersReducedMotion) ? 'none' : 'polygon(0% 110%, 100% 110%, 100% 110%, 0% 110%)',
+                    willChange: 'clip-path, transform',
+                  }}
+                >
+                  {char}
+                </span>
+              ))
+            ) : (
               <span
-                key={i}
                 className="hero-letter"
-                aria-hidden="true"
                 style={{
-                  fontFamily: 'Syne, sans-serif',
+                  fontFamily: nameFont,
                   fontWeight: 900,
-                  fontSize: 'clamp(72px, 13vw, 175px)',
-                  lineHeight: 0.85,
-                  letterSpacing: '-0.04em',
+                  fontSize: nameSize,
+                  lineHeight: nameLineHeight,
+                  letterSpacing: nameLetterSpacing,
                   WebkitTextStroke: '1px var(--gold)',
                   color: 'transparent',
                   display: 'inline-block',
-                  clipPath: 'polygon(0% 110%, 100% 110%, 100% 110%, 0% 110%)',
+                  clipPath: (revealDone || prefersReducedMotion) ? 'none' : 'polygon(0% 110%, 100% 110%, 100% 110%, 0% 110%)',
                   willChange: 'clip-path, transform',
                 }}
               >
-                {char}
+                {lastName}
               </span>
-            ))}
+            )}
           </div>
         </div>
 

@@ -6,6 +6,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 import React from 'react'
+import { useLanguage } from '../context/LanguageContext'
 
 /**
  * @param {'A'|'B'|'C'} [variant='A']
@@ -25,6 +26,8 @@ export default function SanskriticDivider({
   className = '',
   style = {},
 }) {
+  const { language } = useLanguage()
+  
   const svgProps = {
     width: size,
     height: size,
@@ -46,6 +49,33 @@ export default function SanskriticDivider({
   const cy = 100
 
   if (variant === 'A') {
+    if (language === 'mr') {
+      // Japanese Sakura Kamon/wheel counterpart for Marathi mode
+      return (
+        <svg {...svgProps}>
+          <circle cx={cx} cy={cy} r={90} stroke={stroke} strokeWidth={sw} />
+          <circle cx={cx} cy={cy} r={80} stroke={stroke} strokeWidth={sw} opacity="0.5" />
+          
+          {/* 5 sakura-like petals */}
+          {Array.from({ length: 5 }).map((_, i) => {
+            const angle = (i / 5) * 360
+            return (
+              <path
+                key={i}
+                d={`M ${cx},${cy} C ${cx - 20},${cy - 45} ${cx - 15},${cy - 75} ${cx},${cy - 75} C ${cx + 15},${cy - 75} ${cx + 20},${cy - 45} ${cx},${cy}`}
+                stroke={stroke}
+                strokeWidth={sw}
+                fill="none"
+                transform={`rotate(${angle}, ${cx}, ${cy})`}
+              />
+            )
+          })}
+          {/* Inner circle */}
+          <circle cx={cx} cy={cy} r={10} stroke={stroke} strokeWidth={sw} />
+        </svg>
+      )
+    }
+
     // Simplified 9-triangle yantra: concentric circles + interlocked triangles
     return (
       <svg {...svgProps}>
@@ -68,7 +98,6 @@ export default function SanskriticDivider({
   }
 
   if (variant === 'B') {
-    // OM / seed syllable in lotus petal arrangement (8 petals)
     const petalCount = 8
     const petalR = 28
     const outerR = 70
@@ -100,24 +129,42 @@ export default function SanskriticDivider({
         {/* Inner circle */}
         <circle cx={cx} cy={cy} r={18} stroke={stroke} strokeWidth={sw} />
 
-        {/* OM glyph — rendered as text */}
+        {/* OM glyph or Zen Kanji depending on language */}
         <text
           x={cx}
           y={cy + 7}
           textAnchor="middle"
-          fontFamily="'Noto Serif Devanagari', serif"
-          fontSize="22"
+          fontFamily={language === 'mr' ? 'sans-serif' : "'Noto Serif Devanagari', serif"}
+          fontSize={language === 'mr' ? '24' : '22'}
           fill={stroke}
           opacity="0.8"
         >
-          ॐ
+          {language === 'mr' ? '禅' : 'ॐ'}
         </text>
       </svg>
     )
   }
 
   if (variant === 'C') {
-    // Outermost square of a traditional yantra with four T-shaped "gates"
+    if (language === 'mr') {
+      // Torii gate crest counterpart for Marathi mode
+      return (
+        <svg {...svgProps}>
+          <circle cx={cx} cy={cy} r={85} stroke={stroke} strokeWidth={sw} />
+          <circle cx={cx} cy={cy} r={75} stroke={stroke} strokeWidth={sw} opacity="0.5" />
+          
+          {/* Torii pillars */}
+          <line x1="72" y1="65" x2="72" y2="140" stroke={stroke} strokeWidth="1.5" />
+          <line x1="128" y1="65" x2="128" y2="140" stroke={stroke} strokeWidth="1.5" />
+          {/* Crossbeams */}
+          <line x1="62" y1="85" x2="138" y2="85" stroke={stroke} strokeWidth="1.2" />
+          <path d="M 52,65 Q 100,53 148,65" stroke={stroke} strokeWidth="2.5" fill="none" />
+          {/* Center bindu */}
+          <circle cx={cx} cy={cy} r={2.5} fill={stroke} />
+        </svg>
+      )
+    }
+
     const sq = 80  // half side of square
     const gw = 16  // gate width
     const gd = 16  // gate depth
