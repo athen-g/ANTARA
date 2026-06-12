@@ -23,7 +23,7 @@ function useNoiseBackground(canvasRef) {
     const canvas = canvasRef.current
     if (!canvas) return
 
-    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: false })
+    const renderer = new THREE.WebGLRenderer({ canvas, alpha: false, antialias: false })
     renderer.setPixelRatio(1) // Low res — it's pure texture
     renderer.setSize(canvas.offsetWidth || window.innerWidth, canvas.offsetHeight || window.innerHeight)
 
@@ -117,29 +117,19 @@ function useNoiseBackground(canvasRef) {
           float t=uTime*0.00008;
           float n1=snoise(vec3(vUv*2.5,t));
           float n2=snoise(vec3(vUv*5.,t*1.3+17.));
-          float n=(n1*.6+n2*.4);
+          float n=(n1*.6+n2*.4)*0.014;
           
           vec3 col;
-          float alpha;
           if (uIsLight > 0.5) {
-            if (n > 0.0) {
-              col = vec3(1.0, 1.0, 1.0);
-              alpha = n * 0.025;
-            } else {
-              col = uNoiseColor;
-              alpha = -n * 0.22;
-            }
+            vec3 warm = vec3(0.02, 0.01, -0.01) * n;
+            col = uBaseColor + vec3(n * 0.4) + warm;
+            col = clamp(col, uBaseColor - 0.015, uBaseColor + 0.015);
           } else {
-            if (n > 0.0) {
-              col = vec3(1.0, 0.75, 0.3);
-              alpha = n * 0.045;
-            } else {
-              col = vec3(0.0, 0.0, 0.0);
-              alpha = -n * 0.035;
-            }
+            vec3 warm = uNoiseColor * max(n, 0.) * 3.0;
+            col = clamp(uBaseColor + n + warm, vec3(0.02), vec3(0.075));
           }
           
-          gl_FragColor = vec4(col, alpha);
+          gl_FragColor = vec4(col, 1.0);
         }
       `,
     })

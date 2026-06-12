@@ -17,15 +17,22 @@ export default function Loader({ onComplete }) {
   useEffect(() => {
     // Phase timeline
     // 0–2000ms: mandala assembles
-    // 2000–2600ms: pulse
-    // 2600–3400ms: exit slide up
-    // 3400ms: call onComplete
+    // 2000–2600ms: pulse (scale up)
+    // 2600–3400ms: settled (scale down)
+    // 3400–4200ms: exit slide up
+    // 4250ms: call onComplete
 
     const t1 = setTimeout(() => setPhase('pulsing'),  2000)
-    const t2 = setTimeout(() => setPhase('exiting'),  2600)
-    const t3 = setTimeout(() => onCompleteRef.current?.(), 3900)
+    const t2 = setTimeout(() => setPhase('settled'),  2600)
+    const t3 = setTimeout(() => setPhase('exiting'),  3400)
+    const t4 = setTimeout(() => onCompleteRef.current?.(), 4250)
 
-    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3) }
+    return () => {
+      clearTimeout(t1)
+      clearTimeout(t2)
+      clearTimeout(t3)
+      clearTimeout(t4)
+    }
   }, [])
 
   return (
@@ -54,8 +61,8 @@ export default function Loader({ onComplete }) {
       {/* Sri Yantra SVG */}
       <div
         style={{
-          transform: phase === 'pulsing' ? 'scale(1.02)' : 'scale(1)',
-          transition: 'transform 0.6s cubic-bezier(0.16,1,0.3,1)',
+          transform: phase === 'pulsing' ? 'scale(1.03)' : 'scale(1)',
+          transition: 'transform 0.8s cubic-bezier(0.25, 1, 0.5, 1)',
           willChange: 'transform',
         }}
       >
@@ -136,7 +143,7 @@ function SriYantraSVG() {
   ]
 
   const totalElements = rings.length + triangles.length
-  const delayPerElement = 120 // slightly faster stagger for smoother feel
+  const delayPerElement = 80 // slightly faster stagger for smoother feel
 
   return (
     <svg
@@ -162,7 +169,7 @@ function SriYantraSVG() {
             style={{
               strokeDasharray: circ,
               strokeDashoffset: drawn ? 0 : circ,
-              transition: `stroke-dashoffset 1.2s cubic-bezier(0.25, 1, 0.5, 1) ${i * delayPerElement}ms`,
+              transition: `stroke-dashoffset 1.0s cubic-bezier(0.25, 1, 0.5, 1) ${i * delayPerElement}ms`,
             }}
           />
         )
@@ -181,7 +188,7 @@ function SriYantraSVG() {
             style={{
               strokeDasharray: pathLen,
               strokeDashoffset: drawn ? 0 : pathLen,
-              transition: `stroke-dashoffset 1.0s cubic-bezier(0.25, 1, 0.5, 1) ${(rings.length + i) * delayPerElement}ms`,
+              transition: `stroke-dashoffset 0.8s cubic-bezier(0.25, 1, 0.5, 1) ${(rings.length + i) * delayPerElement}ms`,
             }}
           />
         )
@@ -195,7 +202,7 @@ function SriYantraSVG() {
         fill="var(--gold)"
         style={{
           opacity: drawn ? 1 : 0,
-          transition: 'opacity 0.6s ease 1.6s',
+          transition: 'opacity 0.5s ease 1.2s',
           willChange: 'opacity',
         }}
       />
@@ -211,7 +218,7 @@ function SriYantraSVG() {
         opacity="0.5"
         style={{
           opacity: drawn ? 0.5 : 0,
-          transition: 'opacity 0.8s ease 1.7s',
+          transition: 'opacity 0.6s ease 1.3s',
           willChange: 'opacity',
         }}
       >
