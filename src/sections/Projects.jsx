@@ -1,0 +1,172 @@
+import React, { useEffect, useRef, useState } from "react";
+import gsap from "gsap";
+import { projects } from "../data/projects";
+import { ProjectCard } from "../components/ProjectCard";
+import { BrushStroke } from "../components/BrushStroke";
+
+export function Projects() {
+  const triggerRef = useRef(null);
+  const scrollRef = useRef(null);
+  const watermarkRef = useRef(null);
+  const [isMobile, setIsMobile] = useState(false);
+  const [reducedMotion, setReducedMotion] = useState(false);
+
+  useEffect(() => {
+    const checkViewport = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    const checkMotion = () => {
+      setReducedMotion(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+    };
+
+    checkViewport();
+    checkMotion();
+
+    window.addEventListener("resize", checkViewport);
+    return () => window.removeEventListener("resize", checkViewport);
+  }, []);
+
+  // GSAP Horizontal Scroll Pinning for Desktop
+  useEffect(() => {
+    if (isMobile || reducedMotion) return;
+
+    const scrollEl = scrollRef.current;
+    const triggerEl = triggerRef.current;
+    if (!scrollEl || !triggerEl) return;
+
+    // Calculate total horizontal movement width (scrollWidth - viewportWidth)
+    const getScrollAmount = () => {
+      return scrollEl.scrollWidth - window.innerWidth;
+    };
+
+    let scrollTween = gsap.fromTo(
+      scrollEl,
+      { x: 0 },
+      {
+        x: () => -getScrollAmount(),
+        ease: "none",
+        scrollTrigger: {
+          trigger: triggerEl,
+          pin: true,
+          scrub: 0.8,
+          start: "top top",
+          end: () => `+=${getScrollAmount()}`,
+          invalidateOnRefresh: true,
+          // Sync rendering refreshes
+          onRefresh: () => {
+            gsap.set(scrollEl, { x: gsap.getProperty(scrollEl, "x") });
+          }
+        }
+      }
+    );
+
+    return () => {
+      if (scrollTween) {
+        scrollTween.kill();
+        if (scrollTween.scrollTrigger) {
+          scrollTween.scrollTrigger.kill();
+        }
+      }
+    };
+  }, [isMobile, reducedMotion]);
+
+  // Soft mouse parallax for the 匠 (takumi) watermark
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      const xVal = (e.clientX / window.innerWidth - 0.5) * 35;
+      const yVal = (e.clientY / window.innerHeight - 0.5) * 35;
+
+      if (watermarkRef.current) {
+        gsap.to(watermarkRef.current, {
+          x: xVal * 0.8,
+          y: yVal * 0.8,
+          duration: 1.6,
+          ease: "power2.out"
+        });
+      }
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
+
+  return (
+    <div 
+      ref={triggerRef} 
+      id="projects" 
+      className={`relative w-full overflow-hidden border-b border-[var(--border)]
+        ${isMobile || reducedMotion ? "py-24 px-6" : "h-screen bg-bg"}
+      `}
+    >
+      {/* 匠 Kanji Watermark */}
+      <div 
+        ref={watermarkRef}
+        className="absolute top-1/3 left-[40%] text-[26vw] select-none pointer-events-none z-10 kanji-watermark leading-none"
+      >
+        匠
+      </div>
+
+      {isMobile || reducedMotion ? (
+        // MOBILE / REDUCED MOTION LAYOUT: Stacked project cards
+        <div className="max-w-7xl mx-auto relative z-20">
+          <div className="flex flex-col items-start mb-12">
+            <span className="font-display font-black text-[10px] tracking-[0.25em] text-[var(--gold)] uppercase mb-2">
+              TAKUMI ━ Craftsmanship / 匠
+            </span>
+            <h2 className="font-display font-black text-4xl md:text-5xl text-[var(--text-1)]">
+              Selected Work.
+            </h2>
+            <span className="font-ui text-xs text-[var(--text-3)] mt-1">選ばれた作品</span>
+            <BrushStroke variant="horizontal" className="w-48 mt-4 opacity-30" />
+          </div>
+
+          <div className="flex flex-col gap-10 w-full mt-8">
+            {projects.map((project) => (
+              <ProjectCard key={project.id} project={project} />
+            ))}
+          </div>
+        </div>
+      ) : (
+        // DESKTOP HORIZONTAL EMAKIMONO SCROLL LAYOUT
+        <div className="w-full h-full flex items-center relative z-20">
+          
+          {/* Scroll wrapper translated left */}
+          <div 
+            ref={scrollRef} 
+            className="flex items-center gap-10 px-24 h-[75vh] will-change-transform"
+            style={{ display: "flex", flexFlow: "row nowrap" }}
+          >
+            {/* Title intro card inside the horizontal strip */}
+            <div className="w-[30vw] flex-shrink-0 flex flex-col justify-center items-start pr-12 select-none">
+              <span className="font-display font-black text-[10px] tracking-[0.25em] text-[var(--gold)] uppercase mb-2">
+                TAKUMI ━ Craftsmanship / 匠
+              </span>
+              <h2 className="font-display font-black text-5xl xl:text-7xl text-[var(--text-1)] leading-none">
+                Selected<br />Work.
+              </h2>
+              <span className="font-ui text-sm text-[var(--text-3)] tracking-widest uppercase mt-3 pl-1">
+                選ばれた作品
+              </span>
+              <BrushStroke variant="horizontal" className="w-full mt-6 opacity-25" />
+              
+              <div className="mt-8 text-xs font-ui text-[var(--text-3)] tracking-widest flex items-center gap-2">
+                <span>SCROLL DOWN</span>
+                <span className="animate-pulse">━▶</span>
+              </div>
+            </div>
+
+            {/* List of projects */}
+            {projects.map((project) => (
+              <ProjectCard key={project.id} project={project} />
+            ))}
+
+            {/* Empty space card to close the scroll emakimono neatly */}
+            <div className="w-[12vw] flex-shrink-0" />
+          </div>
+
+        </div>
+      )}
+    </div>
+  );
+}

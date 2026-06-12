@@ -1,0 +1,171 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* DESIGN SYSTEM SYSTEM VARIABLES */
+:root {
+  --bg: #080808;
+  --bg-surface: #0F0F0D;
+  --bg-card: #161612;
+  --bg-raised: #1C1C17;
+  --gold: #E8A020;
+  --gold-dim: #A06C10;
+  --vermillion: #C1392B;
+  --teal: #2FC4A0;
+  --teal-dim: #1A7A64;
+  --text-1: #F2EBD9;
+  --text-2: #8A8070;
+  --text-3: #4A453D;
+  --border: rgba(242, 235, 217, 0.06);
+  --border-gold: rgba(232, 160, 32, 0.2);
+  color-scheme: dark;
+}
+
+[data-theme="light"] {
+  --bg: #F5F0E8;
+  --bg-surface: #EDE8DF;
+  --bg-card: #FFFFFF;
+  --bg-raised: #F9F6F0;
+  --gold: #9A5C08;
+  --gold-dim: #C87D20;
+  --vermillion: #991F14;
+  --teal: #0F6E56;
+  --teal-dim: #1A9E7A;
+  --text-1: #1A1610;
+  --text-2: #6A5C48;
+  --text-3: #9A8C78;
+  --border: rgba(26, 22, 16, 0.08);
+  --border-gold: rgba(154, 92, 8, 0.2);
+  color-scheme: light;
+}
+
+/* GLOBAL RESET & STYLES */
+html {
+  scroll-behavior: auto; /* Managed by Lenis */
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text-2);
+  font-family: 'Inter', sans-serif;
+  transition: background-color 0.4s ease, color 0.4s ease;
+  overflow-x: hidden;
+}
+
+/* CUSTOM SELECTION & SCROLLBAR */
+::selection {
+  background-color: var(--gold-dim);
+  color: var(--text-1);
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--gold-dim);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gold);
+}
+
+/* FOCUS ACCESSIBILITY STYLE */
+*:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+/* SHOJI GRID OVERLAY */
+.shoji-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: 
+    linear-gradient(to right, var(--border-gold) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--border-gold) 1px, transparent 1px);
+  background-size: 64px 64px;
+  opacity: 0.15;
+  z-index: 1;
+}
+
+/* TEXT STROKE (GHULE Outlines) */
+.text-stroke-gold {
+  -webkit-text-stroke: 1px var(--gold);
+  color: transparent;
+}
+
+/* KANJI WATERMARKS */
+.kanji-watermark {
+  font-family: 'Syne', sans-serif;
+  font-weight: 900;
+  color: var(--text-1);
+  opacity: 0.035;
+  user-select: none;
+  pointer-events: none;
+  line-height: 1;
+  transition: opacity 0.5s ease;
+}
+
+/* GRAIN NOISE EFFECT */
+.grain-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.03;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+[data-theme="light"] .grain-overlay {
+  opacity: 0.045;
+}
+
+/* RED THREAD OF FATE ANIMATION */
+.red-thread-line {
+  animation: wobble 6s ease-in-out infinite;
+  transform-origin: top center;
+}
+
+@keyframes wobble {
+  0%, 100% {
+    transform: translateX(0) skewX(0);
+  }
+  25% {
+    transform: translateX(1.5px) skewX(0.2deg);
+  }
+  75% {
+    transform: translateX(-1.5px) skewX(-0.2deg);
+  }
+}
+
+/* INK DASH ASSEMBLY */
+.path-dash-animate {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: drawStroke 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes drawStroke {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* TEXT WIPE TRANSITIONS */
+.text-wipe-enter {
+  clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+}
+
+.text-wipe-active {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  transition: clip-path 0.5s ease-in-out;
+}
