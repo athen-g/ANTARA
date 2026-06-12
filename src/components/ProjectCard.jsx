@@ -86,47 +86,77 @@ export default function ProjectCard({ project, index }) {
         {id}
       </div>
 
-      {/* Gradient image placeholder with miniature yantra overlay */}
+      {/* Browser mockup iframe representing the actual website */}
       <div
         style={{
           position: 'relative',
           width: '100%',
-          height: '200px',
-          borderRadius: '1px',
-          background: `linear-gradient(135deg, ${accent[0]}22, ${accent[1]}44)`,
+          height: '240px',
+          borderRadius: '6px',
+          background: 'var(--bg-surface)',
+          border: '0.5px solid var(--border)',
           overflow: 'hidden',
+          display: 'flex',
+          flexDirection: 'column',
           flexShrink: 0,
         }}
       >
-        {/* Yantra overlay */}
+        {/* Browser title/control bar */}
         <div
           style={{
-            position: 'absolute',
-            inset: 0,
+            height: '28px',
+            background: 'var(--bg-raised)',
+            borderBottom: '0.5px solid var(--border)',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
+            padding: '0 12px',
+            gap: '6px',
+            flexShrink: 0,
           }}
         >
-          <SanskriticDivider
-            variant="A"
-            size={100}
-            color={accent[0]}
-            opacity={0.1}
-            rotate={hovered}
-          />
+          {/* Mac-like controls */}
+          <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#ff5f56' }} />
+          <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#ffbd2e' }} />
+          <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#27c93f' }} />
+          
+          {/* Address bar URL display */}
+          <div
+            style={{
+              flex: 1,
+              height: '16px',
+              background: 'rgba(0, 0, 0, 0.25)',
+              borderRadius: '3px',
+              marginLeft: '12px',
+              marginRight: '18px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '9px',
+              color: 'var(--text-3)',
+              fontFamily: 'Inter, sans-serif',
+              letterSpacing: '0.02em',
+              border: '0.5px solid rgba(255, 255, 255, 0.03)',
+            }}
+          >
+            {url.replace('https://', '').replace('http://', '')}
+          </div>
         </div>
 
-        {/* Gradient shimmer on hover */}
-        <div
-          style={{
-            position: 'absolute',
-            inset: 0,
-            background: `linear-gradient(90deg, transparent, ${accent[0]}15, transparent)`,
-            transform: hovered ? 'translateX(100%)' : 'translateX(-100%)',
-            transition: 'transform 0.8s cubic-bezier(0.16,1,0.3,1)',
-          }}
-        />
+        {/* IFrame window */}
+        <div style={{ flex: 1, position: 'relative', width: '100%', overflow: 'hidden' }}>
+          <iframe
+            src={url}
+            title={`Preview of ${title}`}
+            style={{
+              width: '100%',
+              height: '100%',
+              border: 'none',
+              pointerEvents: 'none', // Prevent capturing pointer scroll inside horizontal emakimono
+              background: 'var(--bg-raised)',
+            }}
+            loading="lazy"
+          />
+        </div>
       </div>
 
       {/* Title */}
