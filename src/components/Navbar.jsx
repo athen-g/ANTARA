@@ -5,6 +5,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 import React, { useEffect, useRef, useState } from 'react'
+import { useLanguage } from '../context/LanguageContext'
 
 const NAV_LINKS = [
   { label: 'Work',    href: '#projects' },
@@ -14,6 +15,7 @@ const NAV_LINKS = [
 ]
 
 export default function Navbar() {
+  const { language, setLanguage, t } = useLanguage()
   const [visible, setVisible] = useState(true)
   const [scrolled, setScrolled] = useState(false)
   const [theme, setTheme] = useState('dark')
@@ -147,15 +149,60 @@ export default function Navbar() {
               onMouseEnter={(e) => (e.target.style.color = 'var(--text-1)')}
               onMouseLeave={(e) => (e.target.style.color = 'var(--text-2)')}
             >
-              {label}
+              {t(`nav.${label.toLowerCase()}`)}
             </a>
           </li>
         ))}
       </ul>
 
-      {/* Right Column: Theme toggle + Hire Me button */}
+      {/* Right Column: Theme toggle + Language selectors + Hire Me button */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
         
+        {/* Language selector squares */}
+        <div style={{ display: 'flex', gap: '6px', marginRight: '4px' }}>
+          {[
+            { lang: 'sa', label: 'अ' },
+            { lang: 'en', label: 'a' },
+            { lang: 'ja', label: 'ア' },
+          ].map(({ lang: l, label }) => (
+            <button
+              key={l}
+              onClick={() => setLanguage(l)}
+              style={{
+                width: '28px',
+                height: '28px',
+                border: language === l ? '1px solid var(--gold)' : '0.5px solid var(--border)',
+                borderRadius: '2px',
+                background: language === l ? 'rgba(232, 160, 32, 0.08)' : 'transparent',
+                color: language === l ? 'var(--gold)' : 'var(--text-2)',
+                fontFamily: l === 'sa' ? "'Noto Serif Devanagari', serif" : (l === 'ja' ? 'sans-serif' : 'Inter, sans-serif'),
+                fontSize: '11px',
+                fontWeight: language === l ? '800' : '500',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                transition: 'all 0.3s',
+                outline: 'none',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = 'var(--gold)'
+                e.currentTarget.style.color = 'var(--gold)'
+              }}
+              onMouseLeave={(e) => {
+                if (language !== l) {
+                  e.currentTarget.style.borderColor = 'var(--border)'
+                  e.currentTarget.style.color = 'var(--text-2)'
+                }
+              }}
+              data-cursor="hover"
+              aria-label={`Switch language to ${l === 'sa' ? 'Sanskrit' : (l === 'ja' ? 'Japanese' : 'English')}`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+
         {/* Switch to Light Mode Toggle Button */}
         <button
           onClick={toggleTheme}
@@ -228,7 +275,7 @@ export default function Navbar() {
             e.target.style.color = 'var(--bg)'
           }}
         >
-          Hire Me
+          {t('nav.hireMe')}
         </a>
       </div>
     </nav>

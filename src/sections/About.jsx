@@ -9,11 +9,12 @@ import InkReveal from '../components/InkReveal.jsx'
 import BrushStroke from '../components/BrushStroke.jsx'
 import SanskriticDivider from '../components/SanskriticDivider.jsx'
 import { useScrollReveal } from '../hooks/useScrollReveal.js'
+import { useLanguage } from '../context/LanguageContext'
 
 const STATS = [
-  { value: 12, label: 'Projects Shipped', suffix: '' },
-  { value: 3,  label: 'Years Experience', suffix: '+' },
-  { value: 5,  label: 'Client Rating',    suffix: '★' },
+  { value: 12, labelKey: 'about.shipped', suffix: '' },
+  { value: 3,  labelKey: 'about.experience', suffix: '+' },
+  { value: 5,  labelKey: 'about.rating',    suffix: '★' },
 ]
 
 const SKILL_PILLS = [
@@ -50,6 +51,7 @@ function CountUp({ target, suffix = '', isVisible }) {
 }
 
 export default function About() {
+  const { t } = useLanguage()
   const { ref: sectionRef, isVisible } = useScrollReveal({ threshold: 0.1 })
   const { ref: pillsRef, isVisible: pillsVisible } = useScrollReveal({ threshold: 0.2 })
 
@@ -153,8 +155,8 @@ export default function About() {
               gap: '28px',
             }}
           >
-            {STATS.map(({ value, label, suffix }) => (
-              <div key={label}>
+            {STATS.map(({ value, labelKey, suffix }) => (
+              <div key={labelKey}>
                 <div
                   style={{
                     fontFamily: 'Syne, sans-serif',
@@ -167,7 +169,7 @@ export default function About() {
                 >
                   <CountUp target={value} suffix={suffix} isVisible={isVisible} />
                 </div>
-                <div className="text-label" style={{ marginTop: '4px' }}>{label}</div>
+                <div className="text-label" style={{ marginTop: '4px' }}>{t(labelKey)}</div>
                 <div
                   aria-hidden="true"
                   style={{
@@ -187,7 +189,7 @@ export default function About() {
 
           {/* Section label */}
           <InkReveal delay={0}>
-            <p className="text-label">About — 間 — The Space Between</p>
+            <p className="text-label">{t('about.title')}</p>
           </InkReveal>
 
           {/* Headline */}
@@ -202,11 +204,7 @@ export default function About() {
                 color: 'var(--text-1)',
               }}
             >
-              Designing at the
-              <br />
-              <span style={{ color: 'var(--gold)' }}>threshold</span> of
-              <br />
-              art & engineering.
+              {t('about.headline')}
             </h2>
           </InkReveal>
 
@@ -221,11 +219,7 @@ export default function About() {
                 color: 'var(--text-2)',
               }}
             >
-              I'm Atharva — a designer and developer from India who believes the most
-              powerful digital experiences live in the liminal space between visual poetry
-              and technical precision. I build products that feel inevitable: where every
-              pixel is intentional, every interaction considered, and every line of code
-              serves the story.
+              {t('about.bio1')}
             </p>
           </InkReveal>
 
@@ -239,10 +233,7 @@ export default function About() {
                 color: 'var(--text-2)',
               }}
             >
-              With roots in UI/UX and branches reaching into fullstack development,
-              I speak fluently across disciplines — from early discovery and systems
-              thinking through to deployment and beyond. The work I'm most proud of
-              doesn't announce itself; it simply feels right.
+              {t('about.bio2')}
             </p>
           </InkReveal>
 
@@ -277,7 +268,7 @@ export default function About() {
               letterSpacing: '0.1em',
             }}
           >
-            सृजन · शिल्प · संयोग
+            {t('about.sanskritQuote')}
           </div>
         </div>
       </div>

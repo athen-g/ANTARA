@@ -10,6 +10,7 @@ import BrushStroke from '../components/BrushStroke.jsx'
 import MagneticButton from '../components/MagneticButton.jsx'
 import SanskriticDivider from '../components/SanskriticDivider.jsx'
 import { useScrollReveal } from '../hooks/useScrollReveal.js'
+import { useLanguage } from '../context/LanguageContext'
 
 const SOCIALS = [
   { label: 'GitHub',   href: 'https://github.com/athen-g',               short: 'GH', desc: '@athen-g'    },
@@ -111,6 +112,7 @@ function ToriiSocialBtn({ social }) {
 }
 
 export default function Contact() {
+  const { language, t } = useLanguage()
   const { ref: sectionRef, isVisible } = useScrollReveal({ threshold: 0.08 })
   const [formState, setFormState] = useState({ name: '', email: '', message: '' })
   const [submitted, setSubmitted] = useState(false)
@@ -181,7 +183,7 @@ export default function Contact() {
         {/* Label */}
         <InkReveal>
           <p className="text-label" style={{ marginBottom: '16px', textAlign: 'center' }}>
-            Contact — 縁 — Connection / Fate
+            {t('contact.titleLabel')}
           </p>
         </InkReveal>
 
@@ -192,22 +194,24 @@ export default function Contact() {
             marginBottom: '16px',
           }}
         >
-          {["Let's", 'create', 'something', 'timeless.'].map((word, i) => (
-            <InkReveal key={word} delay={i * 100} style={{ display: 'inline-block', marginRight: '0.25em' }}>
-              <span
-                style={{
-                  fontFamily: 'Syne, sans-serif',
-                  fontWeight: 900,
-                  fontSize: 'clamp(36px, 7vw, 96px)',
-                  lineHeight: 1.0,
-                  letterSpacing: '-0.03em',
-                  color: i === 3 ? 'var(--gold)' : 'var(--text-1)',
-                }}
-              >
-                {word}
-              </span>
-            </InkReveal>
-          ))}
+          {(t('contact.letCreate') || '')
+            .split(language === 'ja' ? '' : ' ')
+            .map((word, i, arr) => (
+              <InkReveal key={`${language}-${i}`} delay={i * 60} style={{ display: 'inline-block', marginRight: language === 'ja' ? '0' : '0.25em' }}>
+                <span
+                  style={{
+                    fontFamily: language === 'sa' ? "'Noto Serif Devanagari', serif" : (language === 'ja' ? 'sans-serif' : 'Syne, sans-serif'),
+                    fontWeight: 900,
+                    fontSize: 'clamp(36px, 6vw, 96px)',
+                    lineHeight: 1.0,
+                    letterSpacing: '-0.03em',
+                    color: i === arr.length - 1 ? 'var(--gold)' : 'var(--text-1)',
+                  }}
+                >
+                  {word}
+                </span>
+              </InkReveal>
+            ))}
         </div>
 
         {/* Sanskrit subtext */}
@@ -226,9 +230,9 @@ export default function Contact() {
                 opacity: 0.6,
                 letterSpacing: '0.1em',
               }}
-              aria-label="Sahayog karein — Let's collaborate"
+              aria-label={t('contact.subtext')}
             >
-              सहयोग करें
+              {t('contact.subtext')}
             </p>
           </InkReveal>
         </div>
@@ -281,7 +285,7 @@ export default function Contact() {
           {/* Left: Torii social buttons */}
           <InkReveal delay={300}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-              <p className="text-label" style={{ marginBottom: '8px' }}>Find me at</p>
+              <p className="text-label" style={{ marginBottom: '8px' }}>{t('contact.findMe')}</p>
 
               <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
                 {SOCIALS.map((social) => (
@@ -309,8 +313,7 @@ export default function Contact() {
                   maxWidth: '280px',
                 }}
               >
-                Open to freelance collaborations, full-time roles, and interesting conversations.
-                Response time: usually within 24 hours.
+                {t('contact.openToCollabs')}
               </p>
             </div>
           </InkReveal>
@@ -346,10 +349,10 @@ export default function Contact() {
                     marginBottom: '8px',
                   }}
                 >
-                  Message received.
+                  {t('contact.msgReceived')}
                 </p>
                 <p style={{ fontFamily: 'Inter', fontSize: '14px', color: 'var(--text-2)' }}>
-                  I'll be in touch soon. Until then — 縁 (en).
+                  {t('contact.msgSubtext')}
                 </p>
               </div>
             ) : (
@@ -365,7 +368,7 @@ export default function Contact() {
                     className="text-label"
                     style={{ display: 'block', marginBottom: '8px' }}
                   >
-                    Name
+                    {t('contact.nameLabel')}
                   </label>
                   <input
                     id="contact-name"
@@ -374,7 +377,7 @@ export default function Contact() {
                     required
                     value={formState.name}
                     onChange={handleChange}
-                    placeholder="Your name"
+                    placeholder={t('contact.namePlaceholder')}
                     className="form-input"
                     aria-required="true"
                   />
@@ -387,7 +390,7 @@ export default function Contact() {
                     className="text-label"
                     style={{ display: 'block', marginBottom: '8px' }}
                   >
-                    Email
+                    {t('contact.emailLabel')}
                   </label>
                   <input
                     id="contact-email"
@@ -396,7 +399,7 @@ export default function Contact() {
                     required
                     value={formState.email}
                     onChange={handleChange}
-                    placeholder="your@email.com"
+                    placeholder={t('contact.emailPlaceholder')}
                     className="form-input"
                     aria-required="true"
                   />
@@ -409,7 +412,7 @@ export default function Contact() {
                     className="text-label"
                     style={{ display: 'block', marginBottom: '8px' }}
                   >
-                    Message
+                    {t('contact.messageLabel')}
                   </label>
                   <textarea
                     id="contact-message"
@@ -418,7 +421,7 @@ export default function Contact() {
                     rows={5}
                     value={formState.message}
                     onChange={handleChange}
-                    placeholder="Tell me about your project..."
+                    placeholder={t('contact.messagePlaceholder')}
                     className="form-input"
                     aria-required="true"
                     style={{ resize: 'vertical', fontFamily: 'Inter, sans-serif' }}
@@ -427,7 +430,7 @@ export default function Contact() {
 
                 {/* Submit */}
                 <MagneticButton type="submit" variant="gold" style={{ alignSelf: 'flex-start' }}>
-                  送信 &nbsp;·&nbsp; Send
+                  {t('contact.sendBtn')}
                 </MagneticButton>
               </form>
             )}

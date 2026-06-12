@@ -6,6 +6,7 @@ import React, { useState } from 'react'
 import MagneticButton from './MagneticButton.jsx'
 import BrushStroke from './BrushStroke.jsx'
 import SanskriticDivider from './SanskriticDivider.jsx'
+import { useLanguage } from '../context/LanguageContext'
 
 /**
  * @param {object} props
@@ -13,8 +14,12 @@ import SanskriticDivider from './SanskriticDivider.jsx'
  * @param {number} props.index   — position index (0-based)
  */
 export default function ProjectCard({ project, index }) {
+  const { language, t } = useLanguage()
   const [hovered, setHovered] = useState(false)
   const { id, title, url, tags, description, accent } = project
+
+  const activeTags = (tags && typeof tags === 'object' && !Array.isArray(tags)) ? (tags[language] || tags.en) : (tags || [])
+  const activeDescription = (description && typeof description === 'object') ? (description[language] || description.en) : (description || '')
 
   return (
     <article
@@ -187,7 +192,7 @@ export default function ProjectCard({ project, index }) {
 
       {/* Tags */}
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-        {tags.map((tag) => (
+        {activeTags.map((tag) => (
           <span
             key={tag}
             style={{
@@ -219,7 +224,7 @@ export default function ProjectCard({ project, index }) {
           flex: 1,
         }}
       >
-        {description}
+        {activeDescription}
       </p>
 
       {/* CTA */}
@@ -234,7 +239,7 @@ export default function ProjectCard({ project, index }) {
             fontSize: '12px',
           }}
         >
-          開く &nbsp;→&nbsp; Visit
+          {t('projectCard.visit')}
         </MagneticButton>
       </div>
     </article>

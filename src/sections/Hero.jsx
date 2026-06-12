@@ -8,8 +8,9 @@ import { gsap } from 'gsap'
 import * as THREE from 'three'
 import BrushStroke from '../components/BrushStroke.jsx'
 import { useMousePosition } from '../hooks/useMousePosition.js'
+import { useLanguage } from '../context/LanguageContext'
 
-const ROLES = ['UI/UX Designer', 'Frontend Developer', 'Fullstack Developer']
+const DEFAULT_ROLES = ['UI/UX Designer', 'Frontend Developer', 'Fullstack Developer']
 
 const SOCIAL_LINKS = [
   { label: 'GitHub',   href: 'https://github.com/athen-g',                        icon: 'GH' },
@@ -176,6 +177,9 @@ function useNoiseBackground(canvasRef) {
 }
 
 export default function Hero({ loaderDone, prefersReducedMotion }) {
+  const { language, t } = useLanguage()
+  const roles = t('hero.roles') || DEFAULT_ROLES
+
   const sectionRef = useRef(null)
   const atharvaRef = useRef(null)
   const ghuleRef   = useRef(null)
@@ -198,12 +202,12 @@ export default function Hero({ loaderDone, prefersReducedMotion }) {
     const interval = setInterval(() => {
       setRoleVisible(false)
       setTimeout(() => {
-        setRoleIndex((i) => (i + 1) % ROLES.length)
+        setRoleIndex((i) => (i + 1) % roles.length)
         setRoleVisible(true)
       }, 500)
     }, 2800)
     return () => clearInterval(interval)
-  }, [])
+  }, [roles.length])
 
   // GSAP letter-by-letter reveal after loader
   useEffect(() => {
@@ -358,7 +362,7 @@ export default function Hero({ loaderDone, prefersReducedMotion }) {
       >
         {/* Section label */}
         <p className="text-label" style={{ marginBottom: '28px', opacity: loaderDone ? 1 : 0, transition: 'opacity 0.6s 0.2s' }}>
-          Portfolio — अन्तर — 2025
+          {t('hero.portfolioLabel')}
         </p>
 
         {/* Name block */}
@@ -460,7 +464,7 @@ export default function Hero({ loaderDone, prefersReducedMotion }) {
           />
           <span
             aria-live="polite"
-            aria-label={`Current role: ${ROLES[roleIndex]}`}
+            aria-label={`Current role: ${roles[roleIndex] || ''}`}
             style={{
               fontFamily: 'Syne, sans-serif',
               fontWeight: 800,
@@ -473,7 +477,7 @@ export default function Hero({ loaderDone, prefersReducedMotion }) {
               whiteSpace: 'nowrap',
             }}
           >
-            {ROLES[roleIndex]}
+            {roles[roleIndex] || ''}
           </span>
         </div>
 
@@ -481,7 +485,7 @@ export default function Hero({ loaderDone, prefersReducedMotion }) {
         <p
           ref={taglineRef}
           style={{
-            fontFamily: 'Inter, sans-serif',
+            fontFamily: language === 'sa' ? "'Noto Serif Devanagari', serif" : (language === 'ja' ? 'sans-serif' : 'Inter, sans-serif'),
             fontWeight: 400,
             fontSize: 'clamp(14px, 1.8vw, 18px)',
             lineHeight: 1.7,
@@ -490,13 +494,13 @@ export default function Hero({ loaderDone, prefersReducedMotion }) {
             marginBottom: '48px',
           }}
         >
-          {`Crafting digital experiences that live at the intersection of art and code.`
-            .split(' ')
+          {(t('hero.tagline') || '')
+            .split(language === 'ja' ? '' : ' ')
             .map((word, i) => (
               <span
-                key={i}
+                key={`${language}-${i}`}
                 className="tagline-word"
-                style={{ display: 'inline-block', marginRight: '0.3em', opacity: 0 }}
+                style={{ display: 'inline-block', marginRight: language === 'ja' ? '0' : '0.3em', opacity: loaderDone ? 1 : 0 }}
               >
                 {word}
               </span>
@@ -585,7 +589,7 @@ export default function Hero({ loaderDone, prefersReducedMotion }) {
                 writingMode: 'vertical-rl',
               }}
             >
-              SCROLL
+              {t('hero.scroll')}
             </span>
             <div
               style={{

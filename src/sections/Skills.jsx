@@ -4,8 +4,10 @@ import { skillCategories } from "../data/skills";
 import SanskriticDivider from "../components/SanskriticDivider";
 import BrushStroke from "../components/BrushStroke";
 import { useScrollReveal } from "../hooks/useScrollReveal";
+import { useLanguage } from "../context/LanguageContext";
 
 export function Skills() {
+  const { t } = useLanguage();
   const containerRef = useRef(null);
   const watermarkRef = useRef(null);
 
@@ -74,12 +76,12 @@ export function Skills() {
         {/* Section Heading */}
         <div className="flex flex-col items-start mb-16">
           <span className="font-display font-black text-[10px] tracking-[0.25em] text-[var(--gold)] uppercase mb-2">
-            Skills — 道 — Tools & Craft
+            {t("skills.titleLabel")}
           </span>
           <h2 className="font-display font-black text-4xl md:text-6xl text-[var(--text-1)] leading-tight">
-            Tools & Craft.
+            {t("skills.title")}
           </h2>
-          <span className="font-ui text-xs text-[var(--text-3)] mt-1">道具と技</span>
+          <span className="font-ui text-xs text-[var(--text-3)] mt-1">{t("skills.japaneseSubtitle")}</span>
           <BrushStroke variant="horizontal" className="w-56 mt-4 opacity-25" />
         </div>
 
@@ -96,10 +98,10 @@ export function Skills() {
                 {skillCategories[0].japanese}
               </span>
               <h3 className="font-display font-black text-xl md:text-2xl text-[var(--text-1)] mt-1 mb-4">
-                {skillCategories[0].name}
+                {t("skills.categories.design")}
               </h3>
               <p className="font-body text-xs text-[var(--text-2)] mb-6 leading-relaxed">
-                Structuring visual systems, typography, and interactive canvases before writing the first line of code.
+                {t("skills.designDesc")}
               </p>
             </div>
             <div className="flex flex-wrap gap-2 mt-auto">
@@ -121,7 +123,7 @@ export function Skills() {
                 {skillCategories[1].japanese}
               </span>
               <h3 className="font-display font-black text-xl md:text-2xl text-[var(--text-1)] mt-1 mb-2">
-                {skillCategories[1].name}
+                {t("skills.categories.frontend")}
               </h3>
             </div>
             <div className="flex flex-wrap gap-2 mt-auto">
@@ -143,10 +145,10 @@ export function Skills() {
                 {skillCategories[2].japanese}
               </span>
               <h3 className="font-display font-black text-xl md:text-2xl text-[var(--text-1)] mt-1 mb-4">
-                {skillCategories[2].name}
+                {t("skills.categories.backend")}
               </h3>
               <p className="font-body text-xs text-[var(--text-2)] mb-6 leading-relaxed">
-                Building scalable services, modeling relationships in relational systems, and managing transactional logic.
+                {t("skills.backendDesc")}
               </p>
             </div>
             <div className="flex flex-wrap gap-2 mt-auto">
@@ -181,7 +183,7 @@ export function Skills() {
                 {skillCategories[3].japanese}
               </span>
               <h3 className="font-display font-black text-xl md:text-2xl text-[var(--text-1)] mt-1 mb-2">
-                {skillCategories[3].name}
+                {t("skills.categories.nocode")}
               </h3>
             </div>
             <div className="flex flex-wrap gap-2 mt-auto">
@@ -203,7 +205,7 @@ export function Skills() {
                 {skillCategories[4].japanese}
               </span>
               <h3 className="font-display font-black text-xl md:text-2xl text-[var(--text-1)] mt-1 mb-2">
-                {skillCategories[4].name}
+                {t("skills.categories.devtools")}
               </h3>
             </div>
             <div className="flex flex-wrap gap-2 mt-auto">

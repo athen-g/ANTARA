@@ -3,8 +3,10 @@ import gsap from "gsap";
 import { projects } from "../data/projects";
 import ProjectCard from "../components/ProjectCard";
 import BrushStroke from "../components/BrushStroke";
+import { useLanguage } from "../context/LanguageContext";
 
 export function Projects() {
+  const { t } = useLanguage();
   const triggerRef = useRef(null);
   const scrollRef = useRef(null);
   const watermarkRef = useRef(null);
@@ -112,12 +114,12 @@ export function Projects() {
         <div className="max-w-7xl mx-auto relative z-20">
           <div className="flex flex-col items-start mb-12">
             <span className="font-display font-black text-[10px] tracking-[0.25em] text-[var(--gold)] uppercase mb-2">
-              Portfolio — अन्तर — 2025
+              {t("projects.titleLabel")}
             </span>
             <h2 className="font-display font-black text-4xl md:text-5xl text-[var(--text-1)]">
-              Selected Work.
+              {t("projects.title")}
             </h2>
-            <span className="font-ui text-xs text-[var(--text-3)] mt-1">選ばれた作品</span>
+            <span className="font-ui text-xs text-[var(--text-3)] mt-1">{t("projects.japaneseSubtitle")}</span>
             <BrushStroke variant="horizontal" className="w-48 mt-4 opacity-30" />
           </div>
 
@@ -140,18 +142,18 @@ export function Projects() {
             {/* Title intro card inside the horizontal strip */}
             <div className="w-[30vw] flex-shrink-0 flex flex-col justify-center items-start pr-12 select-none">
               <span className="font-display font-black text-[10px] tracking-[0.25em] text-[var(--gold)] uppercase mb-2">
-                Portfolio — अन्तर — 2025
+                {t("projects.titleLabel")}
               </span>
               <h2 className="font-display font-black text-5xl xl:text-7xl text-[var(--text-1)] leading-none">
-                Selected<br />Work.
+                {t("projects.title")}
               </h2>
               <span className="font-ui text-sm text-[var(--text-3)] tracking-widest uppercase mt-3 pl-1">
-                選ばれた作品
+                {t("projects.japaneseSubtitle")}
               </span>
               <BrushStroke variant="horizontal" className="w-full mt-6 opacity-25" />
               
               <div className="mt-8 text-xs font-ui text-[var(--text-3)] tracking-widest flex items-center gap-2">
-                <span>SCROLL DOWN</span>
+                <span>{t("projects.scrollDown")}</span>
                 <span className="animate-pulse">━▶</span>
               </div>
             </div>

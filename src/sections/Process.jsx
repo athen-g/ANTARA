@@ -1,8 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import BrushStroke from "../components/BrushStroke";
+import { useLanguage } from "../context/LanguageContext";
 
 export function Process() {
+  const { t } = useLanguage();
   const containerRef = useRef(null);
   const pathRef = useRef(null);
   const [isMobile, setIsMobile] = useState(false);
@@ -76,33 +78,27 @@ export function Process() {
   const steps = [
     {
       id: "01",
-      name: "Discover",
-      kanji: "探", // Tan (Explore / Probe)
-      label: "Phase I",
-      description: "Understanding requirements, detailing constraints, and mapping out the sacred geometry of the problem space."
+      kanji: "探", // Explore / Probe
+      label: "Phase I"
     },
     {
       id: "02",
-      name: "Design",
-      kanji: "画", // Gaku (Plan / Picture)
-      label: "Phase II",
-      description: "Carving negative space, structuring layouts, and sketching proportions with absolute visual focus."
+      kanji: "画", // Plan / Picture
+      label: "Phase II"
     },
     {
       id: "03",
-      name: "Develop",
-      kanji: "編", // Hen (Compile / Weave)
-      label: "Phase III",
-      description: "Weaving interactive react structures and optimizing performance for buttery-smooth rendering curves."
+      kanji: "編", // Compile / Weave
+      label: "Phase III"
     },
     {
       id: "04",
-      name: "Deploy",
-      kanji: "放", // Hō (Release / Launch)
-      label: "Phase IV",
-      description: "Auditing details, polishing web accessibility, and hosting a fast production artifact on Vercel."
+      kanji: "放", // Release / Launch
+      label: "Phase IV"
     }
   ];
+
+  const stepTranslations = t("process.steps") || [];
 
   return (
     <section 
@@ -115,12 +111,12 @@ export function Process() {
         {/* Section Title */}
         <div className="flex flex-col items-start mb-20">
           <span className="font-display font-black text-[10px] tracking-[0.25em] text-[var(--gold)] uppercase mb-2">
-            Process — 経路 — The Pathway
+            {t("process.titleLabel")}
           </span>
           <h2 className="font-display font-black text-4xl md:text-6xl text-[var(--text-1)] leading-tight">
-            Creative Process.
+            {t("process.title")}
           </h2>
-          <span className="font-ui text-xs text-[var(--text-3)] mt-1">道具と技</span>
+          <span className="font-ui text-xs text-[var(--text-3)] mt-1">{t("process.japaneseSubtitle")}</span>
           <BrushStroke variant="horizontal" className="w-56 mt-4 opacity-25" />
         </div>
 
@@ -158,78 +154,85 @@ export function Process() {
           )}
 
           {/* Torii Gates List */}
-          {steps.map((step, idx) => (
-            <div 
-              key={step.id} 
-              className="torii-gate-wrapper flex flex-col items-center z-10 select-none group"
-            >
-              {/* Torii SVG element */}
-              <div className="relative w-[100px] h-[160px] flex items-center justify-center text-[var(--vermillion)] hover:scale-105 transition-transform duration-300">
-                <svg 
-                  viewBox="0 0 100 160" 
-                  className="w-full h-full fill-none stroke-current" 
-                  strokeWidth="2.2"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  {/* Vertical Columns slanted slightly inwards */}
-                  <line x1="28" y1="28" x2="25" y2="160" />
-                  <line x1="72" y1="28" x2="75" y2="160" />
-                  
-                  {/* Straight lintel support beam (Nuki) */}
-                  <line x1="16" y1="62" x2="84" y2="62" />
-                  
-                  {/* Central lintel support block (Gakuzuka) */}
-                  <line x1="50" y1="36" x2="50" y2="62" strokeWidth="1.5" />
-                  
-                  {/* Top curved main beam (Kasagi) with detailed curvature */}
-                  <path 
-                    d="M 5,22 C 25,29 75,29 95,22 L 95,34 C 75,40 25,40 5,34 Z" 
-                    fill="currentColor" 
-                    stroke="none" 
-                  />
-                </svg>
+          {steps.map((step, idx) => {
+            const stepTitle = stepTranslations[idx]?.title || "";
+            return (
+              <div 
+                key={step.id} 
+                className="torii-gate-wrapper flex flex-col items-center z-10 select-none group"
+              >
+                {/* Torii SVG element */}
+                <div className="relative w-[100px] h-[160px] flex items-center justify-center text-[var(--vermillion)] hover:scale-105 transition-transform duration-300">
+                  <svg 
+                    viewBox="0 0 100 160" 
+                    className="w-full h-full fill-none stroke-current" 
+                    strokeWidth="2.2"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    {/* Vertical Columns slanted slightly inwards */}
+                    <line x1="28" y1="28" x2="25" y2="160" />
+                    <line x1="72" y1="28" x2="75" y2="160" />
+                    
+                    {/* Straight lintel support beam (Nuki) */}
+                    <line x1="16" y1="62" x2="84" y2="62" />
+                    
+                    {/* Central lintel support block (Gakuzuka) */}
+                    <line x1="50" y1="36" x2="50" y2="62" strokeWidth="1.5" />
+                    
+                    {/* Top curved main beam (Kasagi) with detailed curvature */}
+                    <path 
+                      d="M 5,22 C 25,29 75,29 95,22 L 95,34 C 75,40 25,40 5,34 Z" 
+                      fill="currentColor" 
+                      stroke="none" 
+                    />
+                  </svg>
 
-                {/* Floating Kanji watermark inside the Gate */}
-                <span className="absolute top-[68px] font-display font-black text-xl text-[var(--text-3)] group-hover:text-[var(--gold)] transition-colors duration-300">
-                  {step.kanji}
-                </span>
+                  {/* Floating Kanji watermark inside the Gate */}
+                  <span className="absolute top-[68px] font-display font-black text-xl text-[var(--text-3)] group-hover:text-[var(--gold)] transition-colors duration-300">
+                    {step.kanji}
+                  </span>
 
-                {/* Micro Red Thread intersection */}
-                <div className="absolute top-[80px] w-1.5 h-1.5 rounded-full bg-[var(--vermillion)] opacity-60 z-20"></div>
+                  {/* Micro Red Thread intersection */}
+                  <div className="absolute top-[80px] w-1.5 h-1.5 rounded-full bg-[var(--vermillion)] opacity-60 z-20"></div>
+                </div>
+
+                {/* Label */}
+                <div className="mt-4 flex flex-col items-center">
+                  <span className="font-ui text-[9px] uppercase tracking-widest text-[var(--text-3)] font-bold">
+                    {step.label}
+                  </span>
+                  <span className="font-display font-black text-sm text-[var(--text-1)] mt-1 tracking-wider uppercase">
+                    {stepTitle}
+                  </span>
+                </div>
               </div>
-
-              {/* Label */}
-              <div className="mt-4 flex flex-col items-center">
-                <span className="font-ui text-[9px] uppercase tracking-widest text-[var(--text-3)] font-bold">
-                  {step.label}
-                </span>
-                <span className="font-display font-black text-sm text-[var(--text-1)] mt-1 tracking-wider uppercase">
-                  {step.name}
-                </span>
-              </div>
-            </div>
-          ))}
+            );
+          })}
 
         </div>
 
         {/* STEPS DETAILED DESCRIPTIONS */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-16">
-          {steps.map((step) => (
-            <div 
-              key={step.id} 
-              className="process-card p-6 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg hover:border-[var(--border-gold)] transition-colors duration-300 relative"
-            >
-              <div className="absolute top-4 right-4 text-[10px] font-ui text-[var(--gold-dim)] font-bold">
-                {step.id}
+          {steps.map((step, idx) => {
+            const stepTitle = stepTranslations[idx]?.title || "";
+            const stepDesc = stepTranslations[idx]?.desc || "";
+            return (
+              <div 
+                key={step.id} 
+                className="process-card p-6 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg hover:border-[var(--border-gold)] transition-colors duration-300 relative"
+              >
+                <div className="absolute top-4 right-4 text-[10px] font-ui text-[var(--gold-dim)] font-bold">
+                  {step.id}
+                </div>
+                <h4 className="font-display font-black text-lg text-[var(--text-1)] mb-2 uppercase tracking-wide">
+                  {stepTitle}
+                </h4>
+                <p className="font-body text-xs leading-relaxed text-[var(--text-2)]">
+                  {stepDesc}
+                </p>
               </div>
-              <h4 className="font-display font-black text-lg text-[var(--text-1)] mb-2 uppercase tracking-wide">
-                {step.name}
-              </h4>
-              <p className="font-body text-xs leading-relaxed text-[var(--text-2)]">
-                {step.description}
-              </p>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
       </div>

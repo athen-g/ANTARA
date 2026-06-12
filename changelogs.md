@@ -2,6 +2,16 @@
 
 All notable changes made to the **ANTARA** portfolio during this session:
 
+## [1.2.0] - 2026-06-12
+
+### Added
+- **Multi-lingual Localization (Sanskrit, English, Japanese)**: Implemented localization support across the entire portfolio site.
+  - Added a language selector in `src/components/Navbar.jsx` with three square buttons (`अ` [Sanskrit], `a` [English], `ア` [Japanese]) placed in order next to the theme switch.
+  - Established a custom `LanguageProvider` React context in `src/context/LanguageContext.jsx` and wrapped the main application in `src/main.jsx`.
+  - Created a comprehensive translations dictionary in `src/data/translations.js` containing Sanskrit (`sa`), English (`en`), and Japanese (`ja`) entries.
+  - Localized the **Hero**, **About**, **Projects**, **Skills**, and **Contact** sections, dynamically resolving all text strings, tags, and descriptors depending on the selected language.
+  - Updated the project data in `src/data/projects.js` to store descriptions and tags as objects for each language, enabling live translations on selected work cards.
+
 ## [1.1.0] - 2026-06-12
 
 ### Added
