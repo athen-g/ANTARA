@@ -5,14 +5,16 @@
 
 import React, { useEffect, useRef, useState } from 'react'
 
-export default function Loader({ onComplete }) {
+export default function Loader({ onExitStart, onComplete }) {
   const loaderRef = useRef(null)
-  const [phase, setPhase] = useState('assembling') // 'assembling' | 'pulsing' | 'exiting'
+  const [phase, setPhase] = useState('assembling') // 'assembling' | 'pulsing' | 'settled' | 'exiting'
 
+  const onExitStartRef = useRef(onExitStart)
   const onCompleteRef = useRef(onComplete)
   useEffect(() => {
+    onExitStartRef.current = onExitStart
     onCompleteRef.current = onComplete
-  }, [onComplete])
+  }, [onExitStart, onComplete])
 
   useEffect(() => {
     // Phase timeline
@@ -24,7 +26,10 @@ export default function Loader({ onComplete }) {
 
     const t1 = setTimeout(() => setPhase('pulsing'),  2000)
     const t2 = setTimeout(() => setPhase('settled'),  2600)
-    const t3 = setTimeout(() => setPhase('exiting'),  3400)
+    const t3 = setTimeout(() => {
+      setPhase('exiting')
+      onExitStartRef.current?.()
+    },  3400)
     const t4 = setTimeout(() => onCompleteRef.current?.(), 4250)
 
     return () => {

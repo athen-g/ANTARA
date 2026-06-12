@@ -22,7 +22,8 @@ import { Footer } from "./sections/Footer";
 gsap.registerPlugin(ScrollTrigger);
 
 function App() {
-  const [loading, setLoading] = useState(true);
+  const [showPortfolio, setShowPortfolio] = useState(false);
+  const [showLoader, setShowLoader] = useState(true);
   const [motionPreference, setMotionPreference] = useState(false);
 
   useEffect(() => {
@@ -44,10 +45,15 @@ function App() {
       <div className="grain-overlay" />
 
       {/* Screen Loader Sequence */}
-      {loading && <Loader onComplete={() => setLoading(false)} />}
+      {showLoader && (
+        <Loader
+          onExitStart={() => setShowPortfolio(true)}
+          onComplete={() => setShowLoader(false)}
+        />
+      )}
 
       {/* Main Portfolio Presentation (rendered after loader exits) */}
-      {!loading && (
+      {showPortfolio && (
         <div className="relative min-h-screen overflow-x-hidden animate-fade-in">
           {/* WebGL Sanskrit Particle Canvas */}
           <ParticleField />
@@ -97,7 +103,7 @@ function App() {
 
           {/* Main Layout Containers */}
           <main id="main-content">
-            <Hero loaderDone={!loading} prefersReducedMotion={motionPreference} />
+            <Hero loaderDone={showPortfolio} prefersReducedMotion={motionPreference} />
             <About />
             <MarqueeTicker />
             <Projects />
