@@ -5,11 +5,11 @@ All notable changes made to the **ANTARA** portfolio during this session:
 ## [1.1.0] - 2026-06-12
 
 ### Added
-- **Interactive Browser Mockups**: Upgraded the selected work cards in `src/components/ProjectCard.jsx` to render live website previews inside highly-customized **Browser Mockup Frames** configured at a standard **16:9 aspect ratio**. Scaled the internal `<iframe>` viewport by **200%** (using CSS transforms) to display full desktop versions of the website layouts. Added `pointer-events: none` to protect horizontal scroll performance.
+- **Interactive Browser Mockups**: Upgraded the selected work cards in `src/components/ProjectCard.jsx` to render live website previews inside highly-customized **Browser Mockup Frames** configured at a standard **16:9 aspect ratio**. Scaled the internal `<iframe>` viewport by **250%** (using CSS transforms at `scale(0.4)`) to display full high-resolution desktop versions of the website layouts. Added `pointer-events: none` to protect horizontal scroll performance.
 - **Descriptive Project Captions**: Updated titles and descriptions in `src/data/projects.js` to match custom specifications and co-founder roles:
   - **FutureU** (privacy-focused MHT-CET college predictor with seat matrices and cutoff trends)
   - **unimark** (lowercased; combined school management and learning system with high-performance attendance database)
-  - **Hanasaku (花咲く)** (newly added; pink-themed real-time menstrual health tracker with strict PostgreSQL policies)
+  - **Hanasaku (花咲く)** (newly added; pink-themed real-time menstrual health tracker with strict PostgreSQL policies; noted as currently in development/demo phase)
   - **MGC Cosmetics** (premium optimized storefront)
   - **Green Life** (eco-centric micro-interactions platform)
 - **Golden Sanskrit Favicon**: Created a new custom vector SVG (`public/favicon.svg`) rendering the Sanskrit letter "अ" filled with a rich golden gradient (`#FCE082` -> `#E8A020` -> `#9E6B0F`), replacing the dark inline data-URI Om symbol in `index.html`.

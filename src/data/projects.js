@@ -20,7 +20,7 @@ export const projects = [
     title: "Hanasaku (花咲く)",
     url: "https://hanasaku-seven.vercel.app/",
     tags: ["Health Tech", "Next.js", "PostgreSQL"],
-    description: "I built Hanasaku (花咲く) to offer a secure, real-time menstrual health tracker featuring strict PostgreSQL security policies, multi-lingual support, and seamless partner sharing.",
+    description: "I built Hanasaku (花咲く) to offer a secure, real-time menstrual health tracker featuring strict PostgreSQL security policies, multi-lingual support, and seamless partner sharing. (Note: This is currently a demo and still in active development.)",
     accent: ["#FF6B8B", "#E03B5B"] // pink accents
   },
   {
