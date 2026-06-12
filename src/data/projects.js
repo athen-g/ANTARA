@@ -2,7 +2,7 @@ export const projects = [
   {
     id: "01",
     title: "FutureU",
-    url: "https://futureu.dev/",
+    url: "https://futureu.dev/?iframe=true",
     tags: ["Fullstack", "React", "Node.js"],
     description: "I built FutureU, a privacy-focused MHT-CET college predictor, to give Maharashtra aspirants a free, instant way to check cutoff trends and seat matrices without spam ads or intrusive login walls.",
     accent: ["#E8A020", "#C1392B"] // gold, vermillion

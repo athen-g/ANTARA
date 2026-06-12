@@ -147,6 +147,13 @@ export default function ProjectCard({ project, index }) {
           <iframe
             src={url}
             title={`Preview of ${title}`}
+            onLoad={(e) => {
+              try {
+                e.target.contentWindow.postMessage({ type: 'dismiss-popup', source: 'antara-portfolio' }, '*');
+              } catch (err) {
+                // Ignore cross-origin warnings if browser blocks it
+              }
+            }}
             style={{
               width: '250%',
               height: '250%',

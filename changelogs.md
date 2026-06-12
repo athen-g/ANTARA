@@ -5,7 +5,7 @@ All notable changes made to the **ANTARA** portfolio during this session:
 ## [1.1.0] - 2026-06-12
 
 ### Added
-- **Interactive Browser Mockups**: Upgraded the selected work cards in `src/components/ProjectCard.jsx` to render live website previews inside highly-customized **Browser Mockup Frames** configured at a standard **16:9 aspect ratio**. Scaled the internal `<iframe>` viewport by **250%** (using CSS transforms at `scale(0.4)`) to display full high-resolution desktop versions of the website layouts. Added `pointer-events: none` to protect horizontal scroll performance.
+- **Interactive Browser Mockups**: Upgraded the selected work cards in `src/components/ProjectCard.jsx` to render live website previews inside highly-customized **Browser Mockup Frames** configured at a standard **16:9 aspect ratio**. Scaled the internal `<iframe>` viewport by **250%** (using CSS transforms at `scale(0.4)`) to display full high-resolution desktop versions of the website layouts. Dispatches a `postMessage` (`type: 'dismiss-popup'`) and appends `?iframe=true` to dynamically dismiss any popup modals in embedded sites. Added `pointer-events: none` to protect horizontal scroll performance.
 - **Descriptive Project Captions**: Updated titles and descriptions in `src/data/projects.js` to match custom specifications and co-founder roles:
   - **FutureU** (privacy-focused MHT-CET college predictor with seat matrices and cutoff trends)
   - **unimark** (lowercased; combined school management and learning system with high-performance attendance database)
