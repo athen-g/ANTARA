@@ -148,12 +148,12 @@ export default function ProjectCard({ project, index }) {
             src={url}
             title={`Preview of ${title}`}
             style={{
-              width: '150%',
-              height: '150%',
+              width: '200%',
+              height: '200%',
               border: 'none',
               pointerEvents: 'none', // Prevent capturing pointer scroll inside horizontal emakimono
               background: 'var(--bg-raised)',
-              transform: 'scale(0.666667)',
+              transform: 'scale(0.5)',
               transformOrigin: 'top left',
             }}
             loading="lazy"
