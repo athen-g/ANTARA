@@ -1,0 +1,29 @@
+# Changelog
+
+All notable changes made to the **ANTARA** portfolio during this session:
+
+## [1.1.0] - 2026-06-12
+
+### Added
+- **Interactive Browser Mockups**: Upgraded the selected work cards in `src/components/ProjectCard.jsx` to render live website pre-views inside highly-customized **Browser Mockup Frames** (featuring window control dots and a hostname address bar). Added `pointer-events: none` to protect horizontal scroll performance.
+- **descriptive Project Captions**: Upgraded all project descriptions in `src/data/projects.js` to showcase technical specifications, design philosophies, and core features for:
+  - **FutureU** (AI-driven academics portal & admission cutoffs tracking)
+  - **The Unimark** (sleek creative collective media portfolio)
+  - **MGC Cosmetics** (premium optimized storefront)
+  - **Green Life** (eco-centric micro-interactions platform)
+- **Golden Sanskrit Favicon**: Created a new custom vector SVG (`public/favicon.svg`) rendering the Sanskrit letter "अ" filled with a rich golden gradient (`#FCE082` -> `#E8A020` -> `#9E6B0F`), replacing the dark inline data-URI Om symbol in `index.html`.
+
+### Fixed
+- **Loader Replay & Lag**: 
+  - Restructured `src/App.jsx` to completely unmount `<Loader>` when the loading sequence concludes (`loading === false`).
+  - Implemented stable ref-capturing for `onComplete` in `src/components/Loader.jsx` and locked timeouts into a one-time mount hook (`useEffect` with empty dependencies `[]`). This prevents any parent re-renders (like scrolling triggers) from resetting the loader timeline.
+  - Removed unoptimized `willChange: 'stroke-dashoffset'` styles from SVG paths to prevent layer creation overhead in Blink-based browsers.
+- **Loader Animation Flow**: Refined stagger delays and transitions in the Sri Yantra SVG to ensure the drawing finishes completely by 1.9 seconds, followed by a full breathing scale pulse (up to 1.03 and back to 1.0) before sliding up and unmounting.
+- **Hero Section Light Mode**: 
+  - Parameterized the WebGL background canvas in `src/sections/Hero.jsx` using shader uniforms (`uBaseColor`, `uNoiseColor`, `uIsLight`) and a `MutationObserver` on `document.documentElement` to respond instantly to light/dark mode switches.
+  - Recalibrated the light mode shader logic to vary noise colors around the base cream background `#F5F0E8`, ensuring the Hero section aligns with the rest of the site and resolving the dark section seam.
+- **WebGL Golden Blob Bug**: Removed the wobbly, high-contrast golden canvas blobs by setting `alpha: false` on the Three.js renderer and rendering solid colors. This resolved a buffer accumulation bug where transparent canvas frames built up to full opacity.
+
+### Git Housekeeping
+- Merged and aligned the local and remote `main` branch to match the `prototype` branch release state.
+- Cleaned up local and remote `prototype` and `prototype-2` branches.
