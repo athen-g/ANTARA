@@ -3,7 +3,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 // Import layout components
-import { Loader } from "./components/Loader";
+import Loader from "./components/Loader";
 import Navbar from "./components/Navbar";
 import { ParticleField } from "./components/ParticleField";
 import { CustomCursor } from "./components/CustomCursor";
