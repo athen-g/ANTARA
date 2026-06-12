@@ -9,6 +9,11 @@ export default function Loader({ onComplete }) {
   const loaderRef = useRef(null)
   const [phase, setPhase] = useState('assembling') // 'assembling' | 'pulsing' | 'exiting'
 
+  const onCompleteRef = useRef(onComplete)
+  useEffect(() => {
+    onCompleteRef.current = onComplete
+  }, [onComplete])
+
   useEffect(() => {
     // Phase timeline
     // 0–2000ms: mandala assembles
@@ -18,10 +23,10 @@ export default function Loader({ onComplete }) {
 
     const t1 = setTimeout(() => setPhase('pulsing'),  2000)
     const t2 = setTimeout(() => setPhase('exiting'),  2600)
-    const t3 = setTimeout(() => onComplete?.(),       3400)
+    const t3 = setTimeout(() => onCompleteRef.current?.(), 3400)
 
     return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3) }
-  }, [onComplete])
+  }, [])
 
   return (
     <div
@@ -158,7 +163,6 @@ function SriYantraSVG() {
               strokeDasharray: circ,
               strokeDashoffset: drawn ? 0 : circ,
               transition: `stroke-dashoffset 1.2s cubic-bezier(0.25, 1, 0.5, 1) ${i * delayPerElement}ms`,
-              willChange: 'stroke-dashoffset',
             }}
           />
         )
@@ -178,7 +182,6 @@ function SriYantraSVG() {
               strokeDasharray: pathLen,
               strokeDashoffset: drawn ? 0 : pathLen,
               transition: `stroke-dashoffset 1.0s cubic-bezier(0.25, 1, 0.5, 1) ${(rings.length + i) * delayPerElement}ms`,
-              willChange: 'stroke-dashoffset',
             }}
           />
         )

@@ -44,7 +44,7 @@ function App() {
       <div className="grain-overlay" />
 
       {/* Screen Loader Sequence */}
-      <Loader onComplete={() => setLoading(false)} />
+      {loading && <Loader onComplete={() => setLoading(false)} />}
 
       {/* Main Portfolio Presentation (rendered after loader exits) */}
       {!loading && (

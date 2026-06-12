@@ -30,10 +30,30 @@ function useNoiseBackground(canvasRef) {
     const scene  = new THREE.Scene()
     const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1)
 
+    // Resolve theme colors dynamically
+    const getThemeColors = () => {
+      const isLight = document.documentElement.getAttribute('data-theme') === 'light'
+      const rootStyle = getComputedStyle(document.documentElement)
+      const bgStr = rootStyle.getPropertyValue('--bg').trim() || (isLight ? '#F5F0E8' : '#080808')
+      const noiseColorStr = isLight ? '#E8DEC9' : '#0d0b07'
+      return {
+        base: new THREE.Color(bgStr),
+        noise: new THREE.Color(noiseColorStr),
+        isLight: isLight ? 1.0 : 0.0
+      }
+    }
+
+    const initialColors = getThemeColors()
+
     // Fullscreen quad
     const geo = new THREE.PlaneGeometry(2, 2)
     const mat = new THREE.ShaderMaterial({
-      uniforms: { uTime: { value: 0 } },
+      uniforms: {
+        uTime: { value: 0 },
+        uBaseColor: { value: initialColors.base },
+        uNoiseColor: { value: initialColors.noise },
+        uIsLight: { value: initialColors.isLight }
+      },
       vertexShader: `
         varying vec2 vUv;
         void main() {
@@ -43,6 +63,9 @@ function useNoiseBackground(canvasRef) {
       `,
       fragmentShader: `
         uniform float uTime;
+        uniform vec3 uBaseColor;
+        uniform vec3 uNoiseColor;
+        uniform float uIsLight;
         varying vec2 vUv;
 
         // Compact simplex noise
@@ -95,10 +118,17 @@ function useNoiseBackground(canvasRef) {
           float n1=snoise(vec3(vUv*2.5,t));
           float n2=snoise(vec3(vUv*5.,t*1.3+17.));
           float n=(n1*.6+n2*.4)*0.014;
-          vec3 base=vec3(0.031);
-          vec3 warm=vec3(0.05,0.033,0.008)*max(n,0.)*3.;
-          vec3 col=clamp(base+n+warm,vec3(0.02),vec3(0.075));
-          gl_FragColor=vec4(col,1.);
+          
+          vec3 col;
+          if (uIsLight > 0.5) {
+            col = uBaseColor + vec3(n * 0.4) - (uBaseColor - uNoiseColor) * max(n, 0.0) * 1.5;
+            col = clamp(col, uNoiseColor - 0.02, uBaseColor + 0.02);
+          } else {
+            vec3 warm = uNoiseColor * max(n, 0.) * 3.0;
+            col = clamp(uBaseColor + n + warm, vec3(0.02), vec3(0.075));
+          }
+          
+          gl_FragColor = vec4(col, 1.0);
         }
       `,
     })
@@ -124,9 +154,19 @@ function useNoiseBackground(canvasRef) {
     }
     window.addEventListener('resize', onResize, { passive: true })
 
+    // Theme observer to dynamically update uniforms
+    const observer = new MutationObserver(() => {
+      const colors = getThemeColors()
+      mat.uniforms.uBaseColor.value.copy(colors.base)
+      mat.uniforms.uNoiseColor.value.copy(colors.noise)
+      mat.uniforms.uIsLight.value = colors.isLight
+    })
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
+
     return () => {
       cancelAnimationFrame(frameId)
       window.removeEventListener('resize', onResize)
+      observer.disconnect()
       mat.dispose()
       geo.dispose()
       renderer.dispose()
