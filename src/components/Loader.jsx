@@ -23,7 +23,7 @@ export default function Loader({ onComplete }) {
 
     const t1 = setTimeout(() => setPhase('pulsing'),  2000)
     const t2 = setTimeout(() => setPhase('exiting'),  2600)
-    const t3 = setTimeout(() => onCompleteRef.current?.(), 3400)
+    const t3 = setTimeout(() => onCompleteRef.current?.(), 3900)
 
     return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3) }
   }, [])
