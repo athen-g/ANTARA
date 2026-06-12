@@ -13,6 +13,7 @@ All notable changes made to the **ANTARA** portfolio during this session:
   - **MGC Cosmetics** (premium optimized storefront)
   - **Green Life** (eco-centric micro-interactions platform)
 - **Golden Sanskrit Favicon**: Created a new custom vector SVG (`public/favicon.svg`) rendering the Sanskrit letter "अ" filled with a rich golden gradient (`#FCE082` -> `#E8A020` -> `#9E6B0F`), replacing the dark inline data-URI Om symbol in `index.html`.
+- **Mandala Visibility Refinement**: Increased the opacity of the `SanskriticDivider` mandalas across the site—especially the central rotating yantra in the Bento grid of the **Tools & Craft** section—making them slightly more visible and prominent.
 
 ### Fixed
 - **Loader Replay & Lag**: 

@@ -75,7 +75,7 @@ export default function About() {
           transition: 'background-color 0.4s ease',
         }}
       >
-        <SanskriticDivider variant="B" size={100} opacity={0.15} color="var(--gold-dim)" />
+        <SanskriticDivider variant="B" size={100} opacity={0.25} color="var(--gold-dim)" />
       </div>
 
       {/* 間 Kanji watermark */}

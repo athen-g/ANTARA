@@ -162,8 +162,8 @@ export function Skills() {
           <div className="hidden md:flex items-center justify-center p-6 min-h-[250px] relative">
             <div className="flex flex-col items-center">
               {/* Central Bindu of Bento Grid (Mandala Rotating) */}
-              <div className="relative w-28 h-28 opacity-35 text-[var(--gold)] animate-rotate-slow flex items-center justify-center">
-                <SanskriticDivider variant="A" className="w-full h-full p-0 py-0" opacity={0.6} />
+              <div className="relative w-28 h-28 opacity-65 text-[var(--gold)] animate-rotate-slow flex items-center justify-center">
+                <SanskriticDivider variant="A" className="w-full h-full p-0 py-0" opacity={0.9} />
               </div>
               <span className="font-ui text-[8px] tracking-[0.3em] uppercase text-[var(--text-3)] mt-2 select-none font-bold">
                 BINDU ━ CENTRE

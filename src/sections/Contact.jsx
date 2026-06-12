@@ -148,7 +148,7 @@ export default function Contact() {
           transition: 'background-color 0.4s ease',
         }}
       >
-        <SanskriticDivider variant="C" size={100} opacity={0.12} color="var(--gold-dim)" />
+        <SanskriticDivider variant="C" size={100} opacity={0.22} color="var(--gold-dim)" />
       </div>
 
       {/* 縁 Kanji watermark */}
@@ -294,7 +294,7 @@ export default function Contact() {
                 <SanskriticDivider
                   variant="B"
                   size={80}
-                  opacity={0.12}
+                  opacity={0.22}
                   color="var(--gold-dim)"
                   rotate={false}
                 />
