@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { skillCategories } from "../data/skills";
-import { SanskriticDivider } from "../components/SanskriticDivider";
-import { BrushStroke } from "../components/BrushStroke";
+import SanskriticDivider from "../components/SanskriticDivider";
+import BrushStroke from "../components/BrushStroke";
 import { useScrollReveal } from "../hooks/useScrollReveal";
 
 export function Skills() {
@@ -74,7 +74,7 @@ export function Skills() {
         {/* Section Heading */}
         <div className="flex flex-col items-start mb-16">
           <span className="font-display font-black text-[10px] tracking-[0.25em] text-[var(--gold)] uppercase mb-2">
-            DO ━ The Way / 道
+            Skills — 道 — Tools & Craft
           </span>
           <h2 className="font-display font-black text-4xl md:text-6xl text-[var(--text-1)] leading-tight">
             Tools & Craft.

@@ -1,109 +1,236 @@
-import React, { useState, useEffect } from "react";
+// ─────────────────────────────────────────────────────────────────────────────
+//  Navbar — minimal, shows/hides on scroll direction
+//  Logo: ANTARA + "अन्तर" wordmark
+//  Features a theme switch toggle + "Hire Me" CTA button in the top right
+// ─────────────────────────────────────────────────────────────────────────────
 
-export function Navbar() {
-  const [visible, setVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
-  const [theme, setTheme] = useState("dark");
+import React, { useEffect, useRef, useState } from 'react'
+
+const NAV_LINKS = [
+  { label: 'Work',    href: '#projects' },
+  { label: 'About',   href: '#about'    },
+  { label: 'Process', href: '#process'  },
+  { label: 'Contact', href: '#contact'  },
+]
+
+export default function Navbar() {
+  const [visible, setVisible] = useState(true)
+  const [scrolled, setScrolled] = useState(false)
+  const [theme, setTheme] = useState('dark')
+  const lastY = useRef(0)
 
   useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      
-      // Show navbar if scrolling up or if near top
-      if (currentScrollY < 50) {
-        setVisible(true);
-      } else if (currentScrollY > lastScrollY) {
-        setVisible(false); // Scrolling down
-      } else {
-        setVisible(true); // Scrolling up
-      }
-      setLastScrollY(currentScrollY);
-    };
+    const onScroll = () => {
+      const y = window.scrollY
+      setScrolled(y > 60)
+      setVisible(y < lastY.current || y < 80)
+      lastY.current = y
+    }
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [lastScrollY]);
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
-  // Handle Theme Toggle
+  useEffect(() => {
+    // Sync local state with document attribute on mount
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark'
+    setTheme(currentTheme)
+  }, [])
+
   const toggleTheme = () => {
-    const newTheme = theme === "dark" ? "light" : "dark";
-    setTheme(newTheme);
-    document.documentElement.setAttribute("data-theme", newTheme);
-  };
+    const newTheme = theme === 'dark' ? 'light' : 'dark'
+    setTheme(newTheme)
+    document.documentElement.setAttribute('data-theme', newTheme)
+  }
 
-  const navLinks = [
-    { name: "अन्तर", href: "#hero" },
-    { name: "About", href: "#about" },
-    { name: "Work", href: "#projects" },
-    { name: "Craft", href: "#skills" },
-    { name: "Process", href: "#process" },
-    { name: "Contact", href: "#contact" }
-  ];
+  const scrollTo = (e, href) => {
+    e.preventDefault()
+    const id = href.replace('#', '')
+    const el = document.getElementById(id)
+    if (el && window.__lenis) {
+      window.__lenis.scrollTo(el, { offset: -80, duration: 1.4 })
+    } else if (el) {
+      el.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
 
   return (
     <nav
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ease-in-out border-b border-[rgba(242,235,217,0.03)]
-        ${visible ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"}
-        ${lastScrollY > 20 ? "bg-[rgba(8,8,8,0.75)] backdrop-blur-md py-4" : "bg-transparent py-6"}
-      `}
+      role="navigation"
+      aria-label="Main navigation"
       style={{
-        backgroundColor: lastScrollY > 20 ? "var(--bg-surface)" : "transparent",
-        borderColor: "var(--border)"
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 1000,
+        transform: visible ? 'translateY(0)' : 'translateY(-100%)',
+        transition: 'transform 0.4s cubic-bezier(0.16,1,0.3,1), background 0.4s',
+        background: scrolled 
+          ? (theme === 'dark' ? 'rgba(8,8,8,0.85)' : 'rgba(245,240,232,0.85)') 
+          : 'transparent',
+        backdropFilter: scrolled ? 'blur(12px)' : 'none',
+        borderBottom: scrolled ? '0.5px solid var(--border)' : 'none',
+        padding: '0 clamp(24px, 6vw, 96px)',
+        height: '72px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
       }}
     >
-      <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between">
-        {/* Brand Logo */}
-        <a 
-          href="#hero" 
-          className="font-display font-black text-xl md:text-2xl tracking-tighter text-[var(--text-1)] flex items-center gap-2"
+      {/* Logo */}
+      <a
+        href="#"
+        onClick={(e) => {
+          e.preventDefault()
+          window.__lenis?.scrollTo(0, { duration: 1.4 })
+        }}
+        style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}
+        data-cursor="hover"
+        aria-label="ANTARA — Atharva Ghule, back to top"
+      >
+        <span
+          style={{
+            fontFamily: 'Syne, sans-serif',
+            fontWeight: 900,
+            fontSize: '15px',
+            letterSpacing: '0.15em',
+            color: 'var(--text-1)',
+            textTransform: 'uppercase',
+          }}
         >
-          ANTARA <span className="font-sanskrit text-xs font-normal text-[var(--gold)] ml-1 opacity-80">अन्तर</span>
-        </a>
+          ANTARA
+        </span>
+        <span
+          style={{
+            fontFamily: "'Noto Serif Devanagari', serif",
+            fontSize: '11px',
+            color: 'var(--gold)',
+            marginLeft: '6px',
+            opacity: 0.85,
+            fontWeight: 400
+          }}
+          aria-hidden="true"
+        >
+          अन्तर
+        </span>
+      </a>
 
-        {/* Navigation Menu */}
-        <div className="hidden md:flex items-center gap-8">
-          {navLinks.map((link) => (
+      {/* Nav links — hidden on mobile */}
+      <ul
+        style={{
+          display: 'flex',
+          gap: '40px',
+          listStyle: 'none',
+          margin: 0,
+          padding: 0,
+        }}
+        className="hidden md:flex"
+      >
+        {NAV_LINKS.map(({ label, href }) => (
+          <li key={href}>
             <a
-              key={link.name}
-              href={link.href}
-              className="text-xs font-ui font-medium uppercase tracking-widest text-[var(--text-2)] hover:text-[var(--gold)] transition-colors duration-300 relative py-1"
+              href={href}
+              onClick={(e) => scrollTo(e, href)}
+              data-cursor="hover"
+              style={{
+                fontFamily: 'Inter, sans-serif',
+                fontWeight: 500,
+                fontSize: '12px',
+                letterSpacing: '0.1em',
+                textTransform: 'uppercase',
+                color: 'var(--text-2)',
+                textDecoration: 'none',
+                transition: 'color 0.3s',
+                position: 'relative',
+              }}
+              onMouseEnter={(e) => (e.target.style.color = 'var(--text-1)')}
+              onMouseLeave={(e) => (e.target.style.color = 'var(--text-2)')}
             >
-              {link.name}
+              {label}
             </a>
-          ))}
-        </div>
+          </li>
+        ))}
+      </ul>
 
-        {/* Action Buttons */}
-        <div className="flex items-center gap-4">
-          {/* Theme Switcher */}
-          <button
-            onClick={toggleTheme}
-            className="w-10 h-10 rounded-full border border-[var(--border-gold)] flex items-center justify-center text-[var(--text-1)] hover:bg-[var(--border-gold)] transition-all duration-300"
-            aria-label="Toggle visual theme"
-            data-hover
-          >
-            {theme === "dark" ? (
-              // Sun Icon (shows when dark, toggles to light)
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="4"></circle>
-                <path d="M12 2v2"></path>
-                <path d="M12 20v2"></path>
-                <path d="m4.93 4.93 1.41 1.41"></path>
-                <path d="m17.66 17.66 1.41 1.41"></path>
-                <path d="M2 12h2"></path>
-                <path d="M20 12h2"></path>
-                <path d="m6.34 17.66-1.41 1.41"></path>
-                <path d="m19.07 4.93-1.41 1.41"></path>
-              </svg>
-            ) : (
-              // Moon Icon (shows when light, toggles to dark)
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
-              </svg>
-            )}
-          </button>
-        </div>
+      {/* Right Column: Theme toggle + Hire Me button */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+        
+        {/* Switch to Light Mode Toggle Button */}
+        <button
+          onClick={toggleTheme}
+          style={{
+            width: '36px',
+            height: '36px',
+            borderRadius: '50%',
+            border: '0.5px solid var(--border-gold)',
+            background: 'transparent',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: 'var(--text-1)',
+            cursor: 'pointer',
+            transition: 'background 0.3s, color 0.3s',
+            outline: 'none',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = 'var(--border-gold)'
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = 'transparent'
+          }}
+          data-cursor="hover"
+          aria-label="Toggle visual theme"
+        >
+          {theme === 'dark' ? (
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="4"></circle>
+              <path d="M12 2v2"></path>
+              <path d="M12 20v2"></path>
+              <path d="m4.93 4.93 1.41 1.41"></path>
+              <path d="m17.66 17.66 1.41 1.41"></path>
+              <path d="M2 12h2"></path>
+              <path d="M20 12h2"></path>
+              <path d="m6.34 17.66-1.41 1.41"></path>
+              <path d="m19.07 4.93-1.41 1.41"></path>
+            </svg>
+          ) : (
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+            </svg>
+          )}
+        </button>
+
+        {/* Hire Me CTA Button */}
+        <a
+          href="mailto:atharvag.design@gmail.com"
+          data-cursor="hover"
+          style={{
+            fontFamily: 'Inter, sans-serif',
+            fontWeight: 500,
+            fontSize: '12px',
+            letterSpacing: '0.08em',
+            textTransform: 'uppercase',
+            color: 'var(--bg)',
+            background: 'var(--gold)',
+            border: 'none',
+            padding: '8px 20px',
+            textDecoration: 'none',
+            transition: 'background 0.3s, color 0.3s',
+            display: 'inline-block',
+          }}
+          onMouseEnter={(e) => {
+            e.target.style.background = 'var(--text-1)'
+            e.target.style.color = (theme === 'dark' ? '#080808' : '#F5F0E8')
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.background = 'var(--gold)'
+            e.target.style.color = 'var(--bg)'
+          }}
+        >
+          Hire Me
+        </a>
       </div>
     </nav>
-  );
+  )
 }

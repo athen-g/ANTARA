@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { projects } from "../data/projects";
-import { ProjectCard } from "../components/ProjectCard";
-import { BrushStroke } from "../components/BrushStroke";
+import ProjectCard from "../components/ProjectCard";
+import BrushStroke from "../components/BrushStroke";
 
 export function Projects() {
   const triggerRef = useRef(null);
@@ -112,7 +112,7 @@ export function Projects() {
         <div className="max-w-7xl mx-auto relative z-20">
           <div className="flex flex-col items-start mb-12">
             <span className="font-display font-black text-[10px] tracking-[0.25em] text-[var(--gold)] uppercase mb-2">
-              TAKUMI ━ Craftsmanship / 匠
+              Portfolio — अन्तर — 2025
             </span>
             <h2 className="font-display font-black text-4xl md:text-5xl text-[var(--text-1)]">
               Selected Work.
@@ -122,8 +122,8 @@ export function Projects() {
           </div>
 
           <div className="flex flex-col gap-10 w-full mt-8">
-            {projects.map((project) => (
-              <ProjectCard key={project.id} project={project} />
+            {projects.map((project, i) => (
+              <ProjectCard key={project.id} project={project} index={i} />
             ))}
           </div>
         </div>
@@ -140,7 +140,7 @@ export function Projects() {
             {/* Title intro card inside the horizontal strip */}
             <div className="w-[30vw] flex-shrink-0 flex flex-col justify-center items-start pr-12 select-none">
               <span className="font-display font-black text-[10px] tracking-[0.25em] text-[var(--gold)] uppercase mb-2">
-                TAKUMI ━ Craftsmanship / 匠
+                Portfolio — अन्तर — 2025
               </span>
               <h2 className="font-display font-black text-5xl xl:text-7xl text-[var(--text-1)] leading-none">
                 Selected<br />Work.
@@ -157,8 +157,8 @@ export function Projects() {
             </div>
 
             {/* List of projects */}
-            {projects.map((project) => (
-              <ProjectCard key={project.id} project={project} />
+            {projects.map((project, i) => (
+              <ProjectCard key={project.id} project={project} index={i} />
             ))}
 
             {/* Empty space card to close the scroll emakimono neatly */}

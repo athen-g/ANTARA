@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
-import { BrushStroke } from "../components/BrushStroke";
+import BrushStroke from "../components/BrushStroke";
 
 export function Process() {
   const containerRef = useRef(null);
@@ -115,7 +115,7 @@ export function Process() {
         {/* Section Title */}
         <div className="flex flex-col items-start mb-20">
           <span className="font-display font-black text-[10px] tracking-[0.25em] text-[var(--gold)] uppercase mb-2">
-            KEIRO ━ The Pathway / 経路
+            Process — 経路 — The Pathway
           </span>
           <h2 className="font-display font-black text-4xl md:text-6xl text-[var(--text-1)] leading-tight">
             Creative Process.

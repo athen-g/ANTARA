@@ -1,205 +1,275 @@
-import React, { useEffect, useRef, useState } from "react";
-import gsap from "gsap";
-import { SanskriticDivider } from "../components/SanskriticDivider";
-import { InkReveal } from "../components/InkReveal";
-import { BrushStroke } from "../components/BrushStroke";
-import { useScrollReveal } from "../hooks/useScrollReveal";
+// ─────────────────────────────────────────────────────────────────────────────
+//  About — 間 (ma) — the space between
+//  Left: OM symbol + brushstroke + animated stats
+//  Right: Bio + skill pills
+// ─────────────────────────────────────────────────────────────────────────────
 
-// Count-up Stat Utility Component
-function StatCounter({ end, suffix = "", duration = 1500 }) {
-  const [count, setCount] = useState(0);
-  const ref = useRef(null);
+import React, { useEffect, useRef, useState } from 'react'
+import InkReveal from '../components/InkReveal.jsx'
+import BrushStroke from '../components/BrushStroke.jsx'
+import SanskriticDivider from '../components/SanskriticDivider.jsx'
+import { useScrollReveal } from '../hooks/useScrollReveal.js'
+
+const STATS = [
+  { value: 12, label: 'Projects Shipped', suffix: '' },
+  { value: 3,  label: 'Years Experience', suffix: '+' },
+  { value: 5,  label: 'Client Rating',    suffix: '★' },
+]
+
+const SKILL_PILLS = [
+  'React', 'TypeScript', 'Node.js', 'Figma', 'Three.js',
+  'GSAP', 'Tailwind', 'Next.js', 'PostgreSQL', 'Framer',
+]
+
+// Animated counter — counts up once visible
+function CountUp({ target, suffix = '', isVisible }) {
+  const [count, setCount] = useState(0)
+  const started = useRef(false)
 
   useEffect(() => {
-    let startTime = null;
-    let frameId;
-
-    const animate = (timestamp) => {
-      if (!startTime) startTime = timestamp;
-      const progress = Math.min((timestamp - startTime) / duration, 1);
-      // Easing out quadratic
-      const easeProgress = progress * (2 - progress);
-      setCount(Math.floor(easeProgress * end));
-
-      if (progress < 1) {
-        frameId = requestAnimationFrame(animate);
-      }
-    };
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          frameId = requestAnimationFrame(animate);
-          observer.unobserve(entry.target);
-        }
-      },
-      { threshold: 0.15 }
-    );
-
-    if (ref.current) {
-      observer.observe(ref.current);
+    if (!isVisible || started.current) return
+    started.current = true
+    const duration = 1800
+    const start    = Date.now()
+    const tick = () => {
+      const elapsed  = Date.now() - start
+      const progress = Math.min(elapsed / duration, 1)
+      const eased    = 1 - Math.pow(1 - progress, 3) // ease out cubic
+      setCount(Math.round(eased * target))
+      if (progress < 1) requestAnimationFrame(tick)
     }
-
-    return () => {
-      cancelAnimationFrame(frameId);
-      if (ref.current) observer.disconnect();
-    };
-  }, [end, duration]);
+    requestAnimationFrame(tick)
+  }, [isVisible, target])
 
   return (
-    <span ref={ref} className="font-display font-black text-3xl md:text-5xl text-[var(--gold)]">
+    <span>
       {count}
       {suffix}
     </span>
-  );
+  )
 }
 
-export function About() {
-  const containerRef = useRef(null);
-  const watermarkRef = useRef(null);
-
-  // Trigger entrance stagger for skills using our useScrollReveal hook
-  useScrollReveal(containerRef, {
-    selector: ".about-stagger",
-    type: "fade-up",
-    stagger: 0.08,
-    once: true
-  });
-
-  // Soft mouse parallax for the 間 (ma) watermark
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      const xVal = (e.clientX / window.innerWidth - 0.5) * 30;
-      const yVal = (e.clientY / window.innerHeight - 0.5) * 30;
-
-      if (watermarkRef.current) {
-        gsap.to(watermarkRef.current, {
-          x: xVal * 0.6,
-          y: yVal * 0.6,
-          duration: 1.5,
-          ease: "power2.out"
-        });
-      }
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
-
-  const coreSkills = [
-    "Figma", "UI/UX Design", "Design Systems", "React 18", 
-    "Vite", "GSAP 3", "Three.js", "Tailwind CSS", 
-    "Node.js", "Wix Studio", "Fullstack Development"
-  ];
+export default function About() {
+  const { ref: sectionRef, isVisible } = useScrollReveal({ threshold: 0.1 })
+  const { ref: pillsRef, isVisible: pillsVisible } = useScrollReveal({ threshold: 0.2 })
 
   return (
-    <section 
-      id="about" 
-      ref={containerRef}
-      className="relative w-full py-24 px-6 md:px-12 xl:px-24 overflow-hidden bg-[var(--bg-surface)] border-b border-[var(--border)]"
+    <section
+      id="about"
+      aria-label="About Atharva Ghule"
+      style={{ position: 'relative', overflow: 'hidden' }}
     >
-      {/* Lotus OM Divider at Section Entry */}
-      <SanskriticDivider variant="B" className="absolute top-0 left-0" />
+      {/* SanskriticDivider Variant B — above section */}
+      <div
+        aria-hidden="true"
+        style={{ display: 'flex', justifyContent: 'center', padding: '20px 0', background: 'var(--bg-surface)' }}
+      >
+        <SanskriticDivider variant="B" size={100} opacity={0.15} color="var(--gold-dim)" />
+      </div>
 
-      {/* 間 Kanji Watermark */}
-      <div 
-        ref={watermarkRef}
-        className="absolute top-1/3 left-[15%] text-[26vw] select-none pointer-events-none z-10 kanji-watermark leading-none"
+      {/* 間 Kanji watermark */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          top: '10%',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          fontFamily: 'Syne, sans-serif',
+          fontWeight: 900,
+          fontSize: 'clamp(140px, 22vw, 300px)',
+          lineHeight: 1,
+          color: 'var(--text-1)',
+          opacity: 0.035,
+          userSelect: 'none',
+          pointerEvents: 'none',
+          zIndex: 0,
+          animation: 'pulseSlow 4s ease-in-out infinite',
+        }}
       >
         間
       </div>
 
-      <div className="relative max-w-7xl mx-auto md:grid md:grid-cols-12 md:gap-16 items-start z-20 pt-16">
-        
-        {/* Left Column (45% on desktop) */}
-        <div className="col-span-5 flex flex-col items-start gap-8">
-          
-          {/* InkReveal graphic panel */}
-          <InkReveal className="w-full flex items-center justify-center p-8 bg-[var(--bg-card)] rounded-xl border border-[var(--border)] relative overflow-hidden group">
-            {/* Shoji subtle subgrid */}
-            <div className="absolute inset-0 bg-grid opacity-10 pointer-events-none" />
-            
-            {/* Om (ॐ) Devanagari graphic */}
-            <div className="font-sanskrit text-[160px] md:text-[200px] leading-none select-none text-[var(--gold)] opacity-15 transition-opacity duration-500 group-hover:opacity-25 py-4">
-              ॐ
+      <div
+        ref={sectionRef}
+        className="section-pad"
+        style={{
+          position: 'relative',
+          zIndex: 1,
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 1fr))',
+          gap: 'clamp(40px, 6vw, 80px)',
+          alignItems: 'start',
+        }}
+      >
+        {/* ── Left Column (45%) ─────────────────────────────────────────── */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+
+          {/* OM symbol as graphic element */}
+          <InkReveal delay={100}>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'flex-start',
+                gap: '16px',
+              }}
+            >
+              <div
+                aria-hidden="true"
+                style={{
+                  fontFamily: "'Noto Serif Devanagari', serif",
+                  fontWeight: 400,
+                  fontSize: 'clamp(100px, 16vw, 200px)',
+                  lineHeight: 1,
+                  color: 'var(--gold)',
+                  opacity: 0.15,
+                  userSelect: 'none',
+                }}
+              >
+                ॐ
+              </div>
+
+              <BrushStroke variant="horizontal" isVisible={isVisible} delay={400} opacity={0.2} />
             </div>
-            
-            {/* Sumi-e corner details */}
-            <BrushStroke variant="corner" className="absolute top-2 left-2 rotate-90 opacity-15" />
-            <BrushStroke variant="corner" className="absolute bottom-2 right-2 -rotate-90 opacity-15" />
           </InkReveal>
 
-          {/* calligrapher brushstroke separator */}
-          <BrushStroke variant="horizontal" className="w-full opacity-20" />
-
-          {/* Count-Up Stats Panel */}
-          <div className="w-full grid grid-cols-3 gap-4 border-t border-[var(--border)] pt-8">
-            <div className="flex flex-col items-start">
-              <StatCounter end={12} />
-              <span className="font-ui uppercase tracking-widest text-[8px] md:text-[9px] text-[var(--text-3)] mt-2 font-bold">
-                Projects Shipped
-              </span>
-            </div>
-            <div className="flex flex-col items-start">
-              <StatCounter end={3} suffix="+" />
-              <span className="font-ui uppercase tracking-widest text-[8px] md:text-[9px] text-[var(--text-3)] mt-2 font-bold">
-                Years Practice
-              </span>
-            </div>
-            <div className="flex flex-col items-start">
-              <StatCounter end={5} suffix="★" />
-              <span className="font-ui uppercase tracking-widest text-[8px] md:text-[9px] text-[var(--text-3)] mt-2 font-bold">
-                Client Rating
-              </span>
-            </div>
+          {/* Animated stats */}
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '28px',
+            }}
+          >
+            {STATS.map(({ value, label, suffix }) => (
+              <div key={label}>
+                <div
+                  style={{
+                    fontFamily: 'Syne, sans-serif',
+                    fontWeight: 900,
+                    fontSize: 'clamp(40px, 6vw, 68px)',
+                    lineHeight: 1,
+                    letterSpacing: '-0.03em',
+                    color: 'var(--text-1)',
+                  }}
+                >
+                  <CountUp target={value} suffix={suffix} isVisible={isVisible} />
+                </div>
+                <div className="text-label" style={{ marginTop: '4px' }}>{label}</div>
+                <div
+                  aria-hidden="true"
+                  style={{
+                    height: '0.5px',
+                    background: 'var(--border-gold)',
+                    marginTop: '12px',
+                    width: '60%',
+                  }}
+                />
+              </div>
+            ))}
           </div>
-
         </div>
 
-        {/* Right Column (55% on desktop) */}
-        <div className="col-span-7 flex flex-col justify-center items-start mt-12 md:mt-0">
-          
-          {/* Section Heading */}
-          <div className="about-stagger flex flex-col items-start mb-6">
-            <span className="font-display font-black text-[10px] tracking-[0.25em] text-[var(--gold)] uppercase mb-2">
-              MA ━ Space & Pause / 間
-            </span>
-            <h2 className="font-display font-black text-4xl md:text-6xl text-[var(--text-1)] leading-tight">
-              The Space Between.
+        {/* ── Right Column (55%) ────────────────────────────────────────── */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
+
+          {/* Section label */}
+          <InkReveal delay={0}>
+            <p className="text-label">About — 間 — The Space Between</p>
+          </InkReveal>
+
+          {/* Headline */}
+          <InkReveal delay={150}>
+            <h2
+              style={{
+                fontFamily: 'Syne, sans-serif',
+                fontWeight: 800,
+                fontSize: 'clamp(28px, 4.5vw, 52px)',
+                lineHeight: 1.1,
+                letterSpacing: '-0.03em',
+                color: 'var(--text-1)',
+              }}
+            >
+              Designing at the
+              <br />
+              <span style={{ color: 'var(--gold)' }}>threshold</span> of
+              <br />
+              art & engineering.
             </h2>
-          </div>
+          </InkReveal>
 
-          {/* Editorial Biography */}
-          <p className="about-stagger font-body text-sm md:text-base leading-relaxed text-[var(--text-2)] mb-6">
-            In Sanskrit, <strong>Antara</strong> represents the space between — the liminal threshold where static designs dissolve into dynamic code. My work resides precisely in this gap, uniting the visceral strokes of calligraphic art with the rigid, logical grids of digital frameworks.
-          </p>
+          {/* Bio */}
+          <InkReveal delay={250}>
+            <p
+              style={{
+                fontFamily: 'Inter, sans-serif',
+                fontWeight: 400,
+                fontSize: '15px',
+                lineHeight: 1.85,
+                color: 'var(--text-2)',
+              }}
+            >
+              I'm Atharva — a designer and developer from India who believes the most
+              powerful digital experiences live in the liminal space between visual poetry
+              and technical precision. I build products that feel inevitable: where every
+              pixel is intentional, every interaction considered, and every line of code
+              serves the story.
+            </p>
+          </InkReveal>
 
-          <p className="about-stagger font-body text-sm md:text-base leading-relaxed text-[var(--text-2)] mb-8">
-            I craft digital products that breathe. Inspired by Japanese <strong>Sumi-e (墨絵)</strong> and ancient <strong>Yantra geometry</strong>, I value negative space (ma), structured proportions, and subtle micro-movements. I believe code should feel like a single, cohesive artwork, built with clean logic, semantic detail, and absolute obsession.
-          </p>
+          <InkReveal delay={320}>
+            <p
+              style={{
+                fontFamily: 'Inter, sans-serif',
+                fontWeight: 400,
+                fontSize: '15px',
+                lineHeight: 1.85,
+                color: 'var(--text-2)',
+              }}
+            >
+              With roots in UI/UX and branches reaching into fullstack development,
+              I speak fluently across disciplines — from early discovery and systems
+              thinking through to deployment and beyond. The work I'm most proud of
+              doesn't announce itself; it simply feels right.
+            </p>
+          </InkReveal>
 
-          {/* Staggered Skill Pills */}
-          <div className="about-stagger flex flex-wrap gap-2.5">
-            {coreSkills.map((skill) => (
+          {/* Brushstroke divider */}
+          <BrushStroke variant="diagonal" isVisible={isVisible} delay={500} opacity={0.12} style={{ alignSelf: 'flex-start' }} width="60px" />
+
+          {/* Skill pills */}
+          <div ref={pillsRef} style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+            {SKILL_PILLS.map((skill, i) => (
               <span
                 key={skill}
-                className="about-pill inline-block text-[10px] font-ui font-medium tracking-wider uppercase px-4 py-2 bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-1)] rounded-full hover:border-[var(--gold)] transition-colors duration-300 select-none"
+                className="skill-chip"
+                style={{
+                  opacity: pillsVisible ? 1 : 0,
+                  transform: pillsVisible ? 'translateY(0)' : 'translateY(8px)',
+                  transition: `opacity 0.4s ease ${i * 0.06}s, transform 0.4s ease ${i * 0.06}s`,
+                }}
               >
                 {skill}
               </span>
             ))}
           </div>
 
+          {/* Sanskrit decorative text */}
+          <div
+            aria-hidden="true"
+            style={{
+              fontFamily: "'Noto Serif Devanagari', serif",
+              fontSize: '13px',
+              color: 'var(--gold)',
+              opacity: 0.45,
+              letterSpacing: '0.1em',
+            }}
+          >
+            सृजन · शिल्प · संयोग
+          </div>
         </div>
-
       </div>
-      
-      <style>{`
-        .bg-grid {
-          background-image: radial-gradient(var(--border-gold) 1px, transparent 1px);
-          background-size: 16px 16px;
-        }
-      `}</style>
     </section>
-  );
+  )
 }

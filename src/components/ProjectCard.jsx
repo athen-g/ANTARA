@@ -1,135 +1,203 @@
-import React, { useState } from "react";
-import { MagneticButton } from "./MagneticButton";
-import { BrushStroke } from "./BrushStroke";
+// ─────────────────────────────────────────────────────────────────────────────
+//  ProjectCard — individual project card in the horizontal emakimono scroll
+// ─────────────────────────────────────────────────────────────────────────────
 
-export function ProjectCard({ project }) {
-  const [hovered, setHovered] = useState(false);
-  const primaryAccent = project.accent[0];
-  const secondaryAccent = project.accent[1];
+import React, { useState } from 'react'
+import MagneticButton from './MagneticButton.jsx'
+import BrushStroke from './BrushStroke.jsx'
+import SanskriticDivider from './SanskriticDivider.jsx'
+
+/**
+ * @param {object} props
+ * @param {object} props.project — project data from projects.js
+ * @param {number} props.index   — position index (0-based)
+ */
+export default function ProjectCard({ project, index }) {
+  const [hovered, setHovered] = useState(false)
+  const { id, title, url, tags, description, accent } = project
 
   return (
-    <div
-      className="group relative w-full md:w-[65vw] xl:w-[45vw] flex-shrink-0 bg-[var(--bg-card)] rounded-xl border border-[var(--border)] p-6 md:p-8 flex flex-col justify-between transition-all duration-500 ease-out select-none cursor-none overflow-hidden"
-      data-cursor="project"
+    <article
+      data-cursor="card"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
+      aria-label={`Project: ${title}`}
       style={{
-        transform: hovered ? "translate3d(0, -8px, 0)" : "translate3d(0, 0, 0)",
-        borderColor: hovered ? "var(--border-gold)" : "var(--border)",
-        boxShadow: hovered 
-          ? `0 20px 40px -15px ${primaryAccent}44, 0 1px 3px rgba(0, 0, 0, 0.2)`
-          : "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+        position: 'relative',
+        width: 'clamp(300px, 65vw, 720px)',
+        flexShrink: 0,
+        background: 'var(--bg-card)',
+        border: '0.5px solid var(--border)',
+        borderLeft: `4px solid ${accent[0]}`,
+        padding: '48px 40px 40px',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '20px',
+        transition: 'transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s cubic-bezier(0.16,1,0.3,1)',
+        transform: hovered ? 'translateY(-8px)' : 'translateY(0)',
+        boxShadow: hovered
+          ? `0 24px 80px rgba(0,0,0,0.5), inset 0 0 0 0.5px ${accent[0]}44`
+          : '0 4px 24px rgba(0,0,0,0.2)',
+        cursor: 'none',
+        overflow: 'hidden',
       }}
     >
-      {/* Decorative Ink Brushstroke Sweep on Hover */}
-      <div 
-        className="absolute top-0 left-0 w-full transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 origin-left"
+      {/* Brushstroke sweeps across top edge on hover */}
+      <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          overflow: 'hidden',
+          height: '3px',
+        }}
       >
-        <BrushStroke variant="horizontal" color={primaryAccent} opacity={0.65} className="h-[4px] w-full" />
-      </div>
-
-      {/* Top Section: Watermark ID & Title */}
-      <div className="relative">
-        {/* Accent Left Border */}
-        <div 
-          className="absolute -left-6 md:-left-8 top-0 h-10 w-[4px] transition-all duration-500"
-          style={{ 
-            backgroundColor: primaryAccent,
-            boxShadow: hovered ? `0 0 12px ${primaryAccent}` : "none"
+        <BrushStroke
+          variant="horizontal"
+          color={accent[0]}
+          opacity={hovered ? 0.8 : 0}
+          isVisible={hovered}
+          style={{
+            transition: 'opacity 0.4s',
+            marginTop: '-10px',
           }}
         />
-
-        {/* Large Watermark ID Number */}
-        <span 
-          className="absolute top-0 right-0 font-display font-black text-8xl md:text-9xl tracking-tighter select-none pointer-events-none transition-colors duration-500 leading-none"
-          style={{ color: "var(--bg-raised)" }}
-        >
-          {project.id}
-        </span>
-
-        {/* Title */}
-        <h3 className="relative font-display font-black text-2xl md:text-4xl text-[var(--text-1)] z-10 pt-2 pr-16 leading-tight">
-          {project.title}
-        </h3>
-
-        {/* Tag Pills */}
-        <div className="flex flex-wrap gap-2 mt-4">
-          {project.tags.map((tag) => (
-            <span
-              key={tag}
-              className="text-[9px] font-ui font-medium tracking-widest uppercase px-2.5 py-0.5 rounded-full border border-[var(--border-gold)] text-[var(--gold)]"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
       </div>
 
-      {/* Middle Section: Visual Placeholder Grid & Description */}
-      <div className="my-6 flex flex-col gap-6">
-        {/* Gradient Yantra Placeholder */}
-        <div 
-          className="relative w-full h-40 md:h-48 rounded-lg overflow-hidden flex items-center justify-center border border-[rgba(242,235,217,0.03)]"
+      {/* Project number watermark */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          top: '20px',
+          right: '28px',
+          fontFamily: 'Syne, sans-serif',
+          fontWeight: 900,
+          fontSize: '120px',
+          lineHeight: 1,
+          color: hovered ? `${accent[0]}18` : 'var(--bg-raised)',
+          userSelect: 'none',
+          transition: 'color 0.4s',
+          letterSpacing: '-0.04em',
+          pointerEvents: 'none',
+        }}
+      >
+        {id}
+      </div>
+
+      {/* Gradient image placeholder with miniature yantra overlay */}
+      <div
+        style={{
+          position: 'relative',
+          width: '100%',
+          height: '200px',
+          borderRadius: '1px',
+          background: `linear-gradient(135deg, ${accent[0]}22, ${accent[1]}44)`,
+          overflow: 'hidden',
+          flexShrink: 0,
+        }}
+      >
+        {/* Yantra overlay */}
+        <div
           style={{
-            background: `linear-gradient(135deg, ${primaryAccent}99, ${secondaryAccent}bb)`
+            position: 'absolute',
+            inset: 0,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
           }}
         >
-          {/* Subtle Yantra Overlay (Simplified Sri Yantra geometry) */}
-          <div className="absolute w-28 h-28 opacity-15 text-white animate-rotate-slow">
-            <svg 
-              viewBox="0 0 200 200" 
-              className="w-full h-full stroke-current fill-none" 
-              strokeWidth="0.8"
-            >
-              <circle cx="100" cy="100" r="90" />
-              <polygon points="100,28 162,136 38,136" />
-              <polygon points="100,172 162,64 38,64" />
-              <circle cx="100" cy="100" r="60" />
-              <circle cx="100" cy="100" r="40" />
-            </svg>
-          </div>
-          
-          {/* Subtle sumi-e ink smoke background */}
-          <div 
-            className="absolute inset-0 bg-cover bg-center mix-blend-overlay opacity-30" 
-            style={{
-              backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='4'/%3E%3CfeDisplacementMap scale='20'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23f)'/%3E%3C/svg%3E")`
-            }}
+          <SanskriticDivider
+            variant="A"
+            size={100}
+            color={accent[0]}
+            opacity={0.1}
+            rotate={hovered}
           />
         </div>
 
-        {/* Short Description */}
-        <p className="font-body text-xs md:text-sm leading-relaxed text-[var(--text-2)] line-clamp-3">
-          {project.description}
-        </p>
+        {/* Gradient shimmer on hover */}
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            background: `linear-gradient(90deg, transparent, ${accent[0]}15, transparent)`,
+            transform: hovered ? 'translateX(100%)' : 'translateX(-100%)',
+            transition: 'transform 0.8s cubic-bezier(0.16,1,0.3,1)',
+          }}
+        />
       </div>
 
-      {/* Bottom Section: Action Button */}
-      <div className="mt-auto flex items-center justify-between">
-        {/* Red Thread connection node */}
-        <div className="flex items-center gap-1.5">
-          <span 
-            className="w-1.5 h-1.5 rounded-full bg-[var(--vermillion)] transition-all duration-300"
-            style={{ 
-              transform: hovered ? "scale(1.5)" : "scale(1)",
-              boxShadow: hovered ? `0 0 8px var(--vermillion)` : "none"
-            }}
-          />
-          <span className="text-[9px] font-ui tracking-widest text-[var(--text-3)] uppercase">LINK</span>
-        </div>
+      {/* Title */}
+      <h3
+        style={{
+          fontFamily: 'Syne, sans-serif',
+          fontWeight: 800,
+          fontSize: 'clamp(24px, 3vw, 36px)',
+          lineHeight: 1.05,
+          color: 'var(--text-1)',
+          letterSpacing: '-0.02em',
+          marginTop: '8px',
+          position: 'relative',
+          zIndex: 1,
+        }}
+      >
+        {title}
+      </h3>
 
-        {/* Visit Button wrapped in Magnetic physics */}
-        <MagneticButton>
-          <a
-            href={project.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-[10px] font-ui font-bold tracking-widest uppercase px-4 py-2 border border-[var(--gold-dim)] text-[var(--gold)] rounded hover:bg-[var(--gold)] hover:text-black hover:border-transparent transition-all duration-300"
+      {/* Tags */}
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+        {tags.map((tag) => (
+          <span
+            key={tag}
+            style={{
+              fontFamily: 'Inter, sans-serif',
+              fontWeight: 500,
+              fontSize: '11px',
+              letterSpacing: '0.12em',
+              textTransform: 'uppercase',
+              color: 'var(--text-2)',
+              border: `0.5px solid ${accent[0]}44`,
+              padding: '3px 9px',
+              transition: 'border-color 0.3s, color 0.3s',
+              borderColor: hovered ? `${accent[0]}88` : `${accent[0]}44`,
+            }}
           >
-            開く <span className="text-[8px] opacity-80">━ Visit</span>
-          </a>
+            {tag}
+          </span>
+        ))}
+      </div>
+
+      {/* Description */}
+      <p
+        style={{
+          fontFamily: 'Inter, sans-serif',
+          fontWeight: 400,
+          fontSize: '14px',
+          lineHeight: 1.75,
+          color: 'var(--text-2)',
+          flex: 1,
+        }}
+      >
+        {description}
+      </p>
+
+      {/* CTA */}
+      <div style={{ marginTop: 'auto', paddingTop: '8px' }}>
+        <MagneticButton
+          href={url}
+          variant="outline"
+          style={{
+            borderColor: accent[0],
+            color: accent[0],
+            padding: '10px 24px',
+            fontSize: '12px',
+          }}
+        >
+          開く &nbsp;→&nbsp; Visit
         </MagneticButton>
       </div>
-    </div>
-  );
+    </article>
+  )
 }

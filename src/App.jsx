@@ -4,18 +4,18 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 // Import layout components
 import { Loader } from "./components/Loader";
-import { Navbar } from "./components/Navbar";
+import Navbar from "./components/Navbar";
 import { ParticleField } from "./components/ParticleField";
 import { CustomCursor } from "./components/CustomCursor";
 
 // Import sections
-import { Hero } from "./sections/Hero";
-import { About } from "./sections/About";
+import Hero from "./sections/Hero";
+import About from "./sections/About";
 import { MarqueeTicker } from "./components/MarqueeTicker";
 import { Projects } from "./sections/Projects";
 import { Skills } from "./sections/Skills";
 import { Process } from "./sections/Process";
-import { Contact } from "./sections/Contact";
+import Contact from "./sections/Contact";
 import { Footer } from "./sections/Footer";
 
 // Register ScrollTrigger globally

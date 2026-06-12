@@ -1,259 +1,428 @@
-import React, { useEffect, useRef, useState } from "react";
-import gsap from "gsap";
-import { SanskriticDivider } from "../components/SanskriticDivider";
-import { BrushStroke } from "../components/BrushStroke";
-import { InkReveal } from "../components/InkReveal";
-import { MagneticButton } from "../components/MagneticButton";
+// ─────────────────────────────────────────────────────────────────────────────
+//  Contact — 縁 (en) — connection / fate
+//  Dramatic InkReveal · Sanskrit subtext · Brushstroke email underline
+//  Torii-framed social links · Form with gold focus borders
+// ─────────────────────────────────────────────────────────────────────────────
 
-export function Contact() {
-  const watermarkRef = useRef(null);
-  const [focusStates, setFocusStates] = useState({ name: false, email: false, message: false });
-  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
-  const [formSent, setFormSent] = useState(false);
+import React, { useState, useRef } from 'react'
+import InkReveal from '../components/InkReveal.jsx'
+import BrushStroke from '../components/BrushStroke.jsx'
+import MagneticButton from '../components/MagneticButton.jsx'
+import SanskriticDivider from '../components/SanskriticDivider.jsx'
+import { useScrollReveal } from '../hooks/useScrollReveal.js'
 
-  // Soft mouse parallax for the 縁 (en) watermark
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      const xVal = (e.clientX / window.innerWidth - 0.5) * 35;
-      const yVal = (e.clientY / window.innerHeight - 0.5) * 35;
+const SOCIALS = [
+  { label: 'GitHub',   href: 'https://github.com/athen-g',               short: 'GH', desc: '@athen-g'    },
+  { label: 'LinkedIn', href: 'https://linkedin.com/in/atharvaghule',      short: 'LI', desc: 'atharvaghule' },
+  { label: 'Dribbble', href: 'https://dribbble.com/athen-g',              short: 'DR', desc: '@athen-g'    },
+]
 
-      if (watermarkRef.current) {
-        gsap.to(watermarkRef.current, {
-          x: xVal * 0.75,
-          y: yVal * 0.75,
-          duration: 1.5,
-          ease: "power2.out"
-        });
-      }
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
-
-  const handleFocus = (field) => {
-    setFocusStates((prev) => ({ ...prev, [field]: true }));
-  };
-
-  const handleBlur = (field) => {
-    setFocusStates((prev) => ({ ...prev, [field]: false }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Simulate form submission
-    setFormSent(true);
-    setTimeout(() => {
-      setFormData({ name: "", email: "", message: "" });
-      setFormSent(false);
-    }, 3000);
-  };
-
-  const socialChannels = [
-    { name: "GitHub", url: "https://github.com/athen-g" },
-    { name: "LinkedIn", url: "https://linkedin.com" },
-    { name: "Figma", url: "https://figma.com" }
-  ];
+// SVG torii frame for social buttons
+function ToriiSocialBtn({ social }) {
+  const [hovered, setHovered] = useState(false)
 
   return (
-    // DRAMATIC INK REVEAL CONTAINER WRAPPING CONTACT SECTION
-    <InkReveal 
-      id="contact" 
-      className="relative w-full py-24 px-6 md:px-12 xl:px-24 overflow-hidden border-b border-[var(--border)]"
+    <a
+      href={social.href}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`${social.label}: ${social.desc}`}
+      data-cursor="hover"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '8px',
+        textDecoration: 'none',
+        transition: 'opacity 0.3s',
+      }}
     >
-      {/* Sri Yantra Gate Bhupura Divider at Section Entry */}
-      <SanskriticDivider variant="C" className="absolute top-0 left-0" />
+      {/* Torii SVG frame */}
+      <div style={{ position: 'relative', width: '64px', height: '88px' }}>
+        <svg
+          width="64" height="88"
+          viewBox="0 0 64 88"
+          fill="none"
+          aria-hidden="true"
+          style={{ position: 'absolute', inset: 0 }}
+        >
+          {/* Left pillar */}
+          <line x1="14" y1="20" x2="14" y2="80"
+            stroke={hovered ? 'var(--vermillion)' : 'var(--border-gold)'}
+            strokeWidth="1.5" strokeLinecap="round"
+            style={{ transition: 'stroke 0.3s' }}
+          />
+          {/* Right pillar */}
+          <line x1="50" y1="20" x2="50" y2="80"
+            stroke={hovered ? 'var(--vermillion)' : 'var(--border-gold)'}
+            strokeWidth="1.5" strokeLinecap="round"
+            style={{ transition: 'stroke 0.3s' }}
+          />
+          {/* Lower crossbeam */}
+          <line x1="8" y1="30" x2="56" y2="30"
+            stroke={hovered ? 'var(--vermillion)' : 'var(--border-gold)'}
+            strokeWidth="1.5" strokeLinecap="round"
+            style={{ transition: 'stroke 0.3s' }}
+          />
+          {/* Upper curved crossbeam */}
+          <path d="M 4,20 Q 14,14 32,12 Q 50,14 60,20"
+            stroke={hovered ? 'var(--vermillion)' : 'var(--border-gold)'}
+            strokeWidth="1.5" strokeLinecap="round" fill="none"
+            style={{ transition: 'stroke 0.3s' }}
+          />
+        </svg>
 
-      {/* 縁 Kanji Watermark */}
-      <div 
-        ref={watermarkRef}
-        className="absolute top-1/4 right-[10%] text-[26vw] select-none pointer-events-none z-10 kanji-watermark leading-none"
+        {/* Icon inside the gate */}
+        <div
+          style={{
+            position: 'absolute',
+            left: '50%',
+            top: '52%',
+            transform: 'translate(-50%, -50%)',
+            fontFamily: 'Inter, sans-serif',
+            fontWeight: 700,
+            fontSize: '11px',
+            letterSpacing: '0.08em',
+            color: hovered ? 'var(--vermillion)' : 'var(--text-2)',
+            transition: 'color 0.3s',
+          }}
+        >
+          {social.short}
+        </div>
+      </div>
+
+      {/* Label */}
+      <span
+        style={{
+          fontFamily: 'Inter, sans-serif',
+          fontSize: '11px',
+          letterSpacing: '0.12em',
+          textTransform: 'uppercase',
+          color: hovered ? 'var(--vermillion)' : 'var(--text-3)',
+          transition: 'color 0.3s',
+        }}
+      >
+        {social.label}
+      </span>
+    </a>
+  )
+}
+
+export default function Contact() {
+  const { ref: sectionRef, isVisible } = useScrollReveal({ threshold: 0.08 })
+  const [formState, setFormState] = useState({ name: '', email: '', message: '' })
+  const [submitted, setSubmitted] = useState(false)
+
+  const handleChange = (e) => {
+    setFormState((s) => ({ ...s, [e.target.name]: e.target.value }))
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    // In production, connect to a form service (Formspree, etc.)
+    setSubmitted(true)
+  }
+
+  return (
+    <section
+      id="contact"
+      ref={sectionRef}
+      aria-label="Contact Atharva Ghule"
+      style={{ position: 'relative', background: 'var(--bg)', overflow: 'hidden' }}
+    >
+      {/* SanskriticDivider Variant C — top of section */}
+      <div
+        aria-hidden="true"
+        style={{ display: 'flex', justifyContent: 'center', padding: '24px 0', background: 'var(--bg-surface)' }}
+      >
+        <SanskriticDivider variant="C" size={100} opacity={0.12} color="var(--gold-dim)" />
+      </div>
+
+      {/* 縁 Kanji watermark */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          top: '8%',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          fontFamily: 'Syne, sans-serif',
+          fontWeight: 900,
+          fontSize: 'clamp(120px, 22vw, 280px)',
+          lineHeight: 1,
+          color: 'var(--text-1)',
+          opacity: 0.035,
+          userSelect: 'none',
+          pointerEvents: 'none',
+          zIndex: 0,
+          animation: 'pulseSlow 4s ease-in-out infinite',
+        }}
       >
         縁
       </div>
 
-      <div className="relative max-w-7xl mx-auto z-20 pt-16">
-        
-        {/* Title */}
-        <div className="flex flex-col items-start mb-12">
-          <span className="font-display font-black text-[10px] tracking-[0.25em] text-[var(--gold)] uppercase mb-2">
-            EN ━ Connection & Fate / 縁
-          </span>
-          <h2 className="font-display font-black text-4xl md:text-6xl text-[var(--text-1)] leading-none">
-            Let's create<br />something timeless.
-          </h2>
-          <span className="font-sanskrit text-sm text-[var(--gold)] opacity-75 mt-3 block select-none">
-            सहयोग करें
-          </span>
-          <BrushStroke variant="horizontal" className="w-56 mt-4 opacity-25" />
+      <div
+        className="section-pad"
+        style={{ position: 'relative', zIndex: 1 }}
+      >
+        {/* Label */}
+        <InkReveal>
+          <p className="text-label" style={{ marginBottom: '16px', textAlign: 'center' }}>
+            Contact — 縁 — Connection / Fate
+          </p>
+        </InkReveal>
+
+        {/* Main headline — dramatic word-by-word InkReveal */}
+        <div
+          style={{
+            textAlign: 'center',
+            marginBottom: '16px',
+          }}
+        >
+          {["Let's", 'create', 'something', 'timeless.'].map((word, i) => (
+            <InkReveal key={word} delay={i * 100} style={{ display: 'inline-block', marginRight: '0.25em' }}>
+              <span
+                style={{
+                  fontFamily: 'Syne, sans-serif',
+                  fontWeight: 900,
+                  fontSize: 'clamp(36px, 7vw, 96px)',
+                  lineHeight: 1.0,
+                  letterSpacing: '-0.03em',
+                  color: i === 3 ? 'var(--gold)' : 'var(--text-1)',
+                }}
+              >
+                {word}
+              </span>
+            </InkReveal>
+          ))}
         </div>
 
-        {/* Massive calligraphic Email block */}
-        <div className="w-full flex flex-col items-start mb-16">
-          <span className="font-ui text-[9px] uppercase tracking-[0.2em] text-[var(--text-3)] mb-2 block font-bold">
-            DIRECT INQUIRY
-          </span>
-          <div className="relative inline-block group">
-            <a 
-              href="mailto:atharvag.design@gmail.com" 
-              className="font-display font-black text-xl sm:text-3xl md:text-5xl tracking-tighter text-[var(--text-1)] hover:text-[var(--gold)] transition-colors duration-300 pl-0.5 cursor-none"
-              data-hover
+        {/* Sanskrit subtext */}
+        <div
+          style={{
+            textAlign: 'center',
+            marginBottom: 'clamp(40px, 6vw, 72px)',
+          }}
+        >
+          <InkReveal delay={400}>
+            <p
+              style={{
+                fontFamily: "'Noto Serif Devanagari', serif",
+                fontSize: 'clamp(14px, 2vw, 20px)',
+                color: 'var(--gold)',
+                opacity: 0.6,
+                letterSpacing: '0.1em',
+              }}
+              aria-label="Sahayog karein — Let's collaborate"
             >
-              atharvag.design@gmail.com
-            </a>
-            {/* Vermillion calligraphic underline sweep */}
-            <BrushStroke 
-              variant="horizontal" 
-              className="absolute -bottom-4 left-0 w-full opacity-60 group-hover:opacity-100 transition-opacity duration-300" 
-              color="var(--vermillion)" 
-              opacity={1} 
-            />
-          </div>
+              सहयोग करें
+            </p>
+          </InkReveal>
         </div>
 
-        {/* Split Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-16 items-start mt-12">
-          
-          {/* Left Column: Social nodes framed in Torii gates */}
-          <div className="col-span-5 flex flex-col justify-start items-start">
-            <span className="font-ui text-[9px] uppercase tracking-[0.2em] text-[var(--text-3)] mb-6 font-bold">
-              DIGITAL PATHWAYS
-            </span>
-            <div className="flex flex-wrap gap-6">
-              {socialChannels.map((social) => (
-                <a
-                  key={social.name}
-                  href={social.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="relative w-20 h-24 flex flex-col items-center justify-center text-[var(--gold-dim)] hover:text-[var(--gold)] transition-colors duration-500 group select-none cursor-none"
-                  data-hover
-                >
-                  {/* Custom mini-SVG Torii Gate frame */}
-                  <svg 
-                    viewBox="0 0 100 120" 
-                    className="absolute inset-0 w-full h-full fill-none stroke-current opacity-30 group-hover:opacity-75 transition-opacity duration-500" 
-                    strokeWidth="2.2"
-                  >
-                    {/* Columns slanted */}
-                    <line x1="28" y1="20" x2="25" y2="120" />
-                    <line x1="72" y1="20" x2="75" y2="120" />
-                    {/* Support straight Beam */}
-                    <line x1="18" y1="50" x2="82" y2="50" />
-                    {/* Top Curved Main Beam */}
-                    <path 
-                      d="M 10,14 C 30,20 70,20 90,14 L 90,24 C 70,30 30,30 10,24 Z" 
-                      fill="currentColor" 
-                      stroke="none" 
-                    />
-                  </svg>
-                  
-                  {/* Social Name acronym */}
-                  <span className="relative z-10 font-ui font-black text-[10px] tracking-wider uppercase text-[var(--text-1)] mt-2">
-                    {social.name.substring(0, 2)}
-                  </span>
-                  
-                  {/* Social Name label */}
-                  <span className="relative z-10 text-[8px] font-ui tracking-widest text-[var(--text-3)] uppercase mt-1">
-                    {social.name}
-                  </span>
-                </a>
-              ))}
+        {/* Email — massive link with brushstroke underline */}
+        <InkReveal delay={500}>
+          <div style={{ textAlign: 'center', marginBottom: 'clamp(48px, 7vw, 80px)', position: 'relative' }}>
+            <a
+              href="mailto:atharva@example.com"
+              data-cursor="hover"
+              style={{
+                fontFamily: 'Syne, sans-serif',
+                fontWeight: 800,
+                fontSize: 'clamp(20px, 4vw, 52px)',
+                color: 'var(--text-1)',
+                textDecoration: 'none',
+                letterSpacing: '-0.02em',
+                transition: 'color 0.3s',
+                display: 'inline-block',
+                position: 'relative',
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--gold)')}
+              onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-1)')}
+            >
+              atharva@example.com
+            </a>
+            {/* Brushstroke underline */}
+            <div style={{ marginTop: '4px', display: 'flex', justifyContent: 'center' }}>
+              <BrushStroke
+                variant="horizontal"
+                color="var(--gold)"
+                opacity={0.35}
+                isVisible={isVisible}
+                delay={700}
+                style={{ maxWidth: '640px' }}
+              />
             </div>
           </div>
+        </InkReveal>
 
-          {/* Right Column: Interactive Form */}
-          <div className="col-span-7">
-            <form onSubmit={handleSubmit} className="w-full flex flex-col gap-6">
-              
-              {/* Name field */}
-              <div className="flex flex-col relative">
-                <label className="relative block text-[10px] font-ui uppercase tracking-widest text-[var(--text-3)] mb-2 font-bold select-none">
-                  Name
-                  {/* Focus line sweep */}
-                  <BrushStroke 
-                    variant="horizontal" 
-                    className={`absolute -bottom-1.5 left-0 w-16 transition-transform duration-500 origin-left ${focusStates.name ? "scale-x-100 opacity-80" : "scale-x-0 opacity-0"}`} 
-                    color="var(--gold)" 
-                    opacity={1} 
-                  />
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="Atharva Ghule"
-                  value={formData.name}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
-                  onFocus={() => handleFocus("name")}
-                  onBlur={() => handleBlur("name")}
-                  className="w-full bg-[var(--bg-surface)] border border-[var(--border-gold)] rounded px-4 py-3 text-xs text-[var(--text-1)] placeholder-[var(--text-3)] focus:border-[var(--gold)] focus:outline-none transition-colors duration-300"
+        {/* ── Two columns: socials + form ─────────────────────────────── */}
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
+            gap: 'clamp(40px, 6vw, 80px)',
+            alignItems: 'start',
+          }}
+        >
+          {/* Left: Torii social buttons */}
+          <InkReveal delay={300}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+              <p className="text-label" style={{ marginBottom: '8px' }}>Find me at</p>
+
+              <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
+                {SOCIALS.map((social) => (
+                  <ToriiSocialBtn key={social.label} social={social} />
+                ))}
+              </div>
+
+              {/* Decorative yantra */}
+              <div style={{ marginTop: '24px' }}>
+                <SanskriticDivider
+                  variant="B"
+                  size={80}
+                  opacity={0.12}
+                  color="var(--gold-dim)"
+                  rotate={false}
                 />
               </div>
 
-              {/* Email field */}
-              <div className="flex flex-col relative">
-                <label className="relative block text-[10px] font-ui uppercase tracking-widest text-[var(--text-3)] mb-2 font-bold select-none">
-                  Email
-                  <BrushStroke 
-                    variant="horizontal" 
-                    className={`absolute -bottom-1.5 left-0 w-16 transition-transform duration-500 origin-left ${focusStates.email ? "scale-x-100 opacity-80" : "scale-x-0 opacity-0"}`} 
-                    color="var(--gold)" 
-                    opacity={1} 
-                  />
-                </label>
-                <input
-                  type="email"
-                  required
-                  placeholder="atharvag@gmail.com"
-                  value={formData.email}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, email: e.target.value }))}
-                  onFocus={() => handleFocus("email")}
-                  onBlur={() => handleBlur("email")}
-                  className="w-full bg-[var(--bg-surface)] border border-[var(--border-gold)] rounded px-4 py-3 text-xs text-[var(--text-1)] placeholder-[var(--text-3)] focus:border-[var(--gold)] focus:outline-none transition-colors duration-300"
-                />
-              </div>
+              <p
+                style={{
+                  fontFamily: 'Inter, sans-serif',
+                  fontSize: '14px',
+                  lineHeight: 1.7,
+                  color: 'var(--text-2)',
+                  maxWidth: '280px',
+                }}
+              >
+                Open to freelance collaborations, full-time roles, and interesting conversations.
+                Response time: usually within 24 hours.
+              </p>
+            </div>
+          </InkReveal>
 
-              {/* Message field */}
-              <div className="flex flex-col relative">
-                <label className="relative block text-[10px] font-ui uppercase tracking-widest text-[var(--text-3)] mb-2 font-bold select-none">
-                  Message
-                  <BrushStroke 
-                    variant="horizontal" 
-                    className={`absolute -bottom-1.5 left-0 w-16 transition-transform duration-500 origin-left ${focusStates.message ? "scale-x-100 opacity-80" : "scale-x-0 opacity-0"}`} 
-                    color="var(--gold)" 
-                    opacity={1} 
-                  />
-                </label>
-                <textarea
-                  required
-                  rows="4"
-                  placeholder="Let's build the space between..."
-                  value={formData.message}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, message: e.target.value }))}
-                  onFocus={() => handleFocus("message")}
-                  onBlur={() => handleBlur("message")}
-                  className="w-full bg-[var(--bg-surface)] border border-[var(--border-gold)] rounded px-4 py-3 text-xs text-[var(--text-1)] placeholder-[var(--text-3)] focus:border-[var(--gold)] focus:outline-none transition-colors duration-300 resize-none"
-                />
+          {/* Right: Contact form */}
+          <InkReveal delay={450}>
+            {submitted ? (
+              <div
+                style={{
+                  padding: '40px',
+                  border: '0.5px solid var(--border-gold)',
+                  textAlign: 'center',
+                }}
+              >
+                <div
+                  aria-hidden="true"
+                  style={{
+                    fontFamily: "'Noto Serif Devanagari', serif",
+                    fontSize: '48px',
+                    color: 'var(--gold)',
+                    opacity: 0.6,
+                    marginBottom: '16px',
+                  }}
+                >
+                  ॐ
+                </div>
+                <p
+                  style={{
+                    fontFamily: 'Syne, sans-serif',
+                    fontWeight: 800,
+                    fontSize: '20px',
+                    color: 'var(--text-1)',
+                    marginBottom: '8px',
+                  }}
+                >
+                  Message received.
+                </p>
+                <p style={{ fontFamily: 'Inter', fontSize: '14px', color: 'var(--text-2)' }}>
+                  I'll be in touch soon. Until then — 縁 (en).
+                </p>
               </div>
-
-              {/* Submit Button */}
-              <div className="mt-4 flex justify-start">
-                <MagneticButton>
-                  <button
-                    type="submit"
-                    className="px-6 py-3 border border-[var(--gold)] text-[var(--gold)] font-ui font-black uppercase text-[10px] tracking-widest rounded hover:bg-[var(--gold)] hover:text-black transition-colors duration-300 flex items-center gap-2 cursor-none"
+            ) : (
+              <form
+                onSubmit={handleSubmit}
+                aria-label="Contact form"
+                style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}
+              >
+                {/* Name */}
+                <div>
+                  <label
+                    htmlFor="contact-name"
+                    className="text-label"
+                    style={{ display: 'block', marginBottom: '8px' }}
                   >
-                    {formSent ? "送信中..." : "送信 Send"} <span className="text-[8px] opacity-75">━▶</span>
-                  </button>
+                    Name
+                  </label>
+                  <input
+                    id="contact-name"
+                    name="name"
+                    type="text"
+                    required
+                    value={formState.name}
+                    onChange={handleChange}
+                    placeholder="Your name"
+                    className="form-input"
+                    aria-required="true"
+                  />
+                </div>
+
+                {/* Email */}
+                <div>
+                  <label
+                    htmlFor="contact-email"
+                    className="text-label"
+                    style={{ display: 'block', marginBottom: '8px' }}
+                  >
+                    Email
+                  </label>
+                  <input
+                    id="contact-email"
+                    name="email"
+                    type="email"
+                    required
+                    value={formState.email}
+                    onChange={handleChange}
+                    placeholder="your@email.com"
+                    className="form-input"
+                    aria-required="true"
+                  />
+                </div>
+
+                {/* Message */}
+                <div>
+                  <label
+                    htmlFor="contact-message"
+                    className="text-label"
+                    style={{ display: 'block', marginBottom: '8px' }}
+                  >
+                    Message
+                  </label>
+                  <textarea
+                    id="contact-message"
+                    name="message"
+                    required
+                    rows={5}
+                    value={formState.message}
+                    onChange={handleChange}
+                    placeholder="Tell me about your project..."
+                    className="form-input"
+                    aria-required="true"
+                    style={{ resize: 'vertical', fontFamily: 'Inter, sans-serif' }}
+                  />
+                </div>
+
+                {/* Submit */}
+                <MagneticButton type="submit" variant="gold" style={{ alignSelf: 'flex-start' }}>
+                  送信 &nbsp;·&nbsp; Send
                 </MagneticButton>
-              </div>
-
-            </form>
-          </div>
-
+              </form>
+            )}
+          </InkReveal>
         </div>
-
       </div>
-    </InkReveal>
-  );
+    </section>
+  )
 }

@@ -1,115 +1,159 @@
-import React from "react";
+// ─────────────────────────────────────────────────────────────────────────────
+//  SanskriticDivider — SVG yantra / mandala geometry between sections
+//  Variant A: 9-triangle yantra (outer circle + interlocked triangles)
+//  Variant B: Seed syllable circle — OM in lotus petal arrangement
+//  Variant C: Shri Chakra outer square with gates
+// ─────────────────────────────────────────────────────────────────────────────
 
-export function SanskriticDivider({ 
-  variant = "A", 
-  className = "", 
-  color = "var(--gold-dim)", 
-  opacity = 0.25 
+import React from 'react'
+
+/**
+ * @param {'A'|'B'|'C'} [variant='A']
+ * @param {number}  [size=120]         — SVG height in px
+ * @param {string}  [color='var(--gold-dim)']
+ * @param {number}  [opacity=0.2]
+ * @param {boolean} [rotate=true]      — applies slow CSS rotation
+ * @param {string}  [className]
+ * @param {object}  [style]
+ */
+export default function SanskriticDivider({
+  variant = 'A',
+  size = 120,
+  color = 'var(--gold-dim)',
+  opacity = 0.2,
+  rotate = true,
+  className = '',
+  style = {},
 }) {
-  return (
-    <div className={`w-full flex items-center justify-center py-12 overflow-hidden ${className}`}>
-      {/* Red Thread intersection point */}
-      <div className="absolute left-[40px] w-3 h-3 rounded-full bg-vermillion opacity-40 z-10 hidden md:block"></div>
-      
-      <div 
-        className="relative w-[120px] h-[120px] flex items-center justify-center animate-rotate-slow"
-        style={{ color, opacity }}
-      >
-        {variant === "A" && (
-          <svg 
-            viewBox="0 0 200 200" 
-            className="w-full h-full stroke-current fill-none" 
-            strokeWidth="0.55"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            {/* Concentric Circles */}
-            <circle cx="100" cy="100" r="90" />
-            <circle cx="100" cy="100" r="75" />
-            <circle cx="100" cy="100" r="60" />
-            
-            {/* Interlocking Triangles (Hexagram representation of Shiva/Shakti) */}
-            <polygon points="100,28 162,136 38,136" />
-            <polygon points="100,172 162,64 38,64" />
-            
-            {/* Additional inner triangles for Sri Yantra complexity */}
-            <polygon points="100,48 145,126 55,126" opacity="0.6" />
-            <polygon points="100,152 145,74 55,74" opacity="0.6" />
-            
-            {/* Center Bindu dot */}
-            <circle cx="100" cy="100" r="2" className="fill-current" />
-          </svg>
-        )}
+  const svgProps = {
+    width: size,
+    height: size,
+    viewBox: '0 0 200 200',
+    fill: 'none',
+    'aria-hidden': 'true',
+    style: {
+      display: 'block',
+      opacity,
+      animation: rotate ? 'rotateSlow 120s linear infinite' : 'none',
+      ...style,
+    },
+    className,
+  }
 
-        {variant === "B" && (
-          <svg 
-            viewBox="0 0 200 200" 
-            className="w-full h-full stroke-current fill-none" 
-            strokeWidth="0.6"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            {/* Outer circles */}
-            <circle cx="100" cy="100" r="88" />
-            <circle cx="100" cy="100" r="78" />
-            
-            {/* 8 Lotus Petals */}
-            <g transform="translate(100, 100)">
-              {[0, 45, 90, 135, 180, 225, 270, 315].map((angle) => (
-                <ellipse 
-                  key={angle} 
-                  cx="0" 
-                  cy="0" 
-                  rx="15" 
-                  ry="45" 
-                  transform={`rotate(${angle})`} 
-                  className="stroke-current"
-                />
-              ))}
-            </g>
-            
-            {/* Inner Circle */}
-            <circle cx="100" cy="100" r="42" className="fill-bg" />
-            
-            {/* Centered OM Symbol (Unrotated text wrapper to keep ॐ upright) */}
-            <g transform="rotate(0)">
-              {/* Note: Noto Serif Devanagari is imported in index.html */}
-              <text 
-                x="100" 
-                y="111" 
-                fontFamily="'Noto Serif Devanagari', serif" 
-                fontSize="32" 
-                textAnchor="middle" 
-                stroke="none" 
-                className="fill-current font-normal select-none pointer-events-none"
-                style={{ transformOrigin: "100px 100px", transform: "rotate(calc(var(--rotation, 0deg) * -1))" }}
-              >
-                ॐ
-              </text>
-            </g>
-          </svg>
-        )}
+  const stroke = color
+  const sw = '0.5'
+  const cx = 100
+  const cy = 100
 
-        {variant === "C" && (
-          <svg 
-            viewBox="0 0 200 200" 
-            className="w-full h-full stroke-current fill-none" 
-            strokeWidth="0.65"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            {/* Bhupura (Outer Square with 4 Gates) */}
-            <path d="M 20,20 L 90,20 L 90,10 L 110,10 L 110,20 L 180,20 L 180,90 L 190,90 L 190,110 L 180,110 L 180,180 L 110,180 L 110,190 L 90,190 L 90,180 L 20,180 L 20,110 L 10,110 L 10,90 L 20,90 Z" />
-            
-            {/* Double Circle inside Bhupura */}
-            <circle cx="100" cy="100" r="68" />
-            <circle cx="100" cy="100" r="60" />
-            
-            {/* Concentric triangles inside representing nested chakra gates */}
-            <polygon points="100,45 148,128 52,128" />
-            <polygon points="100,155 148,72 52,72" />
-            <circle cx="100" cy="100" r="16" />
-            <circle cx="100" cy="100" r="2" className="fill-current" stroke="none" />
-          </svg>
-        )}
-      </div>
-    </div>
-  );
+  if (variant === 'A') {
+    // Simplified 9-triangle yantra: concentric circles + interlocked triangles
+    return (
+      <svg {...svgProps}>
+        {/* Concentric circles */}
+        {[92, 78, 64, 50, 36].map((r) => (
+          <circle key={r} cx={cx} cy={cy} r={r} stroke={stroke} strokeWidth={sw} />
+        ))}
+        {/* Downward triangles */}
+        <polygon points={`${cx},${cy - 76} ${cx + 66},${cy + 38} ${cx - 66},${cy + 38}`} stroke={stroke} strokeWidth={sw} />
+        <polygon points={`${cx},${cy - 52} ${cx + 45},${cy + 26} ${cx - 45},${cy + 26}`} stroke={stroke} strokeWidth={sw} />
+        <polygon points={`${cx},${cy - 32} ${cx + 28},${cy + 16} ${cx - 28},${cy + 16}`} stroke={stroke} strokeWidth={sw} />
+        {/* Upward triangles */}
+        <polygon points={`${cx},${cy + 76} ${cx + 66},${cy - 38} ${cx - 66},${cy - 38}`} stroke={stroke} strokeWidth={sw} />
+        <polygon points={`${cx},${cy + 52} ${cx + 45},${cy - 26} ${cx - 45},${cy - 26}`} stroke={stroke} strokeWidth={sw} />
+        <polygon points={`${cx},${cy + 32} ${cx + 28},${cy - 16} ${cx - 28},${cy - 16}`} stroke={stroke} strokeWidth={sw} />
+        {/* Bindu */}
+        <circle cx={cx} cy={cy} r={2} fill={stroke} />
+      </svg>
+    )
+  }
+
+  if (variant === 'B') {
+    // OM / seed syllable in lotus petal arrangement (8 petals)
+    const petalCount = 8
+    const petalR = 28
+    const outerR = 70
+
+    return (
+      <svg {...svgProps}>
+        {/* Outer circle */}
+        <circle cx={cx} cy={cy} r={outerR} stroke={stroke} strokeWidth={sw} />
+        <circle cx={cx} cy={cy} r={outerR - 8} stroke={stroke} strokeWidth={sw} opacity="0.5" />
+
+        {/* 8 lotus petals — ellipses rotated around center */}
+        {Array.from({ length: petalCount }).map((_, i) => {
+          const angle = (i / petalCount) * 360
+          return (
+            <ellipse
+              key={i}
+              cx={cx}
+              cy={cy - petalR}
+              rx="10"
+              ry={petalR}
+              stroke={stroke}
+              strokeWidth={sw}
+              fill="none"
+              transform={`rotate(${angle}, ${cx}, ${cy})`}
+            />
+          )
+        })}
+
+        {/* Inner circle */}
+        <circle cx={cx} cy={cy} r={18} stroke={stroke} strokeWidth={sw} />
+
+        {/* OM glyph — rendered as text */}
+        <text
+          x={cx}
+          y={cy + 7}
+          textAnchor="middle"
+          fontFamily="'Noto Serif Devanagari', serif"
+          fontSize="22"
+          fill={stroke}
+          opacity="0.8"
+        >
+          ॐ
+        </text>
+      </svg>
+    )
+  }
+
+  if (variant === 'C') {
+    // Outermost square of a traditional yantra with four T-shaped "gates"
+    const sq = 80  // half side of square
+    const gw = 16  // gate width
+    const gd = 16  // gate depth
+
+    return (
+      <svg {...svgProps}>
+        {/* Outer square */}
+        <rect x={cx - sq} y={cy - sq} width={sq * 2} height={sq * 2} stroke={stroke} strokeWidth={sw} />
+
+        {/* Inner square (slightly smaller) */}
+        <rect x={cx - sq + 8} y={cy - sq + 8} width={(sq - 8) * 2} height={(sq - 8) * 2} stroke={stroke} strokeWidth={sw} />
+
+        {/* Four T-shaped gates */}
+        {/* Top gate */}
+        <polyline points={`${cx - gw},${cy - sq} ${cx - gw},${cy - sq - gd} ${cx + gw},${cy - sq - gd} ${cx + gw},${cy - sq}`} stroke={stroke} strokeWidth={sw} />
+        {/* Bottom gate */}
+        <polyline points={`${cx - gw},${cy + sq} ${cx - gw},${cy + sq + gd} ${cx + gw},${cy + sq + gd} ${cx + gw},${cy + sq}`} stroke={stroke} strokeWidth={sw} />
+        {/* Left gate */}
+        <polyline points={`${cx - sq},${cy - gw} ${cx - sq - gd},${cy - gw} ${cx - sq - gd},${cy + gw} ${cx - sq},${cy + gw}`} stroke={stroke} strokeWidth={sw} />
+        {/* Right gate */}
+        <polyline points={`${cx + sq},${cy - gw} ${cx + sq + gd},${cy - gw} ${cx + sq + gd},${cy + gw} ${cx + sq},${cy + gw}`} stroke={stroke} strokeWidth={sw} />
+
+        {/* Concentric inner circles */}
+        {[40, 28, 18].map((r) => (
+          <circle key={r} cx={cx} cy={cy} r={r} stroke={stroke} strokeWidth={sw} />
+        ))}
+
+        {/* Diagonal cross lines */}
+        <line x1={cx - sq + 8} y1={cy - sq + 8} x2={cx + sq - 8} y2={cy + sq - 8} stroke={stroke} strokeWidth={sw} opacity="0.4" />
+        <line x1={cx + sq - 8} y1={cy - sq + 8} x2={cx - sq + 8} y2={cy + sq - 8} stroke={stroke} strokeWidth={sw} opacity="0.4" />
+
+        {/* Center bindu */}
+        <circle cx={cx} cy={cy} r={2.5} fill={stroke} />
+      </svg>
+    )
+  }
+
+  return null
 }

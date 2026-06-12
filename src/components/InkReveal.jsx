@@ -1,95 +1,109 @@
-import React, { useEffect, useRef, useState } from "react";
+// ─────────────────────────────────────────────────────────────────────────────
+//  InkReveal — wraps children; plays ink-wash clip-path reveal on viewport enter
+//  Each instance generates a unique irregular polygon so no two reveals look identical
+// ─────────────────────────────────────────────────────────────────────────────
 
-export function InkReveal({ children, className = "", delay = 0 }) {
-  const containerRef = useRef(null);
-  const [revealed, setRevealed] = useState(false);
-  const [clipPaths, setClipPaths] = useState({ initial: "", final: "" });
-  const [reducedMotion, setReducedMotion] = useState(false);
+import React, { useEffect, useRef, useMemo } from 'react'
+import { useScrollReveal } from '../hooks/useScrollReveal.js'
 
+/**
+ * Generates an irregular ink-splash polygon (20 points).
+ * The shape is a roughly circular blob with random deviations.
+ * We pre-compute the REVEALED polygon (full-cover) and the START polygon (collapsed centre).
+ */
+function generateInkPolygon(seed) {
+  const points = 20
+  const cx = 50 // centre x %
+  const cy = 50 // centre y %
+
+  // Pseudo-random from seed — deterministic per element
+  const rng = (n) => {
+    const x = Math.sin(seed + n * 127.1) * 43758.5453
+    return x - Math.floor(x)
+  }
+
+  const revealedPoints = []
+  const startPoints    = []
+
+  for (let i = 0; i < points; i++) {
+    const angle = (i / points) * 2 * Math.PI
+    // Revealed: irregular blob extending beyond the bounding box
+    const rOuter = 75 + rng(i * 2) * 35       // 75–110%
+    const rx = cx + Math.cos(angle) * rOuter
+    const ry = cy + Math.sin(angle) * rOuter
+    revealedPoints.push(`${rx.toFixed(1)}% ${ry.toFixed(1)}%`)
+
+    // Start: collapsed near centre, random micro-offsets for organic feel
+    const rInner = 1 + rng(i * 3) * 2
+    const sx = cx + Math.cos(angle) * rInner
+    const sy = cy + Math.sin(angle) * rInner
+    startPoints.push(`${sx.toFixed(1)}% ${sy.toFixed(1)}%`)
+  }
+
+  return {
+    start:   `polygon(${startPoints.join(', ')})`,
+    revealed: `polygon(${revealedPoints.join(', ')})`,
+  }
+}
+
+/**
+ * @param {object}  props
+ * @param {React.ReactNode} props.children
+ * @param {number}  [props.delay=0]          — delay before reveal starts (ms)
+ * @param {number}  [props.duration=1400]    — transition duration (ms)
+ * @param {number}  [props.threshold=0.12]   — intersection threshold
+ * @param {string}  [props.className]
+ * @param {object}  [props.style]
+ * @param {string}  [props.as='div']         — wrapper element type
+ */
+export default function InkReveal({
+  children,
+  delay = 0,
+  duration = 1400,
+  threshold = 0.12,
+  className = '',
+  style = {},
+  as: Tag = 'div',
+}) {
+  const innerRef = useRef(null)
+  const { ref: wrapRef, isVisible } = useScrollReveal({ threshold })
+
+  // Unique seed per instance — based on component mount order via a counter
+  const seed = useMemo(() => Math.random() * 999, [])
+  const { start, revealed } = useMemo(() => generateInkPolygon(seed), [seed])
+
+  // Apply clip-path when isVisible flips true
   useEffect(() => {
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    setReducedMotion(prefersReducedMotion);
+    const el = innerRef.current
+    if (!el) return
 
-    if (prefersReducedMotion) {
-      setRevealed(true);
-      return;
+    if (isVisible) {
+      el.style.transition = `clip-path ${duration}ms cubic-bezier(0.16,1,0.3,1) ${delay}ms`
+      // rAF to ensure the browser paints the start state first
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          el.style.clipPath = revealed
+        })
+      })
+    } else {
+      el.style.clipPath = start
+      el.style.transition = 'none'
     }
+  }, [isVisible, start, revealed, delay, duration])
 
-    // Generate unique matching 20-point clip-path polygons
-    const pointsCount = 20;
-    const angleStep = (Math.PI * 2) / pointsCount;
-    const initialPoints = [];
-    const finalPoints = [];
-
-    // Use a pseudo-random seed to make it deterministic per component mount
-    const seed = Math.random();
-
-    for (let i = 0; i < pointsCount; i++) {
-      const angle = i * angleStep;
-      
-      // Initial tight ink-drop coordinate
-      const initVariance = 1 + (Math.sin(angle * 4 + seed * 10) * 0.35); // irregular circle
-      const rInit = 2.5 * initVariance;
-      const initX = 50 + Math.cos(angle) * rInit;
-      const initY = 50 + Math.sin(angle) * rInit;
-      initialPoints.push(`${initX.toFixed(2)}% ${initY.toFixed(2)}%`);
-
-      // Final expanded boundary coordinate
-      const finalVariance = 1 + (Math.cos(angle * 5 + seed * 5) * 0.25);
-      const rFinal = 130 * finalVariance;
-      const finalX = 50 + Math.cos(angle) * rFinal;
-      const finalY = 50 + Math.sin(angle) * rFinal;
-      finalPoints.push(`${finalX.toFixed(2)}% ${finalY.toFixed(2)}%`);
+  // Initialise with collapsed clip-path
+  useEffect(() => {
+    const el = innerRef.current
+    if (el) {
+      el.style.clipPath = start
     }
-
-    setClipPaths({
-      initial: `polygon(${initialPoints.join(", ")})`,
-      final: `polygon(${finalPoints.join(", ")})`
-    });
-
-    // Intersection Observer to trigger entrance
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          // Add configurable stagger/delay
-          setTimeout(() => {
-            setRevealed(true);
-          }, delay * 1000);
-          
-          if (containerRef.current) {
-            observer.unobserve(containerRef.current);
-          }
-        }
-      },
-      { threshold: 0.15 }
-    );
-
-    if (containerRef.current) {
-      observer.observe(containerRef.current);
-    }
-
-    return () => {
-      if (containerRef.current) {
-        observer.disconnect();
-      }
-    };
-  }, [delay]);
-
-  const style = {
-    clipPath: reducedMotion ? "none" : revealed ? clipPaths.final : clipPaths.initial,
-    transition: reducedMotion 
-      ? "none" 
-      : "clip-path 1.4s cubic-bezier(0.25, 1, 0.3, 1), opacity 0.8s ease-out",
-    opacity: revealed ? 1 : 0
-  };
+  }, [start])
 
   return (
-    <div
-      ref={containerRef}
-      className={`will-change-[clip-path,opacity] ${className}`}
-      style={style}
-    >
-      {children}
-    </div>
-  );
+    <Tag ref={wrapRef} className={`ink-reveal-wrapper ${className}`} style={style}>
+      <div ref={innerRef} style={{ willChange: 'clip-path' }}>
+        {children}
+      </div>
+    </Tag>
+  )
 }

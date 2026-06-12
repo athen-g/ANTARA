@@ -1,380 +1,562 @@
-import React, { useEffect, useRef, useState } from "react";
-import * as THREE from "three";
-import gsap from "gsap";
-import fragmentShader from "../shaders/noise.glsl?raw";
-import { BrushStroke } from "../components/BrushStroke";
-import { SplitText } from "../utils/splitText";
+// ─────────────────────────────────────────────────────────────────────────────
+//  Hero — the opening statement
+//  WebGL noise background · Sumi-e letter reveal · Role cycling · Parallax
+// ─────────────────────────────────────────────────────────────────────────────
 
-// Simple vertex shader for the full-screen quad
-const quadVertexShader = `
-  varying vec2 vUv;
-  void main() {
-    vUv = uv;
-    gl_Position = vec4(position, 1.0);
-  }
-`;
+import React, { useEffect, useRef, useState } from 'react'
+import { gsap } from 'gsap'
+import * as THREE from 'three'
+import BrushStroke from '../components/BrushStroke.jsx'
+import { useMousePosition } from '../hooks/useMousePosition.js'
 
-export function Hero() {
-  const sectionRef = useRef(null);
-  const canvasRef = useRef(null);
-  const watermarkRef = useRef(null);
-  
-  const roles = ["UI/UX Designer", "Frontend Developer", "Fullstack Developer"];
-  const [roleIndex, setRoleIndex] = useState(0);
-  const [wipeActive, setWipeActive] = useState(true);
-  const [reducedMotion, setReducedMotion] = useState(false);
+const ROLES = ['UI/UX Designer', 'Frontend Developer', 'Fullstack Developer']
 
-  // Cycle role subtitle with a left-to-right clip wipe
+const SOCIAL_LINKS = [
+  { label: 'GitHub',   href: 'https://github.com/athen-g',                        icon: 'GH' },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/atharva-g45/',            icon: 'LI' },
+  { label: 'Instagram', href: 'https://www.instagram.com/athen_g_/',                icon: 'IG' },
+]
+
+// ── Tiny noise canvas background (Three.js) ───────────────────────────────────
+function useNoiseBackground(canvasRef) {
   useEffect(() => {
-    const interval = setInterval(() => {
-      setWipeActive(false);
-      setTimeout(() => {
-        setRoleIndex((prev) => (prev + 1) % roles.length);
-        setWipeActive(true);
-      }, 500); // Match transition length
-    }, 3300);
+    const canvas = canvasRef.current
+    if (!canvas) return
 
-    return () => clearInterval(interval);
-  }, []);
+    const renderer = new THREE.WebGLRenderer({ canvas, alpha: false, antialias: false })
+    renderer.setPixelRatio(1) // Low res — it's pure texture
+    renderer.setSize(canvas.offsetWidth || window.innerWidth, canvas.offsetHeight || window.innerHeight)
 
-  // WebGL Liquid Noise Background Setup
-  useEffect(() => {
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    setReducedMotion(prefersReducedMotion);
-    if (prefersReducedMotion) return;
+    const scene  = new THREE.Scene()
+    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1)
 
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+    // Fullscreen quad
+    const geo = new THREE.PlaneGeometry(2, 2)
+    const mat = new THREE.ShaderMaterial({
+      uniforms: { uTime: { value: 0 } },
+      vertexShader: `
+        varying vec2 vUv;
+        void main() {
+          vUv = uv;
+          gl_Position = vec4(position.xy, 0.0, 1.0);
+        }
+      `,
+      fragmentShader: `
+        uniform float uTime;
+        varying vec2 vUv;
 
-    const scene = new THREE.Scene();
-    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: false });
-    renderer.setPixelRatio(1); // Low pixel ratio for fast noise computation
-    renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+        // Compact simplex noise
+        vec3 mod289v3(vec3 x){return x-floor(x*(1./289.))*289.;}
+        vec4 mod289v4(vec4 x){return x-floor(x*(1./289.))*289.;}
+        vec4 permute(vec4 x){return mod289v4(((x*34.)+1.)*x);}
+        vec4 taylorInvSqrt(vec4 r){return 1.7928429-0.8537347*r;}
+        float snoise(vec3 v){
+          const vec2 C=vec2(1./6.,1./3.);
+          const vec4 D=vec4(0.,.5,1.,2.);
+          vec3 i=floor(v+dot(v,C.yyy));
+          vec3 x0=v-i+dot(i,C.xxx);
+          vec3 g=step(x0.yzx,x0.xyz);
+          vec3 l=1.-g;
+          vec3 i1=min(g.xyz,l.zxy);
+          vec3 i2=max(g.xyz,l.zxy);
+          vec3 x1=x0-i1+C.xxx;
+          vec3 x2=x0-i2+C.yyy;
+          vec3 x3=x0-D.yyy;
+          i=mod289v3(i);
+          vec4 p=permute(permute(permute(i.z+vec4(0.,i1.z,i2.z,1.))+i.y+vec4(0.,i1.y,i2.y,1.))+i.x+vec4(0.,i1.x,i2.x,1.));
+          float n_=.142857142857;
+          vec3 ns=n_*D.wyz-D.xzx;
+          vec4 j=p-49.*floor(p*ns.z*ns.z);
+          vec4 x_=floor(j*ns.z);
+          vec4 y_=floor(j-7.*x_);
+          vec4 x=x_*ns.x+ns.yyyy;
+          vec4 y=y_*ns.x+ns.yyyy;
+          vec4 h=1.-abs(x)-abs(y);
+          vec4 b0=vec4(x.xy,y.xy);
+          vec4 b1=vec4(x.zw,y.zw);
+          vec4 s0=floor(b0)*2.+1.;
+          vec4 s1=floor(b1)*2.+1.;
+          vec4 sh=-step(h,vec4(0.));
+          vec4 a0=b0.xzyw+s0.xzyw*sh.xxyy;
+          vec4 a1=b1.xzyw+s1.xzyw*sh.zzww;
+          vec3 p0=vec3(a0.xy,h.x);
+          vec3 p1=vec3(a0.zw,h.y);
+          vec3 p2=vec3(a1.xy,h.z);
+          vec3 p3=vec3(a1.zw,h.w);
+          vec4 norm=taylorInvSqrt(vec4(dot(p0,p0),dot(p1,p1),dot(p2,p2),dot(p3,p3)));
+          p0*=norm.x;p1*=norm.y;p2*=norm.z;p3*=norm.w;
+          vec4 m=max(.6-vec4(dot(x0,x0),dot(x1,x1),dot(x2,x2),dot(x3,x3)),0.);
+          m=m*m;
+          return 42.*dot(m*m,vec4(dot(p0,x0),dot(p1,x1),dot(p2,x2),dot(p3,x3)));
+        }
 
-    // full screen quad
-    const geometry = new THREE.PlaneGeometry(2, 2);
-    
-    // Resolve theme colors
-    const getThemeColors = () => {
-      const rootStyle = getComputedStyle(document.documentElement);
-      const bgStr = rootStyle.getPropertyValue("--bg").trim() || "#080808";
-      const surfaceStr = rootStyle.getPropertyValue("--bg-surface").trim() || "#0F0F0D";
-      return {
-        colorBg: new THREE.Color(bgStr),
-        colorSurface: new THREE.Color(surfaceStr)
-      };
-    };
+        void main(){
+          float t=uTime*0.00008;
+          float n1=snoise(vec3(vUv*2.5,t));
+          float n2=snoise(vec3(vUv*5.,t*1.3+17.));
+          float n=(n1*.6+n2*.4)*0.014;
+          vec3 base=vec3(0.031);
+          vec3 warm=vec3(0.05,0.033,0.008)*max(n,0.)*3.;
+          vec3 col=clamp(base+n+warm,vec3(0.02),vec3(0.075));
+          gl_FragColor=vec4(col,1.);
+        }
+      `,
+    })
 
-    const { colorBg, colorSurface } = getThemeColors();
+    const mesh = new THREE.Mesh(geo, mat)
+    scene.add(mesh)
 
-    const uniforms = {
-      uTime: { value: 0 },
-      uResolution: { value: new THREE.Vector2(canvas.clientWidth, canvas.clientHeight) },
-      uColorBg: { value: colorBg },
-      uColorSurface: { value: colorSurface }
-    };
-
-    const material = new THREE.ShaderMaterial({
-      vertexShader: quadVertexShader,
-      fragmentShader,
-      uniforms,
-      depthWrite: false,
-      depthTest: false
-    });
-
-    const mesh = new THREE.Mesh(geometry, material);
-    scene.add(mesh);
-
-    // Watch for theme switch modifications
-    const observer = new MutationObserver(() => {
-      const { colorBg, colorSurface } = getThemeColors();
-      uniforms.uColorBg.value = colorBg;
-      uniforms.uColorSurface.value = colorSurface;
-    });
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
-
-    // Handle Resize
-    const handleResize = () => {
-      if (!canvas) return;
-      const width = canvas.clientWidth;
-      const height = canvas.clientHeight;
-      renderer.setSize(width, height);
-      uniforms.uResolution.value.set(width, height);
-    };
-    window.addEventListener("resize", handleResize);
-
-    // Rendering Loop
-    const clock = new THREE.Clock();
-    let animationFrameId;
-    let isPageVisible = true;
-
-    const handleVisibility = () => {
-      isPageVisible = !document.hidden;
-    };
-    document.addEventListener("visibilitychange", handleVisibility);
-
-    const animate = () => {
-      if (!isPageVisible) {
-        animationFrameId = requestAnimationFrame(animate);
-        return;
+    let frameId
+    let lastTime = 0
+    const animate = (time) => {
+      if (!document.hidden) {
+        const delta = Math.min(time - lastTime, 33)
+        lastTime = time
+        mat.uniforms.uTime.value += delta
+        renderer.render(scene, camera)
       }
-      
-      // Scale down time speed by 0.0001 factor for slow liquid movements
-      uniforms.uTime.value = clock.getElapsedTime() * 0.035;
-      renderer.render(scene, camera);
-      animationFrameId = requestAnimationFrame(animate);
-    };
+      frameId = requestAnimationFrame(animate)
+    }
+    frameId = requestAnimationFrame(animate)
 
-    animate();
+    const onResize = () => {
+      renderer.setSize(canvas.offsetWidth, canvas.offsetHeight)
+    }
+    window.addEventListener('resize', onResize, { passive: true })
 
     return () => {
-      cancelAnimationFrame(animationFrameId);
-      window.removeEventListener("resize", handleResize);
-      document.removeEventListener("visibilitychange", handleVisibility);
-      observer.disconnect();
-      geometry.dispose();
-      material.dispose();
-      renderer.dispose();
-    };
-  }, []);
+      cancelAnimationFrame(frameId)
+      window.removeEventListener('resize', onResize)
+      mat.dispose()
+      geo.dispose()
+      renderer.dispose()
+    }
+  }, [])
+}
 
-  // GSAP Text entrance sequences
+export default function Hero({ loaderDone, prefersReducedMotion }) {
+  const sectionRef = useRef(null)
+  const atharvaRef = useRef(null)
+  const ghuleRef   = useRef(null)
+  const taglineRef = useRef(null)
+  const socialsRef = useRef(null)
+  const scrollRef  = useRef(null)
+  const canvasRef  = useRef(null)
+  const kanjiRef   = useRef(null)
+
+  const [roleIndex, setRoleIndex]  = useState(0)
+  const [roleVisible, setRoleVisible] = useState(true)
+
+  const mouse = useMousePosition()
+
+  // WebGL noise background
+  useNoiseBackground(canvasRef)
+
+  // Role cycling with clip-path wipe
   useEffect(() => {
-    if (reducedMotion) return;
+    const interval = setInterval(() => {
+      setRoleVisible(false)
+      setTimeout(() => {
+        setRoleIndex((i) => (i + 1) % ROLES.length)
+        setRoleVisible(true)
+      }, 500)
+    }, 2800)
+    return () => clearInterval(interval)
+  }, [])
 
-    // Entrance timeline
-    const tl = gsap.timeline({ delay: 0.1 });
-
-    // Kanji watermark fades in and settles
-    tl.fromTo(
-      watermarkRef.current,
-      { opacity: 0, scale: 1.15 },
-      { opacity: 0.04, scale: 1, duration: 2.2, ease: "power2.out" }
-    );
-
-    // Animate ATHARVA letters clip-path reveals
-    tl.fromTo(
-      ".hero-name-first .char-span",
-      { 
-        y: "110%", 
-        clipPath: "polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)" 
-      },
-      { 
-        y: "0%", 
-        clipPath: "polygon(-10% -20%, 110% -20%, 110% 120%, -10% 120%)", 
-        duration: 1.4, 
-        stagger: 0.06, 
-        ease: "power4.out" 
-      },
-      "-=1.8"
-    );
-
-    // Animate GHULE letters clip-path reveals
-    tl.fromTo(
-      ".hero-name-last .char-span",
-      { 
-        y: "110%", 
-        clipPath: "polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)" 
-      },
-      { 
-        y: "0%", 
-        clipPath: "polygon(-10% -20%, 110% -20%, 110% 120%, -10% 120%)", 
-        duration: 1.4, 
-        stagger: 0.06, 
-        ease: "power4.out" 
-      },
-      "-=1.2"
-    );
-
-    // Role Cyclist & Subtitle stagger reveals
-    tl.fromTo(
-      ".hero-box-stroke",
-      { strokeDashoffset: 600, opacity: 0 },
-      { strokeDashoffset: 0, opacity: 1, duration: 1.5, ease: "power3.out" },
-      "-=0.8"
-    );
-
-    tl.fromTo(
-      ".hero-tagline span",
-      { opacity: 0, y: 15 },
-      { opacity: 1, y: 0, duration: 0.8, stagger: 0.1, ease: "power2.out" },
-      "-=0.6"
-    );
-
-    tl.fromTo(
-      ".hero-social-link",
-      { opacity: 0, scale: 0.8 },
-      { opacity: 1, scale: 1, duration: 0.6, stagger: 0.1, ease: "back.out(1.7)" },
-      "-=0.4"
-    );
-
-    tl.fromTo(
-      ".hero-scroll-indicator",
-      { opacity: 0, y: -10 },
-      { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" },
-      "-=0.2"
-    );
-  }, [reducedMotion]);
-
-  // Mouse Parallax movement
+  // GSAP letter-by-letter reveal after loader
   useEffect(() => {
-    if (reducedMotion) return;
+    if (!loaderDone || prefersReducedMotion) return
 
-    const handleMouseMove = (e) => {
-      const xVal = (e.clientX / window.innerWidth - 0.5) * 40; // max shift 20px
-      const yVal = (e.clientY / window.innerHeight - 0.5) * 40;
+    const tl = gsap.timeline({ delay: 0.2 })
 
-      if (watermarkRef.current) {
-        gsap.to(watermarkRef.current, {
-          x: xVal * 0.7,
-          y: yVal * 0.7,
-          duration: 1.2,
-          ease: "power2.out"
-        });
-      }
-    };
+    // "ATHARVA" — each letter
+    const atharvaEl = atharvaRef.current
+    const ghuleEl   = ghuleRef.current
 
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, [reducedMotion]);
+    if (atharvaEl) {
+      const letters = atharvaEl.querySelectorAll('.hero-letter')
+      tl.fromTo(
+        letters,
+        { clipPath: 'polygon(0% 110%, 100% 110%, 100% 110%, 0% 110%)', y: 40, opacity: 0 },
+        {
+          clipPath: 'polygon(0% 0%, 100% 0%, 100% 110%, 0% 110%)',
+          y: 0,
+          opacity: 1,
+          duration: 0.9,
+          stagger: 0.06,
+          ease: 'power3.out',
+        }
+      )
+    }
 
-  const socialLinks = [
-    { name: "GH", url: "https://github.com/athen-g", label: "GitHub" },
-    { name: "LN", url: "https://linkedin.com", label: "LinkedIn" },
-    { name: "X", url: "https://x.com", label: "X" }
-  ];
+    if (ghuleEl) {
+      const letters = ghuleEl.querySelectorAll('.hero-letter')
+      tl.fromTo(
+        letters,
+        { clipPath: 'polygon(0% 110%, 100% 110%, 100% 110%, 0% 110%)', y: 40, opacity: 0 },
+        {
+          clipPath: 'polygon(0% 0%, 100% 0%, 100% 110%, 0% 110%)',
+          y: 0,
+          opacity: 1,
+          duration: 0.9,
+          stagger: 0.06,
+          ease: 'power3.out',
+        },
+        '-=0.5'
+      )
+    }
+
+    // Tagline — word by word
+    if (taglineRef.current) {
+      const words = taglineRef.current.querySelectorAll('.tagline-word')
+      tl.fromTo(
+        words,
+        { opacity: 0, y: 12 },
+        { opacity: 1, y: 0, duration: 0.6, stagger: 0.06, ease: 'power2.out' },
+        '-=0.3'
+      )
+    }
+
+    // Socials + scroll indicator
+    if (socialsRef.current) {
+      tl.fromTo(
+        socialsRef.current.children,
+        { opacity: 0, y: 16 },
+        { opacity: 1, y: 0, duration: 0.5, stagger: 0.08, ease: 'power2.out' },
+        '-=0.4'
+      )
+    }
+
+    if (scrollRef.current) {
+      tl.fromTo(
+        scrollRef.current,
+        { opacity: 0 },
+        { opacity: 1, duration: 0.8 },
+        '-=0.3'
+      )
+    }
+  }, [loaderDone, prefersReducedMotion])
+
+  // Mouse parallax on kanji watermark
+  useEffect(() => {
+    if (!kanjiRef.current) return
+    const x = mouse.ndcX * 30
+    const y = -mouse.ndcY * 20
+    kanjiRef.current.style.transform = `translate(${x}px, ${y}px)`
+  }, [mouse])
 
   return (
-    <section 
-      id="hero"
+    <section
       ref={sectionRef}
-      className="relative w-full min-h-screen flex items-center justify-center py-20 px-6 md:px-12 xl:px-24 overflow-hidden z-10"
+      id="hero"
+      aria-label="Hero — Atharva Ghule introduction"
+      style={{
+        position: 'relative',
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        overflow: 'hidden',
+        paddingTop: '72px', // navbar height
+      }}
     >
-      {/* Three.js Noise Shader Canvas */}
-      {!reducedMotion ? (
-        <canvas ref={canvasRef} className="absolute inset-0 w-full h-full object-cover z-0" />
-      ) : (
-        <div className="absolute inset-0 w-full h-full bg-[var(--bg-surface)] z-0" />
-      )}
+      {/* WebGL noise background */}
+      <canvas
+        ref={canvasRef}
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          inset: 0,
+          width: '100%',
+          height: '100%',
+          zIndex: 0,
+        }}
+      />
 
-      {/* Shoji Screen Grid Lines Overlay */}
-      <div className="shoji-grid opacity-10 md:opacity-20" />
+      {/* Shoji screen grid overlay */}
+      <div
+        aria-hidden="true"
+        className="bg-shoji"
+        style={{ position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none' }}
+      />
 
-      {/* 創 Kanji Watermark (positioned top-right) */}
-      <div 
-        ref={watermarkRef}
-        className="absolute top-1/4 right-[5%] md:right-[10%] text-[24vw] select-none pointer-events-none z-10 kanji-watermark leading-none"
+      {/* 創 Kanji watermark (create/originate) */}
+      <div
+        ref={kanjiRef}
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          top: '5%',
+          right: 'clamp(16px, 5vw, 80px)',
+          fontFamily: 'Syne, sans-serif',
+          fontWeight: 900,
+          fontSize: 'clamp(140px, 25vw, 320px)',
+          lineHeight: 1,
+          color: 'var(--text-1)',
+          opacity: 0.04,
+          userSelect: 'none',
+          pointerEvents: 'none',
+          zIndex: 1,
+          transition: 'transform 0.6s cubic-bezier(0.16,1,0.3,1)',
+        }}
       >
         創
       </div>
 
-      {/* Hero Content Container */}
-      <div className="relative w-full max-w-7xl mx-auto flex flex-col justify-center items-start z-20">
-        
-        {/* Calligraphic Corner Accents */}
-        <BrushStroke variant="corner" className="absolute -top-12 -left-6 md:-left-12 opacity-25 rotate-90 text-[var(--gold)]" />
-        
-        {/* Main Display Typography */}
-        <div className="flex flex-col mt-8 md:mt-0 font-display font-black leading-[0.82] tracking-tighter">
-          
-          {/* ATHARVA name clip container */}
-          <h1 className="hero-name-first text-[clamp(44px,12.5vw,155px)] text-[var(--text-1)] select-none overflow-hidden pb-1 flex flex-wrap">
-            <SplitText text="ATHARVA" charClassName="hero-char char-span" />
-          </h1>
-          
-          {/* GHULE text outlined */}
-          <h2 className="hero-name-last text-[clamp(44px,12.5vw,155px)] text-stroke-gold select-none overflow-hidden pb-2 flex flex-wrap">
-            <SplitText text="GHULE" charClassName="hero-char char-span" />
-          </h2>
+      {/* Main content */}
+      <div
+        style={{
+          position: 'relative',
+          zIndex: 2,
+          paddingLeft: 'clamp(64px, 8vw, 120px)',
+          paddingRight: 'clamp(24px, 6vw, 96px)',
+          paddingTop: 'clamp(60px, 8vh, 120px)',
+          paddingBottom: 'clamp(60px, 8vh, 100px)',
+        }}
+      >
+        {/* Section label */}
+        <p className="text-label" style={{ marginBottom: '28px', opacity: loaderDone ? 1 : 0, transition: 'opacity 0.6s 0.2s' }}>
+          Portfolio — अन्तर — 2025
+        </p>
+
+        {/* Name block */}
+        <div
+          style={{
+            marginBottom: '24px',
+            lineHeight: 0.85,
+          }}
+        >
+          {/* ATHARVA */}
+          <div
+            ref={atharvaRef}
+            aria-label="Atharva"
+            style={{ display: 'flex', gap: '0.01em', overflow: 'hidden' }}
+          >
+            {'ATHARVA'.split('').map((char, i) => (
+              <span
+                key={i}
+                className="hero-letter"
+                aria-hidden="true"
+                style={{
+                  fontFamily: 'Syne, sans-serif',
+                  fontWeight: 900,
+                  fontSize: 'clamp(72px, 13vw, 175px)',
+                  lineHeight: 0.85,
+                  letterSpacing: '-0.04em',
+                  color: 'var(--text-1)',
+                  display: 'inline-block',
+                  clipPath: 'polygon(0% 110%, 100% 110%, 100% 110%, 0% 110%)',
+                  willChange: 'clip-path, transform',
+                }}
+              >
+                {char}
+              </span>
+            ))}
+          </div>
+
+          {/* GHULE — outlined */}
+          <div
+            ref={ghuleRef}
+            aria-label="Ghule"
+            style={{ display: 'flex', gap: '0.01em', overflow: 'hidden' }}
+          >
+            {'GHULE'.split('').map((char, i) => (
+              <span
+                key={i}
+                className="hero-letter"
+                aria-hidden="true"
+                style={{
+                  fontFamily: 'Syne, sans-serif',
+                  fontWeight: 900,
+                  fontSize: 'clamp(72px, 13vw, 175px)',
+                  lineHeight: 0.85,
+                  letterSpacing: '-0.04em',
+                  WebkitTextStroke: '1px var(--gold)',
+                  color: 'transparent',
+                  display: 'inline-block',
+                  clipPath: 'polygon(0% 110%, 100% 110%, 100% 110%, 0% 110%)',
+                  willChange: 'clip-path, transform',
+                }}
+              >
+                {char}
+              </span>
+            ))}
+          </div>
         </div>
 
-        {/* Subtitle & Role Cycler in BrushStroke frame */}
-        <div className="relative mt-6 md:mt-8 flex items-center justify-start">
-          
-          {/* Decorative frame box */}
-          <div className="absolute inset-0 w-full h-full z-0 pointer-events-none opacity-40">
-            <svg viewBox="0 0 200 48" className="w-full h-full" preserveAspectRatio="none">
-              <path 
-                className="hero-box-stroke stroke-[var(--gold)] fill-none stroke-[0.8]" 
-                strokeDasharray="600" 
-                strokeDashoffset="600"
-                d="M 2,2 L 198,2 L 198,46 L 2,46 Z" 
-              />
-            </svg>
-          </div>
+        {/* Brushstroke under name */}
+        <BrushStroke
+          variant="horizontal"
+          isVisible={loaderDone}
+          delay={1200}
+          opacity={0.18}
+          style={{ marginBottom: '28px', maxWidth: '480px' }}
+        />
 
-          <div className="px-6 py-2.5 z-10">
-            <div 
-              className={`font-ui uppercase tracking-[0.25em] text-[10px] md:text-xs font-bold text-[var(--gold)] transition-all duration-500
-                ${wipeActive ? "text-wipe-active" : "text-wipe-enter"}
-              `}
-            >
-              {roles[roleIndex]}
-            </div>
-          </div>
+        {/* Role cycling box */}
+        <div
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '16px',
+            border: '0.5px solid var(--border-gold)',
+            padding: '10px 20px',
+            marginBottom: '32px',
+            overflow: 'hidden',
+            minWidth: '280px',
+          }}
+        >
+          <span
+            aria-hidden="true"
+            style={{
+              width: '6px',
+              height: '6px',
+              borderRadius: '50%',
+              background: 'var(--gold)',
+              flexShrink: 0,
+            }}
+          />
+          <span
+            aria-live="polite"
+            aria-label={`Current role: ${ROLES[roleIndex]}`}
+            style={{
+              fontFamily: 'Syne, sans-serif',
+              fontWeight: 800,
+              fontSize: 'clamp(13px, 2vw, 18px)',
+              color: 'var(--text-1)',
+              clipPath: roleVisible
+                ? 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)'
+                : 'polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%)',
+              transition: 'clip-path 0.5s cubic-bezier(0.16,1,0.3,1)',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            {ROLES[roleIndex]}
+          </span>
         </div>
 
         {/* Tagline */}
-        <p className="hero-tagline max-w-md mt-8 font-body text-sm md:text-base leading-relaxed text-[var(--text-2)] flex flex-wrap gap-x-1.5">
-          {"Crafting digital experiences that live at the intersection of art and code.".split(" ").map((word, idx) => (
-            <span key={idx} className="inline-block">{word}</span>
-          ))}
+        <p
+          ref={taglineRef}
+          style={{
+            fontFamily: 'Inter, sans-serif',
+            fontWeight: 400,
+            fontSize: 'clamp(14px, 1.8vw, 18px)',
+            lineHeight: 1.7,
+            color: 'var(--text-2)',
+            maxWidth: '520px',
+            marginBottom: '48px',
+          }}
+        >
+          {`Crafting digital experiences that live at the intersection of art and code.`
+            .split(' ')
+            .map((word, i) => (
+              <span
+                key={i}
+                className="tagline-word"
+                style={{ display: 'inline-block', marginRight: '0.3em', opacity: 0 }}
+              >
+                {word}
+              </span>
+            ))}
         </p>
 
-        {/* Bottom Bar: Social & Scroll */}
-        <div className="w-full mt-16 md:mt-24 flex flex-row items-end justify-between">
-          
-          {/* Social Links */}
-          <div className="flex gap-3">
-            {socialLinks.map((social) => (
+        {/* Corner brushstroke accent */}
+        <div
+          aria-hidden="true"
+          style={{ position: 'absolute', top: 'clamp(60px, 8vh, 100px)', right: 'clamp(40px, 8vw, 140px)', opacity: 0.12 }}
+        >
+          <BrushStroke variant="corner" isVisible={loaderDone} delay={1400} color="var(--gold)" width="80px" />
+        </div>
+
+        {/* Bottom row: socials + scroll indicator */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'flex-end',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: '24px',
+          }}
+        >
+          {/* Social links */}
+          <div ref={socialsRef} style={{ display: 'flex', gap: '12px' }}>
+            {SOCIAL_LINKS.map(({ label, href, icon }) => (
               <a
-                key={social.name}
-                href={social.url}
+                key={label}
+                href={href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hero-social-link w-9 h-9 border border-[var(--border-gold)] text-[var(--gold)] hover:bg-[var(--gold)] hover:text-black transition-all duration-300 rounded flex items-center justify-center font-ui text-[10px] font-bold cursor-none"
-                title={social.label}
-                data-hover
+                aria-label={label}
+                data-cursor="hover"
+                style={{
+                  width: '36px',
+                  height: '36px',
+                  border: '0.5px solid var(--border-gold)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontFamily: 'Inter, sans-serif',
+                  fontWeight: 700,
+                  fontSize: '9px',
+                  letterSpacing: '0.05em',
+                  color: 'var(--text-2)',
+                  textDecoration: 'none',
+                  transition: 'background 0.3s, color 0.3s, border-color 0.3s',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'var(--gold)'
+                  e.currentTarget.style.color = 'var(--bg)'
+                  e.currentTarget.style.borderColor = 'var(--gold)'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'transparent'
+                  e.currentTarget.style.color = 'var(--text-2)'
+                  e.currentTarget.style.borderColor = 'var(--border-gold)'
+                }}
               >
-                {social.name}
+                {icon}
               </a>
             ))}
           </div>
 
-          {/* Scroll Down Indicator */}
-          <a
-            href="#about"
-            className="hero-scroll-indicator flex flex-col items-center gap-3 cursor-none text-[var(--text-3)] hover:text-[var(--gold)] transition-colors duration-300"
-            data-hover
+          {/* Scroll indicator */}
+          <div
+            ref={scrollRef}
+            aria-hidden="true"
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '8px',
+              opacity: 0,
+            }}
           >
-            <span className="font-ui uppercase tracking-[0.25em] text-[8px] md:text-[9px] rotate-180 writing-mode-vertical select-none font-bold">
+            <span
+              style={{
+                fontFamily: 'Inter, sans-serif',
+                fontWeight: 500,
+                fontSize: '10px',
+                letterSpacing: '0.25em',
+                textTransform: 'uppercase',
+                color: 'var(--text-3)',
+                writingMode: 'vertical-rl',
+              }}
+            >
               SCROLL
             </span>
-            <div className="w-[1px] h-14 bg-gradient-to-b from-[var(--text-3)] to-transparent relative overflow-hidden">
-              {/* Animating line trace */}
-              <div 
-                className="absolute top-0 left-0 w-full h-1/2 bg-[var(--vermillion)]"
-                style={{
-                  animation: "pulseLine 2.2s cubic-bezier(0.76, 0, 0.24, 1) infinite"
-                }}
-              />
-            </div>
-          </a>
-
+            <div
+              style={{
+                width: '1px',
+                height: '48px',
+                background: 'linear-gradient(to bottom, var(--gold), transparent)',
+                animation: 'scrollBounce 2s ease-in-out infinite',
+              }}
+            />
+          </div>
         </div>
-
       </div>
-
-      <style>{`
-        .writing-mode-vertical {
-          writing-mode: vertical-lr;
-        }
-        @keyframes pulseLine {
-          0% { transform: translateY(-100%); }
-          50%, 100% { transform: translateY(200%); }
-        }
-      `}</style>
     </section>
-  );
+  )
 }

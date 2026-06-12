@@ -1,93 +1,103 @@
-import React from "react";
+// ─────────────────────────────────────────────────────────────────────────────
+//  BrushStroke — SVG brushstroke decorative element
+//  Variants: 'horizontal' | 'diagonal' | 'corner'
+//  Draws in when isVisible prop becomes true, or on mount if autoPlay
+// ─────────────────────────────────────────────────────────────────────────────
 
-export function BrushStroke({ 
-  variant = "horizontal", 
-  className = "", 
-  color = "var(--gold)", 
-  opacity = 0.15 
+import React, { useEffect, useRef } from 'react'
+
+/**
+ * @param {object}  props
+ * @param {'horizontal'|'diagonal'|'corner'} [props.variant='horizontal']
+ * @param {string}  [props.color='var(--gold)']
+ * @param {number}  [props.opacity=0.15]
+ * @param {boolean} [props.isVisible=true]   — triggers draw animation
+ * @param {number}  [props.delay=0]          — ms delay before draw
+ * @param {string}  [props.width='100%']
+ * @param {string}  [props.className]
+ * @param {object}  [props.style]
+ */
+export default function BrushStroke({
+  variant = 'horizontal',
+  color = 'var(--gold)',
+  opacity = 0.15,
+  isVisible = true,
+  delay = 0,
+  width = '100%',
+  className = '',
+  style = {},
 }) {
-  if (variant === "horizontal") {
-    return (
-      <svg 
-        viewBox="0 0 500 24" 
-        fill="none" 
-        xmlns="http://www.w3.org/2000/svg" 
-        className={`w-full h-auto pointer-events-none select-none ${className}`}
-        style={{ opacity }}
-        aria-hidden="true"
-      >
-        <path 
-          d="M10 14.5C95 10 215 15.5 310 11.5C395 8 450 14 490 10.5C405 13.5 295 8.5 190 12.5C100 16 45 11.5 10 14.5Z" 
-          fill={color} 
-        />
-        <path 
-          d="M40 13C120 10.5 220 14 300 11C380 8 430 13 470 10C390 11.5 300 9 210 12.5C130 16 70 12 40 13Z" 
-          fill={color} 
-          opacity="0.6"
-        />
-      </svg>
-    );
+  const pathRef = useRef(null)
+
+  useEffect(() => {
+    const path = pathRef.current
+    if (!path) return
+
+    const len = path.getTotalLength?.() || 600
+
+    // Reset
+    path.style.strokeDasharray  = `${len}`
+    path.style.strokeDashoffset = `${len}`
+    path.style.opacity = '0'
+    path.style.transition = 'none'
+
+    if (isVisible) {
+      const timer = setTimeout(() => {
+        path.style.transition = `stroke-dashoffset 1.4s cubic-bezier(0.16,1,0.3,1), opacity 0.2s`
+        path.style.strokeDashoffset = '0'
+        path.style.opacity = String(opacity)
+      }, delay)
+      return () => clearTimeout(timer)
+    }
+  }, [isVisible, delay, opacity])
+
+  const variants = {
+    horizontal: {
+      viewBox: '0 0 600 24',
+      height: '24',
+      path: 'M 2,12 C 60,8 120,16 180,11 C 240,6 300,15 360,10 C 420,5 480,14 540,10 C 560,9 580,11 598,10',
+      strokeWidth: '3',
+      linecap: 'round',
+    },
+    diagonal: {
+      viewBox: '0 0 300 300',
+      height: '120',
+      path: 'M 10,280 C 40,240 80,200 120,155 C 160,110 200,70 240,30 C 260,15 280,8 295,4',
+      strokeWidth: '2.5',
+      linecap: 'round',
+    },
+    corner: {
+      viewBox: '0 0 120 120',
+      height: '80',
+      // Sumi-e corner flourish — a calligrapher's entry stroke
+      path: 'M 8,110 C 10,80 6,50 14,28 C 20,10 32,5 50,4 C 68,3 90,8 112,12',
+      strokeWidth: '2',
+      linecap: 'round',
+    },
   }
 
-  if (variant === "diagonal") {
-    return (
-      <svg 
-        viewBox="0 0 100 100" 
-        fill="none" 
-        xmlns="http://www.w3.org/2000/svg" 
-        className={`w-24 h-24 pointer-events-none select-none ${className}`}
-        style={{ opacity }}
-        aria-hidden="true"
-      >
-        <path 
-          d="M12 88C28 70 54 42 88 12C74 26 48 54 22 78C16 83 13 86 12 88Z" 
-          stroke={color} 
-          strokeWidth="6" 
-          strokeLinecap="round" 
-          strokeLinejoin="round"
-        />
-        <path 
-          d="M20 84C32 70 58 42 80 20" 
-          stroke={color} 
-          strokeWidth="2" 
-          strokeLinecap="round" 
-          opacity="0.7"
-        />
-      </svg>
-    );
-  }
+  const v = variants[variant] || variants.horizontal
 
-  // Variant "corner"
   return (
-    <svg 
-      viewBox="0 0 100 100" 
-      fill="none" 
-      xmlns="http://www.w3.org/2000/svg" 
-      className={`w-20 h-20 pointer-events-none select-none ${className}`}
-      style={{ opacity }}
+    <svg
+      viewBox={v.viewBox}
+      width={width}
+      height={v.height}
+      fill="none"
       aria-hidden="true"
+      className={className}
+      style={{ display: 'block', overflow: 'visible', ...style }}
+      preserveAspectRatio="none"
     >
-      {/* L-shaped calligraphic frame stroke */}
-      <path 
-        d="M6 94V6H94" 
-        stroke={color} 
-        strokeWidth="1.5" 
-        strokeLinecap="square"
-      />
-      {/* Calligrapher's flourish overlay */}
-      <path 
-        d="M2 30C2 18 18 2 30 2" 
-        stroke={color} 
-        strokeWidth="3" 
-        strokeLinecap="round"
-        opacity="0.4"
-      />
-      <path 
-        d="M6 18C12 12 18 6 24 6" 
-        stroke={color} 
-        strokeWidth="0.75"
-        opacity="0.8"
+      <path
+        ref={pathRef}
+        d={v.path}
+        stroke={color}
+        strokeWidth={v.strokeWidth}
+        strokeLinecap={v.linecap}
+        fill="none"
+        vectorEffect="non-scaling-stroke"
       />
     </svg>
-  );
+  )
 }
