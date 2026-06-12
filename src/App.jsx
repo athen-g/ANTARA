@@ -41,9 +41,6 @@ function App() {
 
   return (
     <>
-      {/* High-frequency visual grain texture overlay */}
-      <div className="grain-overlay" />
-
       {/* Screen Loader Sequence */}
       {showLoader && (
         <Loader
