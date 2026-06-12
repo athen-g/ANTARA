@@ -91,7 +91,7 @@ export default function ProjectCard({ project, index }) {
         style={{
           position: 'relative',
           width: '100%',
-          height: '240px',
+          aspectRatio: '16 / 9',
           borderRadius: '6px',
           background: 'var(--bg-surface)',
           border: '0.5px solid var(--border)',
@@ -148,11 +148,13 @@ export default function ProjectCard({ project, index }) {
             src={url}
             title={`Preview of ${title}`}
             style={{
-              width: '100%',
-              height: '100%',
+              width: '150%',
+              height: '150%',
               border: 'none',
               pointerEvents: 'none', // Prevent capturing pointer scroll inside horizontal emakimono
               background: 'var(--bg-raised)',
+              transform: 'scale(0.666667)',
+              transformOrigin: 'top left',
             }}
             loading="lazy"
           />
