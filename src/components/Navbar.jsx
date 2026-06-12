@@ -203,7 +203,7 @@ export default function Navbar() {
 
         {/* Hire Me CTA Button */}
         <a
-          href="mailto:atharvag.design@gmail.com"
+          href="mailto:atharvanitinghule@gmail.com"
           data-cursor="hover"
           style={{
             fontFamily: 'Inter, sans-serif',

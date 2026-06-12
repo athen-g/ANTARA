@@ -97,7 +97,7 @@ function App() {
 
           {/* Main Layout Containers */}
           <main id="main-content">
-            <Hero />
+            <Hero loaderDone={!loading} prefersReducedMotion={motionPreference} />
             <About />
             <MarqueeTicker />
             <Projects />

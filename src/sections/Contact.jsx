@@ -14,7 +14,7 @@ import { useScrollReveal } from '../hooks/useScrollReveal.js'
 const SOCIALS = [
   { label: 'GitHub',   href: 'https://github.com/athen-g',               short: 'GH', desc: '@athen-g'    },
   { label: 'LinkedIn', href: 'https://linkedin.com/in/atharvaghule',      short: 'LI', desc: 'atharvaghule' },
-  { label: 'Dribbble', href: 'https://dribbble.com/athen-g',              short: 'DR', desc: '@athen-g'    },
+  { label: 'Instagram', href: 'https://www.instagram.com/athen_g_/',              short: 'IG', desc: '@athen_g_'    },
 ]
 
 // SVG torii frame for social buttons
@@ -130,12 +130,23 @@ export default function Contact() {
       id="contact"
       ref={sectionRef}
       aria-label="Contact Atharva Ghule"
-      style={{ position: 'relative', background: 'var(--bg)', overflow: 'hidden' }}
+      style={{
+        position: 'relative',
+        background: 'var(--bg)',
+        transition: 'background-color 0.4s ease, color 0.4s ease',
+        overflow: 'hidden',
+      }}
     >
       {/* SanskriticDivider Variant C — top of section */}
       <div
         aria-hidden="true"
-        style={{ display: 'flex', justifyContent: 'center', padding: '24px 0', background: 'var(--bg-surface)' }}
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          padding: '24px 0',
+          background: 'var(--bg-surface)',
+          transition: 'background-color 0.4s ease',
+        }}
       >
         <SanskriticDivider variant="C" size={100} opacity={0.12} color="var(--gold-dim)" />
       </div>
@@ -226,7 +237,7 @@ export default function Contact() {
         <InkReveal delay={500}>
           <div style={{ textAlign: 'center', marginBottom: 'clamp(48px, 7vw, 80px)', position: 'relative' }}>
             <a
-              href="mailto:atharva@example.com"
+              href="mailto:atharvanitinghule@gmail.com"
               data-cursor="hover"
               style={{
                 fontFamily: 'Syne, sans-serif',
@@ -242,7 +253,7 @@ export default function Contact() {
               onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--gold)')}
               onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-1)')}
             >
-              atharva@example.com
+              atharvanitinghule@gmail.com
             </a>
             {/* Brushstroke underline */}
             <div style={{ marginTop: '4px', display: 'flex', justifyContent: 'center' }}>

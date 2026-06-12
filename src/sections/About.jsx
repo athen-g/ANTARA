@@ -57,12 +57,23 @@ export default function About() {
     <section
       id="about"
       aria-label="About Atharva Ghule"
-      style={{ position: 'relative', overflow: 'hidden' }}
+      style={{
+        position: 'relative',
+        overflow: 'hidden',
+        background: 'var(--bg)',
+        transition: 'background-color 0.4s ease, color 0.4s ease',
+      }}
     >
       {/* SanskriticDivider Variant B — above section */}
       <div
         aria-hidden="true"
-        style={{ display: 'flex', justifyContent: 'center', padding: '20px 0', background: 'var(--bg-surface)' }}
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          padding: '20px 0',
+          background: 'var(--bg-surface)',
+          transition: 'background-color 0.4s ease',
+        }}
       >
         <SanskriticDivider variant="B" size={100} opacity={0.15} color="var(--gold-dim)" />
       </div>
@@ -247,7 +258,7 @@ export default function About() {
                 style={{
                   opacity: pillsVisible ? 1 : 0,
                   transform: pillsVisible ? 'translateY(0)' : 'translateY(8px)',
-                  transition: `opacity 0.4s ease ${i * 0.06}s, transform 0.4s ease ${i * 0.06}s`,
+                  transition: `opacity 0.4s ease ${i * 0.06}s, transform 0.4s ease ${i * 0.06}s, border-color 0.3s ease, color 0.3s ease, background 0.3s ease`,
                 }}
               >
                 {skill}

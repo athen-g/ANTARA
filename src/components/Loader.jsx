@@ -43,6 +43,7 @@ export default function Loader({ onComplete }) {
           ? 'transform 0.8s cubic-bezier(0.16,1,0.3,1)'
           : 'none',
         pointerEvents: phase === 'exiting' ? 'none' : 'all',
+        willChange: 'transform',
       }}
     >
       {/* Sri Yantra SVG */}
@@ -50,9 +51,10 @@ export default function Loader({ onComplete }) {
         style={{
           transform: phase === 'pulsing' ? 'scale(1.02)' : 'scale(1)',
           transition: 'transform 0.6s cubic-bezier(0.16,1,0.3,1)',
+          willChange: 'transform',
         }}
       >
-        <SriYantraSVG assembling={phase === 'assembling'} />
+        <SriYantraSVG />
       </div>
 
       {/* Name reveal — letter by letter */}
@@ -75,6 +77,7 @@ export default function Loader({ onComplete }) {
               display: 'inline-block',
               opacity: 0,
               animation: `letterFadeIn 0.05s ease forwards ${0.1 + i * 0.07}s`,
+              willChange: 'transform, opacity',
             }}
           >
             {char === ' ' ? '\u00A0' : char}
@@ -94,10 +97,16 @@ export default function Loader({ onComplete }) {
 
 // ── Sri Yantra SVG — concentric rings + interlocked triangles ────────────────
 
-function SriYantraSVG({ assembling }) {
+function SriYantraSVG() {
   const cx = 120
   const cy = 120
   const size = 240
+
+  const [drawn, setDrawn] = useState(false)
+  useEffect(() => {
+    const timer = setTimeout(() => setDrawn(true), 100)
+    return () => clearTimeout(timer)
+  }, [])
 
   // Ring radii
   const rings = [108, 90, 72, 56]
@@ -122,7 +131,7 @@ function SriYantraSVG({ assembling }) {
   ]
 
   const totalElements = rings.length + triangles.length
-  const delayPerElement = 2000 / totalElements
+  const delayPerElement = 120 // slightly faster stagger for smoother feel
 
   return (
     <svg
@@ -131,30 +140,33 @@ function SriYantraSVG({ assembling }) {
       viewBox={`0 0 ${size} ${size}`}
       fill="none"
       aria-hidden="true"
+      style={{ willChange: 'transform' }}
     >
       {/* Outer rings */}
-      {rings.map((r, i) => (
-        <circle
-          key={`ring-${i}`}
-          cx={cx}
-          cy={cy}
-          r={r}
-          stroke="var(--gold-dim)"
-          strokeWidth="0.5"
-          opacity="0.6"
-          style={{
-            strokeDasharray: `${2 * Math.PI * r}`,
-            strokeDashoffset: assembling ? `${2 * Math.PI * r}` : 0,
-            transition: assembling
-              ? `stroke-dashoffset 0.5s ease ${i * delayPerElement}ms`
-              : 'none',
-          }}
-        />
-      ))}
+      {rings.map((r, i) => {
+        const circ = 2 * Math.PI * r
+        return (
+          <circle
+            key={`ring-${i}`}
+            cx={cx}
+            cy={cy}
+            r={r}
+            stroke="var(--gold-dim)"
+            strokeWidth="0.5"
+            opacity="0.6"
+            style={{
+              strokeDasharray: circ,
+              strokeDashoffset: drawn ? 0 : circ,
+              transition: `stroke-dashoffset 1.2s cubic-bezier(0.25, 1, 0.5, 1) ${i * delayPerElement}ms`,
+              willChange: 'stroke-dashoffset',
+            }}
+          />
+        )
+      })}
 
       {/* Triangles */}
       {triangles.map((d, i) => {
-        const pathLen = 400 // approximate
+        const pathLen = 600 // safe upper bound for triangle perimeter
         return (
           <path
             key={`tri-${i}`}
@@ -164,10 +176,9 @@ function SriYantraSVG({ assembling }) {
             opacity="0.7"
             style={{
               strokeDasharray: pathLen,
-              strokeDashoffset: assembling ? pathLen : 0,
-              transition: assembling
-                ? `stroke-dashoffset 0.4s ease ${(rings.length + i) * delayPerElement}ms`
-                : 'none',
+              strokeDashoffset: drawn ? 0 : pathLen,
+              transition: `stroke-dashoffset 1.0s cubic-bezier(0.25, 1, 0.5, 1) ${(rings.length + i) * delayPerElement}ms`,
+              willChange: 'stroke-dashoffset',
             }}
           />
         )
@@ -180,8 +191,9 @@ function SriYantraSVG({ assembling }) {
         r={3}
         fill="var(--gold)"
         style={{
-          opacity: assembling ? 0 : 1,
-          transition: 'opacity 0.4s ease 1.8s',
+          opacity: drawn ? 1 : 0,
+          transition: 'opacity 0.6s ease 1.6s',
+          willChange: 'opacity',
         }}
       />
 
@@ -195,8 +207,9 @@ function SriYantraSVG({ assembling }) {
         fill="var(--gold)"
         opacity="0.5"
         style={{
-          opacity: assembling ? 0 : 0.5,
-          transition: 'opacity 0.6s ease 1.9s',
+          opacity: drawn ? 0.5 : 0,
+          transition: 'opacity 0.8s ease 1.7s',
+          willChange: 'opacity',
         }}
       >
         ॐ

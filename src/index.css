@@ -1,171 +1,506 @@
+/* ─────────────────────────────────────────────────────────────────────────── *
+ *  ANTARA — Global Stylesheet
+ *  Tailwind directives + CSS custom properties + global styles + keyframes
+ * ─────────────────────────────────────────────────────────────────────────── */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* DESIGN SYSTEM SYSTEM VARIABLES */
+/* ══════════════════════════════════════════════════════════════════════
+   1. DESIGN TOKENS — CSS Custom Properties
+   ══════════════════════════════════════════════════════════════════════ */
+
 :root {
-  --bg: #080808;
-  --bg-surface: #0F0F0D;
-  --bg-card: #161612;
-  --bg-raised: #1C1C17;
-  --gold: #E8A020;
-  --gold-dim: #A06C10;
-  --vermillion: #C1392B;
-  --teal: #2FC4A0;
-  --teal-dim: #1A7A64;
-  --text-1: #F2EBD9;
-  --text-2: #8A8070;
-  --text-3: #4A453D;
-  --border: rgba(242, 235, 217, 0.06);
+  /* Backgrounds */
+  --bg:          #080808;
+  --bg-surface:  #0F0F0D;
+  --bg-card:     #161612;
+  --bg-raised:   #1C1C17;
+
+  /* Accent palette */
+  --gold:        #E8A020;
+  --gold-dim:    #A06C10;
+  --vermillion:  #C1392B;
+  --teal:        #2FC4A0;
+  --teal-dim:    #1A7A64;
+
+  /* Text */
+  --text-1:      #F2EBD9;
+  --text-2:      #8A8070;
+  --text-3:      #4A453D;
+
+  /* Borders */
+  --border:      rgba(242, 235, 217, 0.06);
   --border-gold: rgba(232, 160, 32, 0.2);
-  color-scheme: dark;
+
+  /* Spacing rhythm */
+  --section-pad: clamp(80px, 10vw, 140px);
+
+  /* Transition defaults */
+  --ease-ink: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-snap: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
+/* Light mode override */
 [data-theme="light"] {
-  --bg: #F5F0E8;
-  --bg-surface: #EDE8DF;
-  --bg-card: #FFFFFF;
-  --bg-raised: #F9F6F0;
-  --gold: #9A5C08;
-  --gold-dim: #C87D20;
-  --vermillion: #991F14;
-  --teal: #0F6E56;
-  --teal-dim: #1A9E7A;
-  --text-1: #1A1610;
-  --text-2: #6A5C48;
-  --text-3: #9A8C78;
-  --border: rgba(26, 22, 16, 0.08);
+  --bg:          #F5F0E8;
+  --bg-surface:  #EDE8DF;
+  --bg-card:     #FFFFFF;
+  --bg-raised:   #F9F6F0;
+  --gold:        #9A5C08;
+  --gold-dim:    #C87D20;
+  --vermillion:  #991F14;
+  --teal:        #0F6E56;
+  --teal-dim:    #1A9E7A;
+  --text-1:      #1A1610;
+  --text-2:      #6A5C48;
+  --text-3:      #9A8C78;
+  --border:      rgba(26, 22, 16, 0.08);
   --border-gold: rgba(154, 92, 8, 0.2);
-  color-scheme: light;
 }
 
-/* GLOBAL RESET & STYLES */
+/* ══════════════════════════════════════════════════════════════════════
+   2. BASE RESET & GLOBAL STYLES
+   ══════════════════════════════════════════════════════════════════════ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 html {
-  scroll-behavior: auto; /* Managed by Lenis */
+  scroll-behavior: auto; /* Lenis handles smooth scroll */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 body {
   background-color: var(--bg);
-  color: var(--text-2);
-  font-family: 'Inter', sans-serif;
-  transition: background-color 0.4s ease, color 0.4s ease;
+  color: var(--text-1);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.75;
   overflow-x: hidden;
+  cursor: none; /* Custom cursor takes over */
 }
 
-/* CUSTOM SELECTION & SCROLLBAR */
+/* Restore cursor on touch/mobile */
+@media (hover: none) {
+  body {
+    cursor: auto;
+  }
+}
+
+/* Focus styles — gold outline on all focusable elements */
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Selection colour */
 ::selection {
-  background-color: var(--gold-dim);
+  background-color: rgba(232, 160, 32, 0.25);
   color: var(--text-1);
 }
 
-::-webkit-scrollbar {
-  width: 6px;
-}
+/* ══════════════════════════════════════════════════════════════════════
+   3. CUSTOM SCROLLBAR
+   ══════════════════════════════════════════════════════════════════════ */
 
+::-webkit-scrollbar {
+  width: 4px;
+}
 ::-webkit-scrollbar-track {
   background: var(--bg);
 }
-
 ::-webkit-scrollbar-thumb {
   background: var(--gold-dim);
-  border-radius: 3px;
+  border-radius: 2px;
 }
-
 ::-webkit-scrollbar-thumb:hover {
   background: var(--gold);
 }
 
-/* FOCUS ACCESSIBILITY STYLE */
-*:focus-visible {
-  outline: 2px solid var(--gold);
-  outline-offset: 2px;
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--gold-dim) var(--bg);
 }
 
-/* SHOJI GRID OVERLAY */
-.shoji-grid {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background-image: 
-    linear-gradient(to right, var(--border-gold) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--border-gold) 1px, transparent 1px);
-  background-size: 64px 64px;
-  opacity: 0.15;
-  z-index: 1;
+/* ══════════════════════════════════════════════════════════════════════
+   4. TYPOGRAPHY UTILITIES
+   ══════════════════════════════════════════════════════════════════════ */
+
+.font-syne   { font-family: 'Syne', sans-serif; }
+.font-inter  { font-family: 'Inter', sans-serif; }
+.font-devanagari { font-family: 'Noto Serif Devanagari', serif; }
+
+/* Display — hero name */
+.text-display {
+  font-family: 'Syne', sans-serif;
+  font-weight: 900;
+  font-size: clamp(80px, 14vw, 180px);
+  line-height: 0.85;
+  letter-spacing: -0.04em;
+  color: var(--text-1);
 }
 
-/* TEXT STROKE (GHULE Outlines) */
-.text-stroke-gold {
+/* Display small — mobile hero */
+@media (max-width: 767px) {
+  .text-display {
+    font-size: clamp(52px, 14vw, 80px);
+  }
+}
+
+/* Editorial headings */
+.text-editorial {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: clamp(36px, 6vw, 88px);
+  line-height: 1.0;
+}
+
+/* Section label */
+.text-label {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+
+/* UI chrome */
+.text-ui {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: 0.05em;
+}
+
+/* Outlined / ghost text — used for "GHULE" */
+.text-outlined {
   -webkit-text-stroke: 1px var(--gold);
   color: transparent;
 }
 
-/* KANJI WATERMARKS */
+/* ══════════════════════════════════════════════════════════════════════
+   5. NOISE TEXTURE OVERLAY
+   ══════════════════════════════════════════════════════════════════════ */
+
+/* CSS noise via SVG data URI — subtle film grain on the whole page */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 128px 128px;
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   6. SHOJI SCREEN GRID — Hero background texture
+   ══════════════════════════════════════════════════════════════════════ */
+
+.bg-shoji {
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 63px,
+      rgba(232, 160, 32, 0.03) 63px,
+      rgba(232, 160, 32, 0.03) 64px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 63px,
+      rgba(232, 160, 32, 0.03) 63px,
+      rgba(232, 160, 32, 0.03) 64px
+    );
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   7. INK WASH REVEAL — Core keyframes
+   ══════════════════════════════════════════════════════════════════════ */
+
+/* Clip-path states are applied via JS (InkReveal.jsx) for per-element
+   polygon variation. These are the base transitions. */
+
+.ink-reveal-wrapper {
+  position: relative;
+  overflow: visible;
+}
+
+.ink-reveal-inner {
+  clip-path: polygon(50% 50%, 50% 50%, 50% 50%, 50% 50%, 50% 50%, 50% 50%);
+  transition: clip-path 1.4s var(--ease-ink);
+  will-change: clip-path;
+}
+
+.ink-reveal-inner.revealed {
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   8. KANJI WATERMARKS
+   ══════════════════════════════════════════════════════════════════════ */
+
 .kanji-watermark {
   font-family: 'Syne', sans-serif;
   font-weight: 900;
-  color: var(--text-1);
-  opacity: 0.035;
-  user-select: none;
-  pointer-events: none;
+  font-size: clamp(120px, 25vw, 300px);
   line-height: 1;
-  transition: opacity 0.5s ease;
-}
-
-/* GRAIN NOISE EFFECT */
-.grain-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-  opacity: 0.03;
+  color: var(--text-1);
+  opacity: 0.04;
   pointer-events: none;
-  z-index: 9999;
+  user-select: none;
+  position: absolute;
 }
 
-[data-theme="light"] .grain-overlay {
-  opacity: 0.045;
+.kanji-watermark.animate-pulse-slow {
+  animation: pulseSlow 4s ease-in-out infinite;
 }
 
-/* RED THREAD OF FATE ANIMATION */
-.red-thread-line {
-  animation: wobble 6s ease-in-out infinite;
-  transform-origin: top center;
+@keyframes pulseSlow {
+  0%, 100% { opacity: 0.04; }
+  50%       { opacity: 0.07; }
 }
 
-@keyframes wobble {
-  0%, 100% {
-    transform: translateX(0) skewX(0);
-  }
-  25% {
-    transform: translateX(1.5px) skewX(0.2deg);
-  }
-  75% {
-    transform: translateX(-1.5px) skewX(-0.2deg);
-  }
+/* ══════════════════════════════════════════════════════════════════════
+   9. MARQUEE
+   ══════════════════════════════════════════════════════════════════════ */
+
+.marquee-track {
+  display: flex;
+  gap: 0;
+  white-space: nowrap;
+  will-change: transform;
 }
 
-/* INK DASH ASSEMBLY */
-.path-dash-animate {
+.marquee-left  { animation: marqueeLeft  30s linear infinite; }
+.marquee-right { animation: marqueeRight 28s linear infinite; }
+
+@keyframes marqueeLeft {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+@keyframes marqueeRight {
+  0%   { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+
+/* Pause on hover */
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   10. RED THREAD OF FATE
+   ══════════════════════════════════════════════════════════════════════ */
+
+.red-thread-svg {
+  position: fixed;
+  left: 40px;
+  top: 0;
+  width: 20px;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 50;
+  overflow: visible;
+}
+
+.red-thread-path {
+  stroke: var(--vermillion);
+  stroke-width: 1;
+  opacity: 0.3;
+  fill: none;
+  stroke-dasharray: 4 6;
+  animation: threadWobble 10s ease-in-out infinite alternate;
+}
+
+@keyframes threadWobble {
+  0%   { d: path('M 10,0 Q 13,150 7,300 Q 12,450 8,600 Q 13,750 9,900 Q 12,1050 10,1200'); }
+  100% { d: path('M 10,0 Q 7,150 13,300 Q 8,450 12,600 Q 7,750 11,900 Q 8,1050 10,1200'); }
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   11. BRUSHSTROKE DRAW ANIMATION
+   ══════════════════════════════════════════════════════════════════════ */
+
+.brush-path {
   stroke-dasharray: 1000;
   stroke-dashoffset: 1000;
-  animation: drawStroke 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  transition: stroke-dashoffset 1.4s var(--ease-ink);
 }
 
-@keyframes drawStroke {
-  to {
-    stroke-dashoffset: 0;
+.brush-path.drawn {
+  stroke-dashoffset: 0;
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   12. SECTION LAYOUT HELPERS
+   ══════════════════════════════════════════════════════════════════════ */
+
+.section-pad {
+  padding-top: var(--section-pad);
+  padding-bottom: var(--section-pad);
+  padding-left: clamp(24px, 6vw, 96px);
+  padding-right: clamp(24px, 6vw, 96px);
+}
+
+/* Mobile sidebar offset — leave room for red thread */
+@media (max-width: 767px) {
+  .section-pad {
+    padding-left: 24px;
+    padding-right: 24px;
   }
 }
 
-/* TEXT WIPE TRANSITIONS */
-.text-wipe-enter {
-  clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+/* ══════════════════════════════════════════════════════════════════════
+   13. LOADER ANIMATIONS
+   ══════════════════════════════════════════════════════════════════════ */
+
+@keyframes loaderSlideUp {
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(-100%); }
 }
 
-.text-wipe-active {
-  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-  transition: clip-path 0.5s ease-in-out;
+.loader-exit {
+  animation: loaderSlideUp 0.8s var(--ease-ink) forwards;
+}
+
+@keyframes strokeAssemble {
+  0%   { stroke-dashoffset: var(--dash-length, 500); }
+  100% { stroke-dashoffset: 0; }
+}
+
+@keyframes mandalaScale {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   14. PROJECT CARD
+   ══════════════════════════════════════════════════════════════════════ */
+
+.project-card {
+  background: var(--bg-card);
+  border: 0.5px solid var(--border);
+  transition: transform 0.4s var(--ease-ink), box-shadow 0.4s var(--ease-ink);
+}
+
+.project-card:hover {
+  transform: translateY(-8px);
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   15. SKILL CHIPS
+   ══════════════════════════════════════════════════════════════════════ */
+
+.skill-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border: 0.5px solid var(--border-gold);
+  border-radius: 2px;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-2);
+  background: transparent;
+  transition: border-color 0.3s, color 0.3s, background 0.3s;
+}
+
+.skill-chip:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+  background: rgba(232, 160, 32, 0.05);
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   16. INPUT STYLES
+   ══════════════════════════════════════════════════════════════════════ */
+
+.form-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 0.5px solid var(--border-gold);
+  padding: 12px 0;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  color: var(--text-1);
+  outline: none;
+  transition: border-color 0.3s var(--ease-snap);
+}
+
+.form-input::placeholder {
+  color: var(--text-3);
+}
+
+.form-input:focus {
+  border-color: var(--gold);
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   17. REDUCED MOTION OVERRIDES
+   ══════════════════════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .ink-reveal-inner {
+    clip-path: none !important;
+    transition: none !important;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   18. UTILITY CLASSES
+   ══════════════════════════════════════════════════════════════════════ */
+
+.will-change-transform { will-change: transform; }
+.gpu { transform: translateZ(0); }
+
+/* Devanagari particle characters */
+.devanagari-glyph {
+  font-family: 'Noto Serif Devanagari', serif;
+  color: var(--gold);
+}
+
+/* Torii gate shape container */
+.torii-frame {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Magnetic button base */
+.magnetic-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: none;
+  transition: transform 0.3s var(--ease-snap);
 }
