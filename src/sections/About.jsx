@@ -109,12 +109,10 @@ export default function About() {
 
       <div
         ref={sectionRef}
-        className="section-pad"
+        className="section-pad grid grid-cols-1 lg:grid-cols-[45%_55%]"
         style={{
           position: 'relative',
           zIndex: 1,
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 1fr))',
           gap: 'clamp(40px, 6vw, 80px)',
           alignItems: 'start',
         }}
@@ -155,12 +153,13 @@ export default function About() {
           <div
             style={{
               display: 'flex',
-              flexDirection: 'column',
-              gap: '28px',
+              flexDirection: 'row',
+              flexWrap: 'wrap',
+              gap: 'clamp(24px, 4vw, 48px)',
             }}
           >
             {STATS.map(({ value, labelKey, suffix }) => (
-              <div key={labelKey}>
+              <div key={labelKey} style={{ flex: '1 1 140px', minWidth: '120px' }}>
                 <div
                   style={{
                     fontFamily: 'Syne, sans-serif',
@@ -169,6 +168,7 @@ export default function About() {
                     lineHeight: 1,
                     letterSpacing: '-0.03em',
                     color: 'var(--text-1)',
+                    whiteSpace: 'nowrap',
                   }}
                 >
                   <CountUp target={value} suffix={suffix} isVisible={isVisible} />
@@ -180,7 +180,7 @@ export default function About() {
                     height: '0.5px',
                     background: 'var(--border-gold)',
                     marginTop: '12px',
-                    width: '60%',
+                    width: '100%',
                   }}
                 />
               </div>

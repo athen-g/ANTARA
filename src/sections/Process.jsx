@@ -7,7 +7,7 @@ export function Process() {
   const { language, t } = useLanguage();
   const containerRef = useRef(null);
   const pathRef = useRef(null);
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => typeof window !== "undefined" ? window.innerWidth < 1024 : false);
   const [reducedMotion, setReducedMotion] = useState(false);
 
   useEffect(() => {
@@ -18,7 +18,6 @@ export function Process() {
       setReducedMotion(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
     };
 
-    checkViewport();
     checkMotion();
 
     window.addEventListener("resize", checkViewport);

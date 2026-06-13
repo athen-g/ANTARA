@@ -161,6 +161,9 @@ export default function ProjectCard({ project, index, isStacked }) {
               }
             }}
             style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
               width: '250%',
               height: '250%',
               border: 'none',

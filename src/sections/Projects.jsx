@@ -11,7 +11,7 @@ export function Projects() {
   const triggerRef = useRef(null);
   const scrollRef = useRef(null);
   const watermarkRef = useRef(null);
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => typeof window !== "undefined" ? window.innerWidth < 1024 : false);
   const [reducedMotion, setReducedMotion] = useState(false);
 
   useEffect(() => {
@@ -23,7 +23,6 @@ export function Projects() {
       setReducedMotion(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
     };
 
-    checkViewport();
     checkMotion();
 
     window.addEventListener("resize", checkViewport);
@@ -66,10 +65,11 @@ export function Projects() {
 
     return () => {
       if (scrollTween) {
-        scrollTween.kill();
         if (scrollTween.scrollTrigger) {
+          scrollTween.scrollTrigger.revert();
           scrollTween.scrollTrigger.kill();
         }
+        scrollTween.kill();
       }
     };
   }, [isMobile, reducedMotion]);
