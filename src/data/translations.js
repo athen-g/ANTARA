@@ -59,7 +59,7 @@ export const translations = {
     },
     contact: {
       titleLabel: "संपर्क — संबंध / भाग्य",
-      subtext: "सहकार्य करूया",
+      subtext: "सहयोगं कुर्वन्तु",
       letCreate: "आगच्छत, वयं कालातीतं किमपि रचयाम।",
       findMe: "येथे संपर्क करा",
       openToCollabs: "मी फ्रीलान्स सहकार्य, पूर्ण-वेळ भूमिका आणि मनोरंजक संभाषणांसाठी खुला आहे. प्रतिसाद वेळ: सहसा २४ तासांच्या आत.",
@@ -122,7 +122,7 @@ export const translations = {
       scrollDown: "SCROLL DOWN"
     },
     projectCard: {
-      visit: "Visit →"
+      visit: "開く ━ Visit"
     },
     process: {
       titleLabel: "Workflow — विधि — Step by Step",
