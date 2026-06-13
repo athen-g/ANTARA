@@ -12,6 +12,9 @@ All notable changes made to the **ANTARA** portfolio during this session:
 
 ### Fixed
 - **Mobile Text & Email Overflow**: Reduced minimum font-size bounds inside `Hero.jsx` (`nameSize`) and `Contact.jsx` (email links) to avoid text overflows on narrow (320px) screens.
+- **Hero Name & Role Box Scaling**: Refined English name size clamp bounds and redesigned the role cycling container in `Hero.jsx` to use dynamic clamp dimensions, preventing visual overflow and character clipping on small mobile viewports.
+- **Torii Pathway Breakpoint Match**: Adjusted layout direction queries in `Process.jsx` to match vertical/horizontal dotted lines, resolving alignment mismatches on tablet screens.
+- **Contact Form Columns Stacking**: Converted the grid layout in `Contact.jsx` to stack vertically below 1024px, matching bento grid guidelines and improving readability of contact inputs.
 - **Projects Tablet Spacing**: Lowered the breakpoint threshold for the projects stacked layout in `Projects.jsx` to `< 1024px`. This disables horizontal scrubbing/scrolling for tablet touch viewports, presenting stacked cards instead.
 - **Responsive Project Cards**: Configured `ProjectCard.jsx` to accept `isStacked`, dynamically scaling width (`100%`) and reducing internal card padding on smaller viewports.
 - **Skills Bento Adaptability**: Set bento grid structures in `Skills.jsx` to stack on tablet resolutions, hiding the decorative rotating yantra to save screen space.

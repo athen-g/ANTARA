@@ -199,7 +199,7 @@ export default function Hero({ loaderDone, prefersReducedMotion }) {
   const lastName = t('hero.lastName') || 'GHULE'
   const isEnglish = language === 'en'
   const nameFont = language === 'mr' ? "'Noto Serif Devanagari', serif" : (language === 'ja' ? 'sans-serif' : 'Syne, sans-serif')
-  const nameSize = language === 'en' ? 'clamp(38px, 12vw, 175px)' : 'clamp(32px, 9vw, 110px)'
+  const nameSize = language === 'en' ? 'clamp(30px, 9vw, 175px)' : 'clamp(26px, 8vw, 110px)'
   const nameLineHeight = language === 'mr' ? 1.35 : (language === 'ja' ? 1.15 : 0.85)
   const nameLetterSpacing = language === 'en' ? '-0.04em' : 'normal'
   const heroWatermark = language === 'ja' ? 'सृ' : '創'
@@ -495,12 +495,12 @@ export default function Hero({ loaderDone, prefersReducedMotion }) {
           style={{
             display: 'inline-flex',
             alignItems: 'center',
-            gap: '16px',
+            gap: 'clamp(10px, 1.5vw, 16px)',
             border: '0.5px solid var(--border-gold)',
-            padding: '10px 20px',
+            padding: '8px clamp(12px, 3vw, 20px)',
             marginBottom: '32px',
             overflow: 'hidden',
-            minWidth: '280px',
+            minWidth: 'clamp(200px, 60vw, 280px)',
           }}
         >
           <span
@@ -519,7 +519,7 @@ export default function Hero({ loaderDone, prefersReducedMotion }) {
             style={{
               fontFamily: 'Syne, sans-serif',
               fontWeight: 800,
-              fontSize: 'clamp(13px, 2vw, 18px)',
+              fontSize: 'clamp(11px, 2vw, 16px)',
               color: 'var(--text-1)',
               clipPath: roleVisible
                 ? 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)'

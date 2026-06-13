@@ -280,9 +280,8 @@ export default function Contact() {
 
         {/* ── Two columns: socials + form ─────────────────────────────── */}
         <div
+          className="grid grid-cols-1 lg:grid-cols-[45%_55%]"
           style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
             gap: 'clamp(40px, 6vw, 80px)',
             alignItems: 'start',
           }}

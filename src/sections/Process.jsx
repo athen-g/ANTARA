@@ -120,7 +120,7 @@ export function Process() {
         </div>
 
         {/* TORII GATE PATHWAY AREA */}
-        <div className="relative flex flex-col md:flex-row justify-between items-center gap-12 md:gap-4 md:px-12 mb-16">
+        <div className="relative flex flex-col lg:flex-row justify-between items-center gap-12 lg:gap-4 lg:px-12 mb-16">
           
           {/* 
             DOTTED PATH LINE
