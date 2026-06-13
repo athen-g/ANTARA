@@ -16,6 +16,7 @@ All notable changes made to the **ANTARA** portfolio during this session:
 - **Torii Pathway Breakpoint Match**: Adjusted layout direction queries in `Process.jsx` to match vertical/horizontal dotted lines, resolving alignment mismatches on tablet screens.
 - **Contact Form Columns Stacking**: Converted the grid layout in `Contact.jsx` to stack vertically below 1024px, matching bento grid guidelines and improving readability of contact inputs.
 - **Projects Tablet Spacing**: Lowered the breakpoint threshold for the projects stacked layout in `Projects.jsx` to `< 1024px`. This disables horizontal scrubbing/scrolling for tablet touch viewports, presenting stacked cards instead.
+- **GSAP Desktop clean-up crash**: Fixed a TypeError crash on desktop viewports by calling `scrollTween.revert()` directly instead of accessing the nonexistent `.revert()` method on the `scrollTrigger` instance.
 - **Responsive Project Cards**: Configured `ProjectCard.jsx` to accept `isStacked`, dynamically scaling width (`100%`) and reducing internal card padding on smaller viewports.
 - **Skills Bento Adaptability**: Set bento grid structures in `Skills.jsx` to stack on tablet resolutions, hiding the decorative rotating yantra to save screen space.
 - **Process Pathway Columns**: Swapped dotted process lines in `Process.jsx` to stack vertically under 1024px, and updated step cards layout (`grid-cols-1 sm:grid-cols-2 lg:grid-cols-4`) to prevent squashing descriptions.
