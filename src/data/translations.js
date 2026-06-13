@@ -32,7 +32,7 @@ export const translations = {
       scrollDown: "खाली स्क्रोल करा"
     },
     projectCard: {
-      visit: "पहा →"
+      visit: "開く ━ Visit"
     },
     process: {
       titleLabel: "कार्यप्रवाह — पद्धत — टप्प्याटप्प्याने",
@@ -60,7 +60,7 @@ export const translations = {
     contact: {
       titleLabel: "संपर्क — संबंध / भाग्य",
       subtext: "सहकार्य करूया",
-      letCreate: "चला काहीतरी कालातीत तयार करूया.",
+      letCreate: "आगच्छत, वयं कालातीतं किमपि रचयाम।",
       findMe: "येथे संपर्क करा",
       openToCollabs: "मी फ्रीलान्स सहकार्य, पूर्ण-वेळ भूमिका आणि मनोरंजक संभाषणांसाठी खुला आहे. प्रतिसाद वेळ: सहसा २४ तासांच्या आत.",
       nameLabel: "नाव",
@@ -211,7 +211,7 @@ export const translations = {
       scrollDown: "スクロールダウン"
     },
     projectCard: {
-      visit: "開く →"
+      visit: "पश्यन्तु ━ Visit"
     },
     process: {
       titleLabel: "ワークフロー — विधि — ステップ・バイ・ステップ",

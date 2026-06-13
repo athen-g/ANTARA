@@ -249,14 +249,14 @@ export default function Contact() {
               style={{
                 fontFamily: 'Syne, sans-serif',
                 fontWeight: 800,
-                fontSize: 'clamp(15px, 4.5vw, 52px)',
+                fontSize: 'clamp(11px, 3.8vw, 52px)',
                 color: 'var(--text-1)',
                 textDecoration: 'none',
                 letterSpacing: '-0.02em',
                 transition: 'color 0.3s',
                 display: 'inline-block',
                 position: 'relative',
-                wordBreak: 'break-all',
+                whiteSpace: 'nowrap',
                 maxWidth: '100%',
               }}
               onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--gold)')}
@@ -287,27 +287,44 @@ export default function Contact() {
           }}
         >
           {/* Left: Torii social buttons */}
-          <InkReveal delay={300}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+            <InkReveal delay={100}>
               <p className="text-label" style={{ marginBottom: '8px' }}>{t('contact.findMe')}</p>
+            </InkReveal>
 
-              <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
-                {SOCIALS.map((social) => (
-                  <ToriiSocialBtn key={social.label} social={social} />
-                ))}
-              </div>
+            <div
+              style={{
+                display: 'flex',
+                gap: '24px',
+                flexWrap: 'wrap',
+                opacity: isVisible ? 1 : 0,
+                transform: isVisible ? 'translateY(0)' : 'translateY(15px)',
+                transition: 'opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s',
+              }}
+            >
+              {SOCIALS.map((social) => (
+                <ToriiSocialBtn key={social.label} social={social} />
+              ))}
+            </div>
 
-              {/* Decorative yantra */}
-              <div style={{ marginTop: '24px' }}>
-                <SanskriticDivider
-                  variant="B"
-                  size={80}
-                  opacity={0.22}
-                  color="var(--gold-dim)"
-                  rotate={false}
-                />
-              </div>
+            {/* Decorative yantra */}
+            <div
+              style={{
+                marginTop: '24px',
+                opacity: isVisible ? 1 : 0,
+                transition: 'opacity 0.8s ease 0.4s',
+              }}
+            >
+              <SanskriticDivider
+                variant="B"
+                size={80}
+                opacity={0.22}
+                color="var(--gold-dim)"
+                rotate={false}
+              />
+            </div>
 
+            <InkReveal delay={300}>
               <p
                 style={{
                   fontFamily: 'Inter, sans-serif',
@@ -319,11 +336,17 @@ export default function Contact() {
               >
                 {t('contact.openToCollabs')}
               </p>
-            </div>
-          </InkReveal>
+            </InkReveal>
+          </div>
 
           {/* Right: Contact form */}
-          <InkReveal delay={450}>
+          <div
+            style={{
+              opacity: isVisible ? 1 : 0,
+              transform: isVisible ? 'translateY(0)' : 'translateY(15px)',
+              transition: 'opacity 0.8s ease 0.3s, transform 0.8s ease 0.3s',
+            }}
+          >
             {submitted ? (
               <div
                 style={{
@@ -367,13 +390,15 @@ export default function Contact() {
               >
                 {/* Name */}
                 <div>
-                  <label
-                    htmlFor="contact-name"
-                    className="text-label"
-                    style={{ display: 'block', marginBottom: '8px' }}
-                  >
-                    {t('contact.nameLabel')}
-                  </label>
+                  <InkReveal delay={100}>
+                    <label
+                      htmlFor="contact-name"
+                      className="text-label"
+                      style={{ display: 'block', marginBottom: '8px' }}
+                    >
+                      {t('contact.nameLabel')}
+                    </label>
+                  </InkReveal>
                   <input
                     id="contact-name"
                     name="name"
@@ -389,13 +414,15 @@ export default function Contact() {
 
                 {/* Email */}
                 <div>
-                  <label
-                    htmlFor="contact-email"
-                    className="text-label"
-                    style={{ display: 'block', marginBottom: '8px' }}
-                  >
-                    {t('contact.emailLabel')}
-                  </label>
+                  <InkReveal delay={150}>
+                    <label
+                      htmlFor="contact-email"
+                      className="text-label"
+                      style={{ display: 'block', marginBottom: '8px' }}
+                    >
+                      {t('contact.emailLabel')}
+                    </label>
+                  </InkReveal>
                   <input
                     id="contact-email"
                     name="email"
@@ -411,13 +438,15 @@ export default function Contact() {
 
                 {/* Message */}
                 <div>
-                  <label
-                    htmlFor="contact-message"
-                    className="text-label"
-                    style={{ display: 'block', marginBottom: '8px' }}
-                  >
-                    {t('contact.messageLabel')}
-                  </label>
+                  <InkReveal delay={200}>
+                    <label
+                      htmlFor="contact-message"
+                      className="text-label"
+                      style={{ display: 'block', marginBottom: '8px' }}
+                    >
+                      {t('contact.messageLabel')}
+                    </label>
+                  </InkReveal>
                   <textarea
                     id="contact-message"
                     name="message"
@@ -438,7 +467,7 @@ export default function Contact() {
                 </MagneticButton>
               </form>
             )}
-          </InkReveal>
+          </div>
         </div>
       </div>
     </section>
