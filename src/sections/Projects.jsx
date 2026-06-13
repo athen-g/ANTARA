@@ -65,10 +65,7 @@ export function Projects() {
 
     return () => {
       if (scrollTween) {
-        if (scrollTween.scrollTrigger) {
-          scrollTween.scrollTrigger.revert();
-          scrollTween.scrollTrigger.kill();
-        }
+        scrollTween.revert();
         scrollTween.kill();
       }
     };
