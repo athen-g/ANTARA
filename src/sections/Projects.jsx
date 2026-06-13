@@ -141,8 +141,8 @@ export function Projects() {
             {/* Title intro card inside the horizontal strip */}
             <div 
               style={{
-                width: '30vw',
-                minWidth: '320px',
+                width: '35vw',
+                minWidth: '420px',
                 flexShrink: 0,
                 display: 'flex',
                 flexDirection: 'column',
