@@ -24,6 +24,7 @@ export function LenisProvider({ children }) {
     });
 
     setLenis(lenisInstance);
+    window.__lenis = lenisInstance;
 
     let rafId;
     function update(time) {
@@ -36,6 +37,7 @@ export function LenisProvider({ children }) {
     return () => {
       cancelAnimationFrame(rafId);
       lenisInstance.destroy();
+      window.__lenis = undefined;
     };
   }, []);
 

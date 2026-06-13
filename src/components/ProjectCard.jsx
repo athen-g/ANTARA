@@ -13,7 +13,7 @@ import { useLanguage } from '../context/LanguageContext'
  * @param {object} props.project — project data from projects.js
  * @param {number} props.index   — position index (0-based)
  */
-export default function ProjectCard({ project, index }) {
+export default function ProjectCard({ project, index, isStacked }) {
   const { language, t } = useLanguage()
   const [hovered, setHovered] = useState(false)
   const { id, title, url, tags, description, accent } = project
@@ -29,12 +29,13 @@ export default function ProjectCard({ project, index }) {
       aria-label={`Project: ${title}`}
       style={{
         position: 'relative',
-        width: 'clamp(300px, 65vw, 720px)',
-        flexShrink: 0,
+        width: isStacked ? '100%' : 'clamp(300px, 65vw, 720px)',
+        maxWidth: isStacked ? '720px' : 'none',
+        flexShrink: isStacked ? 1 : 0,
         background: 'var(--bg-card)',
         border: '0.5px solid var(--border)',
         borderLeft: `4px solid ${accent[0]}`,
-        padding: '48px 40px 40px',
+        padding: isStacked ? 'clamp(32px, 5vw, 48px) clamp(20px, 5vw, 40px) clamp(32px, 5vw, 40px)' : '48px 40px 40px',
         display: 'flex',
         flexDirection: 'column',
         gap: '20px',

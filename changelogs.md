@@ -2,6 +2,21 @@
 
 All notable changes made to the **ANTARA** portfolio during this session:
 
+## [1.4.0] - 2026-06-13
+
+### Added
+- **Global Smooth Scroll Engine Fix**: Exposed the `lenisInstance` as `window.__lenis` in `useLenis.js`. This resolves a scrolling fallback bug where navbar smooth scroll offsets failed to target the active scroll engine.
+- **Drawer Scroll Locking**: Configured the mobile navigation overlay in `Navbar.jsx` to lock the body scroll position and pause Lenis events when the menu is open, restoring scroll state on navigation.
+- **Header Specificity Override Fix**: Removed inline `display: flex` declarations that clashed with Tailwind's responsive classes (`hidden`, `md:flex`, `md:hidden`), correcting layout rendering on mobile headers.
+- **Dynamic Spacing Rhythm**: Tuned container paddings using CSS clamp values to dynamically adapt layout margins across mobile, tablet, and desktop screens.
+
+### Fixed
+- **Mobile Text & Email Overflow**: Reduced minimum font-size bounds inside `Hero.jsx` (`nameSize`) and `Contact.jsx` (email links) to avoid text overflows on narrow (320px) screens.
+- **Projects Tablet Spacing**: Lowered the breakpoint threshold for the projects stacked layout in `Projects.jsx` to `< 1024px`. This disables horizontal scrubbing/scrolling for tablet touch viewports, presenting stacked cards instead.
+- **Responsive Project Cards**: Configured `ProjectCard.jsx` to accept `isStacked`, dynamically scaling width (`100%`) and reducing internal card padding on smaller viewports.
+- **Skills Bento Adaptability**: Set bento grid structures in `Skills.jsx` to stack on tablet resolutions, hiding the decorative rotating yantra to save screen space.
+- **Process Pathway Columns**: Swapped dotted process lines in `Process.jsx` to stack vertically under 1024px, and updated step cards layout (`grid-cols-1 sm:grid-cols-2 lg:grid-cols-4`) to prevent squashing descriptions.
+
 ## [1.3.0] - 2026-06-12
 
 ### Added

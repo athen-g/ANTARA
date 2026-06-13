@@ -199,7 +199,7 @@ export default function Hero({ loaderDone, prefersReducedMotion }) {
   const lastName = t('hero.lastName') || 'GHULE'
   const isEnglish = language === 'en'
   const nameFont = language === 'mr' ? "'Noto Serif Devanagari', serif" : (language === 'ja' ? 'sans-serif' : 'Syne, sans-serif')
-  const nameSize = language === 'en' ? 'clamp(72px, 13vw, 175px)' : 'clamp(48px, 9vw, 110px)'
+  const nameSize = language === 'en' ? 'clamp(38px, 12vw, 175px)' : 'clamp(32px, 9vw, 110px)'
   const nameLineHeight = language === 'mr' ? 1.35 : (language === 'ja' ? 1.15 : 0.85)
   const nameLetterSpacing = language === 'en' ? '-0.04em' : 'normal'
   const heroWatermark = language === 'ja' ? 'सृ' : '創'
@@ -366,7 +366,7 @@ export default function Hero({ loaderDone, prefersReducedMotion }) {
         style={{
           position: 'relative',
           zIndex: 2,
-          paddingLeft: 'clamp(64px, 8vw, 120px)',
+          paddingLeft: 'clamp(24px, 8vw, 120px)',
           paddingRight: 'clamp(24px, 6vw, 96px)',
           paddingTop: 'clamp(60px, 8vh, 120px)',
           paddingBottom: 'clamp(60px, 8vh, 100px)',

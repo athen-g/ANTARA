@@ -16,7 +16,7 @@ export function Projects() {
 
   useEffect(() => {
     const checkViewport = () => {
-      setIsMobile(window.innerWidth < 768);
+      setIsMobile(window.innerWidth < 1024);
     };
 
     const checkMotion = () => {
@@ -99,7 +99,7 @@ export function Projects() {
       ref={triggerRef} 
       id="projects" 
       className={`relative w-full overflow-hidden border-b border-[var(--border)]
-        ${isMobile || reducedMotion ? "py-24 px-6" : "h-screen bg-bg"}
+        ${isMobile || reducedMotion ? "py-24 px-6 md:px-12 xl:px-24" : "h-screen bg-bg"}
       `}
     >
       {/* 匠 Kanji Watermark */}
@@ -125,9 +125,9 @@ export function Projects() {
             <BrushStroke variant="horizontal" className="w-48 mt-4 opacity-30" />
           </div>
 
-          <div className="flex flex-col gap-10 w-full mt-8">
+          <div className="flex flex-col gap-10 w-full mt-8 items-center">
             {projects.map((project, i) => (
-              <ProjectCard key={project.id} project={project} index={i} />
+              <ProjectCard key={project.id} project={project} index={i} isStacked={true} />
             ))}
           </div>
         </div>
@@ -162,7 +162,7 @@ export function Projects() {
 
             {/* List of projects */}
             {projects.map((project, i) => (
-              <ProjectCard key={project.id} project={project} index={i} />
+              <ProjectCard key={project.id} project={project} index={i} isStacked={false} />
             ))}
 
             {/* Empty space card to close the scroll emakimono neatly */}

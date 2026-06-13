@@ -12,7 +12,7 @@ export function Process() {
 
   useEffect(() => {
     const checkViewport = () => {
-      setIsMobile(window.innerWidth < 768);
+      setIsMobile(window.innerWidth < 1024);
     };
     const checkMotion = () => {
       setReducedMotion(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
@@ -231,7 +231,7 @@ export function Process() {
         </div>
 
         {/* STEPS DETAILED DESCRIPTIONS */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-16">
           {steps.map((step, idx) => {
             const stepTitle = stepTranslations[idx]?.title || "";
             const stepDesc = stepTranslations[idx]?.desc || "";

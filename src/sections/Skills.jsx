@@ -51,11 +51,11 @@ export function Skills() {
 
   // Helper to map category IDs to custom CSS grid area classes on desktop
   const gridClasses = {
-    design: "md:col-span-1 md:row-span-2 min-h-[380px] md:min-h-[520px]",
-    frontend: "md:col-span-1 md:row-span-1 min-h-[200px] md:min-h-[250px]",
-    backend: "md:col-span-1 md:row-span-2 min-h-[380px] md:min-h-[520px]",
-    nocode: "md:col-span-1 md:row-span-1 min-h-[200px] md:min-h-[250px]",
-    devtools: "md:col-span-2 md:row-span-1 min-h-[200px] md:min-h-[250px]"
+    design: "lg:col-span-1 lg:row-span-2 min-h-[380px] lg:min-h-[520px]",
+    frontend: "lg:col-span-1 lg:row-span-1 min-h-[200px] lg:min-h-[250px]",
+    backend: "lg:col-span-1 lg:row-span-2 min-h-[380px] lg:min-h-[520px]",
+    nocode: "lg:col-span-1 lg:row-span-1 min-h-[200px] lg:min-h-[250px]",
+    devtools: "lg:col-span-2 lg:row-span-1 min-h-[200px] lg:min-h-[250px]"
   };
 
   return (
@@ -88,7 +88,7 @@ export function Skills() {
         </div>
 
         {/* YANTRA BENTO GRID */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:grid-rows-3 auto-rows-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:grid-rows-3 auto-rows-auto">
           
           {/* Bento Cell 1: Design Tools (Left Column, spans 2 rows) */}
           <div 
@@ -163,7 +163,7 @@ export function Skills() {
           </div>
 
           {/* Center Cell: Hosting the Rotating Yantra (Center Column, Row 2) */}
-          <div className="hidden md:flex items-center justify-center p-6 min-h-[250px] relative">
+          <div className="hidden lg:flex items-center justify-center p-6 min-h-[250px] relative">
             <div className="flex flex-col items-center">
               {/* Central Bindu of Bento Grid (Mandala Rotating) */}
               <div className="relative w-28 h-28 opacity-65 text-[var(--gold)] animate-rotate-slow flex items-center justify-center">

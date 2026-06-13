@@ -249,13 +249,15 @@ export default function Contact() {
               style={{
                 fontFamily: 'Syne, sans-serif',
                 fontWeight: 800,
-                fontSize: 'clamp(20px, 4vw, 52px)',
+                fontSize: 'clamp(15px, 4.5vw, 52px)',
                 color: 'var(--text-1)',
                 textDecoration: 'none',
                 letterSpacing: '-0.02em',
                 transition: 'color 0.3s',
                 display: 'inline-block',
                 position: 'relative',
+                wordBreak: 'break-all',
+                maxWidth: '100%',
               }}
               onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--gold)')}
               onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-1)')}
