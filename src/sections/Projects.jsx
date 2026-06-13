@@ -139,7 +139,19 @@ export function Projects() {
             style={{ display: "flex", flexFlow: "row nowrap" }}
           >
             {/* Title intro card inside the horizontal strip */}
-            <div className="w-[30vw] flex-shrink-0 flex flex-col justify-center items-start pr-12 select-none">
+            <div 
+              style={{
+                width: '30vw',
+                minWidth: '320px',
+                flexShrink: 0,
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'start',
+                paddingRight: '48px',
+                userSelect: 'none'
+              }}
+            >
               <span className="font-display font-black text-[10px] tracking-[0.25em] text-[var(--gold)] uppercase mb-2">
                 {t("projects.titleLabel")}
               </span>

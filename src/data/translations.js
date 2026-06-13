@@ -59,7 +59,7 @@ export const translations = {
     },
     contact: {
       titleLabel: "संपर्क — संबंध / भाग्य",
-      subtext: "सहयोगं कुर्वन्तु",
+      subtext: "コラボレーションしましょう",
       letCreate: "आगच्छत, वयं कालातीतं किमपि रचयाम।",
       findMe: "येथे संपर्क करा",
       openToCollabs: "मी फ्रीलान्स सहकार्य, पूर्ण-वेळ भूमिका आणि मनोरंजक संभाषणांसाठी खुला आहे. प्रतिसाद वेळ: सहसा २४ तासांच्या आत.",
@@ -149,7 +149,7 @@ export const translations = {
     },
     contact: {
       titleLabel: "Contact — 縁 — Connection / Fate",
-      subtext: "Let's collaborate",
+      subtext: "सहयोग करें",
       letCreate: "Let's create something timeless.",
       findMe: "Find me at",
       openToCollabs: "Open to freelance collaborations, full-time roles, and interesting conversations. Response time: usually within 24 hours.",
@@ -238,7 +238,7 @@ export const translations = {
     },
     contact: {
       titleLabel: "連絡先 — 縁 — つながり / 運命",
-      subtext: "コラボレーションしましょう",
+      subtext: "सहयोग करें",
       letCreate: "時代を超えるものを共に創りましょう。",
       findMe: "連絡先一覧",
       openToCollabs: "フリーランスのコラボレーション、正社員雇用、興味深い会話をいつでもお待ちしています。返信時間：通常24時間以内。",
