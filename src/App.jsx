@@ -17,6 +17,9 @@ import { Skills } from "./sections/Skills";
 import { Process } from "./sections/Process";
 import Contact from "./sections/Contact";
 import { Footer } from "./sections/Footer";
+import ManifestoMarquee from "./components/ManifestoMarquee";
+import SoftSkills from "./sections/SoftSkills";
+import Achievements from "./sections/Achievements";
 
 // Register ScrollTrigger globally
 gsap.registerPlugin(ScrollTrigger);
@@ -104,9 +107,12 @@ function App() {
           {/* Main Layout Containers */}
           <main id="main-content">
             <Hero loaderDone={showPortfolio} prefersReducedMotion={motionPreference} />
+            <ManifestoMarquee />
             <About />
             <MarqueeTicker />
             <Projects />
+            <SoftSkills />
+            <Achievements />
             <Skills />
             <Process />
             <Contact />

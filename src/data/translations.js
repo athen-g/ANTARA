@@ -86,6 +86,35 @@ export const translations = {
         nocode: "नो-कोड आणि प्लॅटफॉर्म",
         devtools: "डेव्हलपमेंट साधने"
       }
+    },
+    softSkills: {
+      titleLabel: "नेतृत्व आणि कार्यक्रम — मऊ कौशल्ये — २०२६",
+      title: "सक्रिय सहभाग.",
+      japaneseSubtitle: "活動実績",
+      roleLabel: "भूमिका",
+      hostedEvents: "आयोजित कार्यक्रम",
+      viewPhotos: "फोटो पहा",
+      closePhotos: "बंद करा"
+    },
+    achievements: {
+      titleLabel: "सन्मान आणि यश — पुरस्कार",
+      title: "यश आणि सन्मान.",
+      japaneseSubtitle: "受賞歴",
+      viewAllLinkedIn: "इतर सर्व यश LinkedIn वर पहा",
+      coepTitle: "सीओईपी आय२आय '२६ - द्वितीय पुरस्कार",
+      unimarkProject: "युनिमार्क प्रकल्प",
+      educationCategory: "शिक्षण श्रेणी",
+      teamCollab: "संघ सहकार्य"
+    },
+    philosophies: {
+      title: "तत्वज्ञान आणि विचारसरणी",
+      subtitle: "जीवन आणि कामाची मूल्ये",
+      shoshinTitle: "शोषिन (प्रारंभिक मन)",
+      shoshinDesc: "नवीन कल्पना आणि दृष्टीकोन स्वीकारण्याची नेहमी तयारी ठेवणे.",
+      sadhanaTitle: "साधना (समर्पित अभ्यास)",
+      sadhanaDesc: "दररोज नियमित अभ्यासातून कला आणि कौशल्याची वाढ करणे.",
+      kintsugiTitle: "किंटसुगी (अपूर्णतेत सौंदर्य)",
+      kintsugiDesc: "अपूर्णतेचा स्वीकार करून चुकांमधून शिकणे व अधिक सुंदर बनणे."
     }
   },
   en: {
@@ -176,6 +205,35 @@ export const translations = {
         nocode: "No-Code & Platforms",
         devtools: "Dev Tools & Flow"
       }
+    },
+    softSkills: {
+      titleLabel: "Leadership & Events — Soft Skills — 2026",
+      title: "Active Stature.",
+      japaneseSubtitle: "活動実績",
+      roleLabel: "Role",
+      hostedEvents: "Hosted Events",
+      viewPhotos: "View Event Photos",
+      closePhotos: "Close Gallery"
+    },
+    achievements: {
+      titleLabel: "Honors & Triumphs — Awards",
+      title: "Achievements.",
+      japaneseSubtitle: "受賞歴",
+      viewAllLinkedIn: "View all other achievements on LinkedIn",
+      coepTitle: "COEP I2I '26 - Second Prize",
+      unimarkProject: "unimark Project",
+      educationCategory: "Education Category",
+      teamCollab: "Team Collaboration"
+    },
+    philosophies: {
+      title: "Philosophies & Mindset",
+      subtitle: "Values of Life & Craft",
+      shoshinTitle: "Shoshin (Beginner's Mind)",
+      shoshinDesc: "Approaching every situation with openness, eagerness, and lack of preconceptions.",
+      sadhanaTitle: "Sadhana (Dedicated Practice)",
+      sadhanaDesc: "Disciplined daily execution to refine craft and master complex skills.",
+      kintsugiTitle: "Kintsugi (Imperfection's Beauty)",
+      kintsugiDesc: "Embracing scars, errors, and learning phases, making them beautiful highlights of growth."
     }
   },
   ja: {
@@ -265,6 +323,35 @@ export const translations = {
         nocode: "ノーコードとプラットフォーム",
         devtools: "開発ツールとフロー"
       }
+    },
+    softSkills: {
+      titleLabel: "リーダーシップとイベント — ソフトスキル — 2026",
+      title: "活動実績。",
+      japaneseSubtitle: "活動実績",
+      roleLabel: "役割",
+      hostedEvents: "主催イベント",
+      viewPhotos: "写真を表示",
+      closePhotos: "ギャラリーを閉じる"
+    },
+    achievements: {
+      titleLabel: "名誉と栄光 — 受賞",
+      title: "受賞歴。",
+      japaneseSubtitle: "受賞歴",
+      viewAllLinkedIn: "LinkedInで他のすべての受賞歴を表示",
+      coepTitle: "COEP I2I '26 - 第2位受賞",
+      unimarkProject: "unimarkプロジェクト",
+      educationCategory: "教育部門",
+      teamCollab: "チームコラボレーション"
+    },
+    philosophies: {
+      title: "哲学とマインドセット",
+      subtitle: "生命と技術の価値観",
+      shoshinTitle: "初心 (初心者の心)",
+      shoshinDesc: "すべての物事に対して、先入観を持たず、開かれた心で貪欲に取り組むこと。",
+      sadhanaTitle: "サダナ (献身的な実践)",
+      sadhanaDesc: "技術を磨き、複雑なスキルを習得するための、規律ある日々の実践。",
+      kintsugiTitle: "金継ぎ (不完全の美)",
+      kintsugiDesc: "傷や失敗、学習の過程を受け入れ、それらを美しく輝く成長の軌跡とすること。"
     }
   }
 };

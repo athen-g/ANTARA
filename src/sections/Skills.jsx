@@ -56,7 +56,8 @@ export function Skills() {
     frontend: "lg:col-span-1 lg:row-span-1 min-h-[200px] lg:min-h-[250px]",
     backend: "lg:col-span-1 lg:row-span-2 min-h-[380px] lg:min-h-[520px]",
     nocode: "lg:col-span-1 lg:row-span-1 min-h-[200px] lg:min-h-[250px]",
-    devtools: "lg:col-span-2 lg:row-span-1 min-h-[200px] lg:min-h-[250px]"
+    devtools: "lg:col-span-1 lg:row-span-1 min-h-[200px] lg:min-h-[250px]",
+    philosophies: "lg:col-span-1 lg:row-span-1 min-h-[200px] lg:min-h-[250px]"
   };
 
   return (
@@ -198,7 +199,7 @@ export function Skills() {
             </div>
           </div>
 
-          {/* Bento Cell 5: Dev Tools (Center/Right Columns, Row 3) */}
+          {/* Bento Cell 5: Dev Tools (Center Column, Row 3) */}
           <div 
             className={`bento-cell group relative bg-[var(--bg-card)] rounded-xl border border-[var(--border-gold)] p-6 md:p-8 flex flex-col justify-between overflow-hidden transition-all duration-300 hover:border-[var(--gold)] ${gridClasses.devtools}`}
           >
@@ -217,6 +218,39 @@ export function Skills() {
                   {skill}
                 </span>
               ))}
+            </div>
+          </div>
+
+          {/* Bento Cell 6: Philosophies & Mindset (Right Column, Row 3) */}
+          <div 
+            className={`bento-cell group relative bg-[var(--bg-card)] rounded-xl border border-[var(--border-gold)] p-6 md:p-8 flex flex-col justify-between overflow-hidden transition-all duration-300 hover:border-[var(--gold)] ${gridClasses.philosophies}`}
+          >
+            <BrushStroke variant="corner" className="absolute top-2 left-2 opacity-20 text-[var(--gold)]" />
+            <div>
+              <span className="font-ui uppercase tracking-widest text-[9px] text-[var(--gold)] font-black">
+                {language === 'ja' ? '理念' : 'दर्शन'}
+              </span>
+              <h3 className="font-display font-black text-xl md:text-2xl text-[var(--text-1)] mt-1 mb-2">
+                {t("philosophies.title")}
+              </h3>
+              <p className="font-body text-xs text-[var(--text-2)] leading-relaxed mt-2 mb-4">
+                {language === 'ja' 
+                  ? "初心、修行、金継ぎ。日本の美意識とサンスクリットの教えを取り入れ、日々のコード作成と人格形成に活かしています。" 
+                  : language === 'mr'
+                  ? "शोषिन, साधना आणि किंटसुगी. जपानी आणि सार्थ संस्कृतीचा मेळ जो आमच्या आचार-विचारात आणि निर्मितीत दिसून येतो."
+                  : "Integrating Shoshin, Sadhana, and Kintsugi values to guide daily technical execution and visual craftsmanship."}
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-2 mt-auto">
+              <span className="skill-chip text-[9px] font-ui tracking-wider px-2.5 py-1.5 bg-[var(--bg-raised)] border border-[var(--border)] text-[var(--text-2)] hover:text-[var(--gold)] rounded transition-colors duration-300">
+                {language === 'ja' ? '初心 ━ Shoshin' : 'शोषिन ━ Shoshin'}
+              </span>
+              <span className="skill-chip text-[9px] font-ui tracking-wider px-2.5 py-1.5 bg-[var(--bg-raised)] border border-[var(--border)] text-[var(--text-2)] hover:text-[var(--gold)] rounded transition-colors duration-300">
+                {language === 'ja' ? '修行 ━ Sadhana' : 'साधना ━ Sadhana'}
+              </span>
+              <span className="skill-chip text-[9px] font-ui tracking-wider px-2.5 py-1.5 bg-[var(--bg-raised)] border border-[var(--border)] text-[var(--text-2)] hover:text-[var(--gold)] rounded transition-colors duration-300">
+                {language === 'ja' ? '金継ぎ ━ Kintsugi' : 'किंटसुगी ━ Kintsugi'}
+              </span>
             </div>
           </div>
 

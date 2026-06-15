@@ -241,6 +241,42 @@ export default function About() {
             </p>
           </InkReveal>
 
+          {/* Mindset & Philosophies block */}
+          <InkReveal delay={380}>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 py-6 border-t border-b border-[var(--border)] my-2">
+              <div>
+                <span className="font-devanagari text-xs text-[var(--gold)] font-bold block mb-1">初心 ━ SHOSHIN</span>
+                <p className="text-[11px] leading-relaxed text-[var(--text-2)]">
+                  {language === 'ja' 
+                    ? "すべての物事に対して、先入観を持たず、開かれた心で貪欲に取り組むこと。" 
+                    : language === 'mr'
+                    ? "नवीन कल्पना आणि दृष्टीकोन स्वीकारण्याची नेहमी तयारी ठेवणे."
+                    : "Approaching every situation with openness, eagerness, and lack of preconceptions."}
+                </p>
+              </div>
+              <div>
+                <span className="font-devanagari text-xs text-[var(--gold)] font-bold block mb-1">修行 ━ SADHANA</span>
+                <p className="text-[11px] leading-relaxed text-[var(--text-2)]">
+                  {language === 'ja' 
+                    ? "技術を磨き、複雑なスキルを習得するための、規律ある日々の実践。" 
+                    : language === 'mr'
+                    ? "दररोज नियमित अभ्यासातून कला आणि कौशल्याची वाढ करणे."
+                    : "Disciplined daily execution to refine craft and master complex skills."}
+                </p>
+              </div>
+              <div>
+                <span className="font-devanagari text-xs text-[var(--gold)] font-bold block mb-1">金継ぎ ━ KINTSUGI</span>
+                <p className="text-[11px] leading-relaxed text-[var(--text-2)]">
+                  {language === 'ja' 
+                    ? "傷や失敗、学習の過程を受け入れ、それらを美しく輝く成長の軌跡とすること。" 
+                    : language === 'mr'
+                    ? "अपूर्णतेचा स्वीकार करून चुकांमधून शिकणे व अधिक सुंदर बनणे."
+                    : "Embracing scars, errors, and learning phases, making them beautiful highlights of growth."}
+                </p>
+              </div>
+            </div>
+          </InkReveal>
+
           {/* Brushstroke divider */}
           <BrushStroke variant="diagonal" isVisible={isVisible} delay={500} opacity={0.12} style={{ alignSelf: 'flex-start' }} width="60px" />
 
