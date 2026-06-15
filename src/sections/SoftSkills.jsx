@@ -155,11 +155,11 @@ function EventCard({ event, idx, language, t, isSelected, onClick }) {
       {event.images && event.images.map((img, imgIdx) => (
         <div 
           key={imgIdx}
-          className="absolute inset-0 bg-cover bg-center transition-opacity duration-1000 pointer-events-none z-0"
+          className="absolute inset-0 bg-cover bg-center transition-opacity duration-1000 pointer-events-none"
           style={{
-            backgroundImage: `url(${img})`,
-            opacity: isSelected && currentImgIdx === imgIdx ? 0.18 : 0,
-            zIndex: 0
+            backgroundImage: `url("${img}")`,
+            opacity: isSelected && currentImgIdx === imgIdx ? 0.45 : 0,
+            zIndex: 1
           }}
         />
       ))}
@@ -167,20 +167,25 @@ function EventCard({ event, idx, language, t, isSelected, onClick }) {
       {/* Static Backdrop Fallback (when collapsed) */}
       {!isSelected && event.backdrop && (
         <div 
-          className="absolute inset-0 bg-cover bg-center opacity-[0.03] pointer-events-none z-0 scale-100 transition-all duration-700"
-          style={{ backgroundImage: `url(${event.backdrop})` }}
+          className="absolute inset-0 bg-cover bg-center pointer-events-none transition-all duration-700"
+          style={{ 
+            backgroundImage: `url("${event.backdrop}")`,
+            opacity: 0.15,
+            zIndex: 1
+          }}
         />
       )}
 
       {/* High-contrast gradient overlay to ensure text readability */}
       <div 
-        className={`absolute inset-0 bg-gradient-to-t from-[rgba(8,8,8,0.92)] via-[rgba(8,8,8,0.75)] to-[rgba(8,8,8,0.45)] pointer-events-none z-0 transition-opacity duration-700
+        className={`absolute inset-0 bg-gradient-to-t from-[rgba(8,8,8,0.92)] via-[rgba(8,8,8,0.75)] to-[rgba(8,8,8,0.45)] pointer-events-none transition-opacity duration-700
           ${isSelected ? "opacity-100" : "opacity-0"}
         `}
+        style={{ zIndex: 2 }}
       />
       
       {/* Inner Content Grid */}
-      <div className="relative z-10 w-full h-full flex flex-col justify-between">
+      <div className="relative z-10 w-full h-full flex flex-col justify-between" style={{ zIndex: 10 }}>
         
         {/* Top Bar: Date / Index */}
         <div className="flex items-center justify-between w-full">
@@ -222,10 +227,10 @@ function EventCard({ event, idx, language, t, isSelected, onClick }) {
             - Transitions to horizontal when expanded.
           */}
           <h3 
-            className={`font-display font-black text-[15px] md:text-lg text-[var(--text-1)] tracking-wide transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] whitespace-normal will-change-transform lg:origin-left-bottom lg:absolute lg:left-0 lg:bottom-0
+            className={`font-display font-black text-[15px] md:text-lg text-[var(--text-1)] tracking-wide transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform pr-8 lg:origin-left-bottom
               ${isSelected 
-                ? "lg:rotate-0 lg:translate-x-0 lg:translate-y-0 lg:max-w-none" 
-                : "lg:rotate-[-90deg] lg:-translate-y-6 lg:translate-x-1 lg:max-w-[340px] lg:leading-[1.1]"
+                ? "whitespace-normal lg:relative lg:left-0 lg:bottom-0 lg:rotate-0 lg:translate-x-0 lg:translate-y-0 lg:max-w-none" 
+                : "whitespace-normal lg:whitespace-nowrap lg:absolute lg:left-1/2 lg:bottom-0 lg:rotate-[-90deg] lg:translate-y-[-16px] lg:translate-x-[8px] lg:max-w-[340px] lg:leading-[1.2]"
               }
             `}
             style={{
