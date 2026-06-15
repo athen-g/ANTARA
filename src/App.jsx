@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Analytics } from "@vercel/analytics/react";
 
 // Import layout components
 import Loader from "./components/Loader";
@@ -121,6 +122,7 @@ function App() {
           <Footer />
         </div>
       )}
+      <Analytics />
     </>
   );
 }
