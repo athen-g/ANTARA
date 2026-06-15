@@ -42,6 +42,67 @@ function App() {
     return () => mediaQuery.removeEventListener("change", handleMotionChange);
   }, []);
 
+  // Initialize Ko-fi overlay widget with active theme variables
+  useEffect(() => {
+    if (!showPortfolio) return;
+
+    let activeScript = null;
+
+    const initKofi = () => {
+      // Clean up previous widget instance if exists to avoid duplication
+      const existingWidget = document.querySelector('.kofi-iframe-container') || document.getElementById('kofi-widget-overlay');
+      if (existingWidget) {
+        existingWidget.remove();
+      }
+
+      if (window.kofiWidgetOverlay) {
+        const vermillion = getComputedStyle(document.documentElement).getPropertyValue('--vermillion').trim() || '#C1392B';
+        const text1 = getComputedStyle(document.documentElement).getPropertyValue('--text-1').trim() || '#F2EBD9';
+        
+        window.kofiWidgetOverlay.draw('athen_g', {
+          'type': 'floating-chat',
+          'floating-chat.donateButton.text': 'Support me',
+          'floating-chat.donateButton.background-color': vermillion,
+          'floating-chat.donateButton.text-color': text1
+        });
+      }
+    };
+
+    // Load overlay widget script
+    if (!window.kofiWidgetOverlay) {
+      const script = document.createElement("script");
+      script.src = "https://storage.ko-fi.com/cdn/scripts/overlay-widget.js";
+      script.async = true;
+      script.onload = initKofi;
+      document.body.appendChild(script);
+      activeScript = script;
+    } else {
+      initKofi();
+    }
+
+    // Observe data-theme changes to dynamically swap button colors
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === 'attributes' && (mutation.attributeName === 'data-theme' || mutation.attributeName === 'class')) {
+          initKofi();
+        }
+      });
+    });
+
+    observer.observe(document.documentElement, { attributes: true });
+
+    return () => {
+      observer.disconnect();
+      const existingWidget = document.querySelector('.kofi-iframe-container') || document.getElementById('kofi-widget-overlay');
+      if (existingWidget) {
+        existingWidget.remove();
+      }
+      if (activeScript && activeScript.parentNode) {
+        activeScript.parentNode.removeChild(activeScript);
+      }
+    };
+  }, [showPortfolio]);
+
   return (
     <>
       {/* High-frequency visual grain texture overlay */}
