@@ -19,33 +19,39 @@ export function SplitText({
   if (type === "words") {
     const words = text.split(" ");
     return (
-      <span className={className} aria-label={ariaLabel}>
-        {words.map((word, i) => (
-          <span key={i} className={wordClassName} style={{ display: "inline-block" }}>
-            {word}
-          </span>
-        ))}
-      </span>
+      <>
+        <span className="sr-only">{text}</span>
+        <span className={className} aria-hidden="true">
+          {words.map((word, i) => (
+            <span key={i} className={wordClassName} style={{ display: "inline-block" }}>
+              {word}
+            </span>
+          ))}
+        </span>
+      </>
     );
   }
 
   // type === "chars"
   const words = text.split(" ");
   return (
-    <span className={className} aria-label={ariaLabel}>
-      {words.map((word, wIdx) => (
-        <span key={wIdx} className={wordClassName} style={{ display: "inline-block" }}>
-          {word.split("").map((char, cIdx) => (
-            <span 
-              key={cIdx} 
-              className={charClassName} 
-              style={{ display: "inline-block", position: "relative" }}
-            >
-              {char}
-            </span>
-          ))}
-        </span>
-      ))}
-    </span>
+    <>
+      <span className="sr-only">{text}</span>
+      <span className={className} aria-hidden="true">
+        {words.map((word, wIdx) => (
+          <span key={wIdx} className={wordClassName} style={{ display: "inline-block" }}>
+            {word.split("").map((char, cIdx) => (
+              <span 
+                key={cIdx} 
+                className={charClassName} 
+                style={{ display: "inline-block", position: "relative" }}
+              >
+                {char}
+              </span>
+            ))}
+          </span>
+        ))}
+      </span>
+    </>
   );
 }

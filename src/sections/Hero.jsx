@@ -384,10 +384,13 @@ export default function Hero({ loaderDone, prefersReducedMotion }) {
             lineHeight: nameLineHeight,
           }}
         >
+          {/* Screen-reader accessible version of the name */}
+          <span className="sr-only">{firstName} {lastName}</span>
+
           {/* ATHARVA */}
           <div
             ref={atharvaRef}
-            aria-label={firstName}
+            aria-hidden="true"
             style={{ display: 'flex', gap: '0.01em', overflow: 'hidden' }}
           >
             {isEnglish ? (
@@ -434,7 +437,7 @@ export default function Hero({ loaderDone, prefersReducedMotion }) {
           {/* GHULE — outlined */}
           <div
             ref={ghuleRef}
-            aria-label={lastName}
+            aria-hidden="true"
             style={{ display: 'flex', gap: '0.01em', overflow: 'hidden' }}
           >
             {isEnglish ? (
