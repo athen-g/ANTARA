@@ -304,7 +304,7 @@ export default function About() {
               fontFamily: language === 'mr' ? 'sans-serif' : "'Noto Serif Devanagari', serif",
               fontSize: '13px',
               color: 'var(--gold)',
-              opacity: 0.45,
+              opacity: 0.85,
               letterSpacing: '0.1em',
             }}
           >

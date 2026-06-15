@@ -20,7 +20,7 @@
 
   /* Accent palette */
   --gold:        #E8A020;
-  --gold-dim:    #A06C10;
+  --gold-dim:    #C58B2B;
   --vermillion:  #C1392B;
   --teal:        #2FC4A0;
   --teal-dim:    #1A7A64;
@@ -28,7 +28,7 @@
   /* Text */
   --text-1:      #F2EBD9;
   --text-2:      #8A8070;
-  --text-3:      #4A453D;
+  --text-3:      #7C7365;
 
   /* Borders */
   --border:      rgba(242, 235, 217, 0.06);
@@ -55,7 +55,7 @@
   --teal-dim:    #1A9E7A;
   --text-1:      #1A1610;
   --text-2:      #6A5C48;
-  --text-3:      #9A8C78;
+  --text-3:      #62594E;
   --border:      rgba(26, 22, 16, 0.08);
   --border-gold: rgba(154, 92, 8, 0.2);
 }

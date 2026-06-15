@@ -138,7 +138,7 @@ export default function ProjectCard({ project, index, isStacked }) {
               alignItems: 'center',
               justifyContent: 'center',
               fontSize: '9px',
-              color: 'var(--text-3)',
+              color: 'var(--text-2)',
               fontFamily: 'Inter, sans-serif',
               letterSpacing: '0.02em',
               border: '0.5px solid rgba(255, 255, 255, 0.03)',

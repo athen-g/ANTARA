@@ -242,9 +242,9 @@ export function Process() {
                 <div className="absolute top-4 right-4 text-[10px] font-ui text-[var(--gold-dim)] font-bold">
                   {step.id}
                 </div>
-                <h4 className="font-display font-black text-lg text-[var(--text-1)] mb-2 uppercase tracking-wide">
+                <h3 className="font-display font-black text-lg text-[var(--text-1)] mb-2 uppercase tracking-wide">
                   {stepTitle}
-                </h4>
+                </h3>
                 <p className="font-body text-xs leading-relaxed text-[var(--text-2)]">
                   {stepDesc}
                 </p>
