@@ -144,7 +144,7 @@ function EventCard({ event, idx, language, t, isSelected, onClick }) {
       className={`relative rounded-2xl overflow-hidden border cursor-pointer transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] flex flex-col justify-between p-6 md:p-8 will-change-[flex,max-height,transform] gpu
         ${isSelected 
           ? "border-[var(--gold)] bg-[var(--bg-raised)] shadow-[0_15px_35px_rgba(232,160,32,0.05)] flex-[3.5] max-h-[600px]" 
-          : "border-[var(--border)] bg-[var(--bg-card)] hover:border-[var(--border-gold)] flex-[1] max-h-[110px] lg:max-h-none"
+          : "border-[var(--border)] bg-[var(--bg-card)] hover:border-[var(--border-gold)] flex-[1] min-h-[130px] max-h-[130px] lg:min-h-0 lg:max-h-none"
         }
       `}
     >
@@ -230,7 +230,7 @@ function EventCard({ event, idx, language, t, isSelected, onClick }) {
             className={`font-display font-black text-[15px] md:text-lg text-[var(--text-1)] tracking-wide transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform pr-8 lg:origin-bottom-left
               ${isSelected 
                 ? "whitespace-normal lg:relative lg:left-0 lg:bottom-0 lg:rotate-0 lg:translate-x-0 lg:translate-y-0 lg:max-w-none" 
-                : "whitespace-normal lg:whitespace-nowrap lg:absolute lg:left-1/2 lg:bottom-0 lg:rotate-[-90deg] lg:translate-y-[-16px] lg:translate-x-[8px] lg:max-w-[340px] lg:leading-[1.2]"
+                : "whitespace-normal lg:whitespace-normal lg:absolute lg:left-1/2 lg:bottom-0 lg:rotate-[-90deg] lg:translate-y-[-16px] lg:translate-x-[14px] lg:max-w-[280px] lg:leading-[1.1]"
               }
             `}
             style={{
