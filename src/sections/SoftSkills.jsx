@@ -92,7 +92,7 @@ function EventCard({ event, idx, language, t, isSelected, onClick }) {
 
     const interval = setInterval(() => {
       setCurrentImgIdx((prev) => (prev + 1) % event.images.length);
-    }, 3500);
+    }, 2000);
 
     return () => clearInterval(interval);
   }, [isSelected, event.images]);
@@ -165,11 +165,11 @@ function EventCard({ event, idx, language, t, isSelected, onClick }) {
       ))}
 
       {/* Static Backdrop Fallback (when collapsed) */}
-      {!isSelected && event.backdrop && (
+      {!isSelected && (event.backdrop || (event.images && event.images[0])) && (
         <div 
           className="absolute inset-0 bg-cover bg-center pointer-events-none transition-all duration-700"
           style={{ 
-            backgroundImage: `url("${event.backdrop}")`,
+            backgroundImage: `url("${event.backdrop || event.images[0]}")`,
             opacity: 0.15,
             zIndex: 1
           }}
@@ -227,7 +227,7 @@ function EventCard({ event, idx, language, t, isSelected, onClick }) {
             - Transitions to horizontal when expanded.
           */}
           <h3 
-            className={`font-display font-black text-[15px] md:text-lg text-[var(--text-1)] tracking-wide transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform pr-8 lg:origin-left-bottom
+            className={`font-display font-black text-[15px] md:text-lg text-[var(--text-1)] tracking-wide transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform pr-8 lg:origin-bottom-left
               ${isSelected 
                 ? "whitespace-normal lg:relative lg:left-0 lg:bottom-0 lg:rotate-0 lg:translate-x-0 lg:translate-y-0 lg:max-w-none" 
                 : "whitespace-normal lg:whitespace-nowrap lg:absolute lg:left-1/2 lg:bottom-0 lg:rotate-[-90deg] lg:translate-y-[-16px] lg:translate-x-[8px] lg:max-w-[340px] lg:leading-[1.2]"
