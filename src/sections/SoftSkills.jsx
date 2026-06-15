@@ -230,7 +230,7 @@ function EventCard({ event, idx, language, t, isSelected, onClick }) {
             className={`font-display font-black text-[15px] md:text-lg text-[var(--text-1)] tracking-wide transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform pr-8 lg:origin-bottom-left
               ${isSelected 
                 ? "whitespace-normal lg:relative lg:left-0 lg:bottom-0 lg:rotate-0 lg:translate-x-0 lg:translate-y-0 lg:max-w-none" 
-                : "whitespace-normal lg:whitespace-normal lg:absolute lg:left-1/2 lg:bottom-0 lg:rotate-[-90deg] lg:translate-y-[-16px] lg:translate-x-[14px] lg:max-w-[280px] lg:leading-[1.1]"
+                : "whitespace-normal lg:whitespace-normal lg:absolute lg:left-1/2 lg:bottom-0 lg:rotate-[-90deg] lg:translate-y-[-16px] lg:translate-x-[14px] lg:max-w-[450px] lg:leading-[1.1]"
               }
             `}
             style={{
