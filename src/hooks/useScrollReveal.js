@@ -53,6 +53,7 @@ export function useScrollReveal(firstArg, secondArg) {
         delay,
         ease: "power3.out",
         stagger: stagger || 0,
+        force3D: true,
         scrollTrigger: {
           trigger: el,
           start,

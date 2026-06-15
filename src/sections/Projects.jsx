@@ -48,6 +48,7 @@ export function Projects() {
       {
         x: () => -getScrollAmount(),
         ease: "none",
+        force3D: true,
         scrollTrigger: {
           trigger: triggerEl,
           pin: true,
@@ -82,7 +83,8 @@ export function Projects() {
           x: xVal * 0.8,
           y: yVal * 0.8,
           duration: 1.6,
-          ease: "power2.out"
+          ease: "power2.out",
+          force3D: true
         });
       }
     };

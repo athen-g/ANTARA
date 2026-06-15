@@ -40,7 +40,8 @@ export function Skills() {
           x: xVal * 0.7,
           y: yVal * 0.7,
           duration: 1.4,
-          ease: "power2.out"
+          ease: "power2.out",
+          force3D: true
         });
       }
     };

@@ -223,7 +223,7 @@ export default function Hero({ loaderDone, prefersReducedMotion }) {
   useEffect(() => {
     if (!loaderDone || prefersReducedMotion) return
 
-    const tl = gsap.timeline({ delay: 0.2 })
+    const tl = gsap.timeline({ delay: 0.2, defaults: { force3D: true } })
 
     // "ATHARVA" — each letter
     const atharvaEl = atharvaRef.current
@@ -300,7 +300,7 @@ export default function Hero({ loaderDone, prefersReducedMotion }) {
     if (!kanjiRef.current) return
     const x = mouse.ndcX * 30
     const y = -mouse.ndcY * 20
-    kanjiRef.current.style.transform = `translate(${x}px, ${y}px)`
+    kanjiRef.current.style.transform = `translate3d(${x}px, ${y}px, 0)`
   }, [mouse])
 
   return (

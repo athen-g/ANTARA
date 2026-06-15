@@ -246,7 +246,8 @@ body::before {
 .ink-reveal-inner {
   clip-path: polygon(50% 50%, 50% 50%, 50% 50%, 50% 50%, 50% 50%, 50% 50%);
   transition: clip-path 1.4s var(--ease-ink);
-  will-change: clip-path;
+  will-change: clip-path, transform;
+  transform: translate3d(0, 0, 0);
 }
 
 .ink-reveal-inner.revealed {
@@ -267,6 +268,9 @@ body::before {
   pointer-events: none;
   user-select: none;
   position: absolute;
+  will-change: opacity, transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
 }
 
 .kanji-watermark.animate-pulse-slow {
@@ -287,18 +291,20 @@ body::before {
   gap: 0;
   white-space: nowrap;
   will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
 }
 
 .marquee-left  { animation: marqueeLeft  30s linear infinite; }
 .marquee-right { animation: marqueeRight 28s linear infinite; }
 
 @keyframes marqueeLeft {
-  0%   { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  0%   { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-50%, 0, 0); }
 }
 @keyframes marqueeRight {
-  0%   { transform: translateX(-50%); }
-  100% { transform: translateX(0); }
+  0%   { transform: translate3d(-50%, 0, 0); }
+  100% { transform: translate3d(0, 0, 0); }
 }
 
 /* Pause on hover */
@@ -319,6 +325,8 @@ body::before {
   pointer-events: none;
   z-index: 50;
   overflow: visible;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
 }
 
 .red-thread-path {
@@ -400,10 +408,13 @@ body::before {
   background: var(--bg-card);
   border: 0.5px solid var(--border);
   transition: transform 0.4s var(--ease-ink), box-shadow 0.4s var(--ease-ink);
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
 }
 
 .project-card:hover {
-  transform: translateY(-8px);
+  transform: translate3d(0, -8px, 0);
 }
 
 /* ══════════════════════════════════════════════════════════════════════
@@ -422,6 +433,8 @@ body::before {
   color: var(--text-2);
   background: transparent;
   transition: border-color 0.3s, color 0.3s, background 0.3s;
+  will-change: border-color, color, background-color;
+  transform: translate3d(0, 0, 0);
 }
 
 .skill-chip:hover {
@@ -479,7 +492,11 @@ body::before {
    ══════════════════════════════════════════════════════════════════════ */
 
 .will-change-transform { will-change: transform; }
-.gpu { transform: translateZ(0); }
+.gpu {
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
 
 /* Devanagari particle characters */
 .devanagari-glyph {

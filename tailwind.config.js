@@ -40,16 +40,16 @@ export default {
       },
       keyframes: {
         rotateSlow: {
-          '0%': { transform: 'rotate(0deg)' },
-          '100%': { transform: 'rotate(360deg)' },
+          '0%': { transform: 'rotate3d(0, 0, 1, 0deg)' },
+          '100%': { transform: 'rotate3d(0, 0, 1, 360deg)' },
         },
         fadeIn: {
           '0%': { opacity: '0' },
           '100%': { opacity: '1' },
         },
         redThread: {
-          '0%, 100%': { transform: 'translateX(0) scaleX(1)' },
-          '50%': { transform: 'translateX(2px) scaleX(1.05)' },
+          '0%, 100%': { transform: 'translate3d(0, 0, 0) scale3d(1, 1, 1)' },
+          '50%': { transform: 'translate3d(2px, 0, 0) scale3d(1.05, 1, 1)' },
         }
       }
     },

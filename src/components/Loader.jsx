@@ -55,7 +55,7 @@ export default function Loader({ onExitStart, onComplete }) {
         alignItems: 'center',
         justifyContent: 'center',
         gap: '32px',
-        transform: phase === 'exiting' ? 'translateY(-100%)' : 'translateY(0)',
+        transform: phase === 'exiting' ? 'translate3d(0, -100%, 0)' : 'translate3d(0, 0, 0)',
         transition: phase === 'exiting'
           ? 'transform 0.8s cubic-bezier(0.16,1,0.3,1)'
           : 'none',
@@ -104,8 +104,8 @@ export default function Loader({ onExitStart, onComplete }) {
 
       <style>{`
         @keyframes letterFadeIn {
-          from { opacity: 0; transform: translateY(8px); }
-          to   { opacity: 1; transform: translateY(0); }
+          from { opacity: 0; transform: translate3d(0, 8px, 0); }
+          to   { opacity: 1; transform: translate3d(0, 0, 0); }
         }
       `}</style>
     </div>
