@@ -1,26 +1,16 @@
-import React, { useRef, useState, useEffect } from "react";
-import gsap from "gsap";
+import React, { useState, useRef, useEffect } from "react";
 import { useLanguage } from "../context/LanguageContext";
-import { softSkillsData } from "../data/softSkills";
+import { softSkillsEvents } from "../data/softSkills";
 import BrushStroke from "../components/BrushStroke";
-import { useScrollReveal } from "../hooks/useScrollReveal";
+import gsap from "gsap";
 
-export default function SoftSkills() {
+export function SoftSkills() {
   const { language, t } = useLanguage();
-  const sectionRef = useRef(null);
-  const lineRef = useRef(null);
+  const [activeEvent, setActiveEvent] = useState("render-creation"); // default active event
   const watermarkRef = useRef(null);
-  const [activePhoto, setActivePhoto] = useState(null);
+  const containerRef = useRef(null);
 
-  // Trigger animations on scroll
-  useScrollReveal(sectionRef, {
-    selector: ".timeline-card",
-    type: "fade-up",
-    stagger: 0.15,
-    once: true
-  });
-
-  // Soft mouse parallax on the 演 (en) watermark
+  // Watermark mouse parallax
   useEffect(() => {
     const handleMouseMove = (e) => {
       const xVal = (e.clientX / window.innerWidth - 0.5) * 35;
@@ -28,8 +18,8 @@ export default function SoftSkills() {
 
       if (watermarkRef.current) {
         gsap.to(watermarkRef.current, {
-          x: xVal * 0.75,
-          y: yVal * 0.75,
+          x: xVal * 0.7,
+          y: yVal * 0.7,
           duration: 1.5,
           ease: "power2.out",
           force3D: true
@@ -43,147 +33,226 @@ export default function SoftSkills() {
 
   return (
     <section
-      ref={sectionRef}
       id="soft-skills"
+      ref={containerRef}
       className="relative w-full py-24 px-6 md:px-12 xl:px-24 overflow-hidden border-b border-[var(--border)] bg-[var(--bg)]"
-      style={{ transition: "background-color 0.4s ease, color 0.4s ease" }}
     >
-      {/* 演 (En - performance/conduct) Kanji Watermark */}
+      {/* 演 (Conduct) Kanji Watermark */}
       <div
         ref={watermarkRef}
-        className="absolute top-1/3 left-[30%] text-[28vw] select-none pointer-events-none z-10 kanji-watermark leading-none opacity-5"
+        className="absolute top-[25%] left-[45%] text-[26vw] select-none pointer-events-none z-10 kanji-watermark leading-none opacity-[0.03]"
       >
         演
       </div>
 
-      <div className="relative max-w-6xl mx-auto z-20">
-        
-        {/* Section Title */}
-        <div className="flex flex-col items-center mb-20 text-center">
+      <div className="relative max-w-7xl mx-auto z-20">
+
+        {/* Section Heading */}
+        <div className="flex flex-col items-start mb-16">
           <span className="font-display font-black text-[10px] tracking-[0.25em] text-[var(--gold)] uppercase mb-2">
             {t("softSkills.titleLabel")}
           </span>
           <h2 className="font-display font-black text-4xl md:text-6xl text-[var(--text-1)] leading-tight">
             {t("softSkills.title")}
           </h2>
-          <span className="font-ui text-xs text-[var(--text-3)] mt-1">
-            {t("softSkills.japaneseSubtitle")}
-          </span>
+          <span className="font-ui text-xs text-[var(--text-3)] mt-1">{t("softSkills.japaneseSubtitle")}</span>
           <BrushStroke variant="horizontal" className="w-56 mt-4 opacity-25" />
         </div>
 
-        {/* TIMELINE CONTAINER */}
-        <div className="relative w-full min-h-[500px]">
-          
-          {/* Central Timeline Line (Dashed Calligraphic Style) */}
-          <div
-            ref={lineRef}
-            className="absolute left-[20px] md:left-1/2 top-0 bottom-0 w-[1px] -translate-x-1/2 opacity-25 z-10"
+        {/* HORIZONTAL / VERTICAL RESPONSIVE ACCORDION */}
+        <div className="flex flex-col lg:flex-row gap-6 w-full min-h-[580px] lg:h-[600px] items-stretch select-none">
+
+          {softSkillsEvents.map((event, idx) => (
+            <EventCard
+              key={event.id}
+              event={event}
+              idx={idx}
+              language={language}
+              t={t}
+              isSelected={activeEvent === event.id}
+              onClick={() => setActiveEvent(event.id)}
+            />
+          ))}
+
+        </div>
+
+      </div>
+    </section>
+  );
+}
+
+// ── Sub-component for individual event card managing its own slideshow ──────
+
+function EventCard({ event, idx, language, t, isSelected, onClick }) {
+  const [currentImgIdx, setCurrentImgIdx] = useState(0);
+
+  // Auto-running image slideshow inside the card
+  useEffect(() => {
+    if (!isSelected || !event.images || event.images.length <= 1) return;
+
+    const interval = setInterval(() => {
+      setCurrentImgIdx((prev) => (prev + 1) % event.images.length);
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, [isSelected, event.images]);
+
+  // Reset slideshow index when collapsed
+  useEffect(() => {
+    if (!isSelected) {
+      setCurrentImgIdx(0);
+    }
+  }, [isSelected]);
+
+  // Generate description
+  let descriptionText = "";
+  if (event.id === "render-creation") {
+    descriptionText = language === "mr"
+      ? "हायपरस्पेस एक्सआर एसआयजी (HYPERSPACE XR SIG) चे डिझाइन प्रमुख म्हणून, मी एमईएसडब्ल्यूसीओई एक्सआर लॅबमध्ये आयोजित केलेल्या दोन दिवसीय युनिटी वर्कशॉपच्या यशस्वी नियोजनात योगदान दिले. ब्रँडिंग डिझाइन करण्यासोबतच, मी विद्यार्थ्यांना गेम डेव्हलपमेंटच्या मूलभूत संकल्पना शिकवल्या."
+      : language === "ja"
+        ? "HYPERSPACE XR SIGのデザインヘッドとして、MESWCOE XRラボで開催された2日間のUnityワークショップを共同運営。ビジュアルアイデンティティのデザインから、Unity基礎指導、アーチェリーゲーム制作までサポートしました。"
+        : "As Design Head of HYPERSPACE XR SIG, I co-organized the 2-day Unity Workshop in the MESWCOE XR Lab. Responsibilities included graphic branding, poster creation, and instructing attendees on game development concepts using Unity.";
+  } else if (event.id === "activate-immersion") {
+    descriptionText = language === "mr"
+      ? "अतिथी व्याख्यानाचे डिझाइन प्रमुख आणि यजमान म्हणून, मी मुख्य पाहुणे अक्षय राठोड (संस्थापक, फायरबर्ड व्हीआर) यांची ओळख करून दिली आणि एक्सआर तंत्रज्ञानावरील सत्र आयोजित केले."
+      : language === "ja"
+        ? "ゲスト講師であるAkshay Rathod氏（Firebird VR社CEO）の招待講演にて司会・ホストを担当。イベント用スライド等のクリエイティブもデザインしました。"
+        : "As Design Head and Host, designed event presentations and introduced our speaker, Mr. Akshay Rathod (CEO, Firebird VR) to address emerging XR trends.";
+  } else if (event.id === "initiate-calibration") {
+    descriptionText = language === "mr"
+      ? "उद्घाटन कार्यक्रमात डिझाइन प्रमुख म्हणून मी फोटोग्राफीची जबाबदारी घेतली आणि व्हीआर अनुभव सत्राचे व्यवस्थापन केले."
+      : language === "ja"
+        ? "発足イベントにて、スライドデザイン・写真撮影を担当。イベント後半のVR体験コーナーでは学生のデバイス操作サポートを務めました。"
+        : "Managed event branding, coordination, photography, and hosted a VR roller coaster simulator session for college attendees during the inaugural SIG event.";
+  } else if (event.id === "git-github-workshop") {
+    descriptionText = language === "mr"
+      ? "मल्टीपल एसआयजीच्या सहकार्याने आयोजित केलेल्या गिट आणि गिटहब कार्यशाळेत सह-डेव्हलपर आणि मार्गदर्शक म्हणून विद्यार्थ्यांना व्हर्जन कंट्रोल शिकवले."
+      : language === "ja"
+        ? "複数の学生技術グループ共同で開催されたワークショップの講師として登壇。バージョン管理からGitHub実習まで、ハンズオン形式で指導しました。"
+        : "Served as a workshop instructor in a collaborative session across multiple student groups at college, facilitating hands-on training for Git commands, branches, and collaboration workflows.";
+  } else if (event.id === "coep-i2i-collab") {
+    descriptionText = language === "mr"
+      ? "सीओईपी टेक्नॉलॉजिकल युनिव्हर्सिटीच्या आय२आय राष्ट्रीय स्पर्धेत युनिमार्क टीमसाठी डेटाबेस व्यवस्थापक म्हणून जबाबदारी सायकल चालवली."
+      : language === "ja"
+        ? "COEP技術大学主催のビジネスモデルコンテストにて、チームunimarkのデータベース管理者としてアーキテクチャ設計・共同開発を担当し、全国690以上のチームから勝ち抜き準優勝を達成。"
+        : "Managed database design and architectural modeling for team unimark at the national Ignited Innovators of India (I2I) business competition held at COEP University, securing 2nd prize in the Education category.";
+  }
+
+  return (
+    <div
+      onClick={onClick}
+      className={`relative rounded-2xl overflow-hidden border cursor-pointer transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] flex flex-col justify-between p-6 md:p-8 will-change-[flex,max-height,transform] gpu
+        ${isSelected
+          ? "border-[var(--gold)] bg-[var(--bg-raised)] shadow-[0_15px_35px_rgba(232,160,32,0.05)] flex-[3.5] max-h-[600px]"
+          : "border-[var(--border)] bg-[var(--bg-card)] hover:border-[var(--border-gold)] flex-[1] min-h-[130px] max-h-[130px] lg:min-h-0 lg:max-h-none"
+        }
+      `}
+    >
+      {/* 
+        IMAGE SLIDESHOW (Fits card completely)
+        Fades slides sequentially based on active image index.
+      */}
+      {event.images && event.images.map((img, imgIdx) => (
+        <div
+          key={imgIdx}
+          className="absolute inset-0 bg-cover bg-center transition-opacity duration-1000 pointer-events-none"
+          style={{
+            backgroundImage: `url("${img}")`,
+            opacity: isSelected && currentImgIdx === imgIdx ? 0.45 : 0,
+            zIndex: 1
+          }}
+        />
+      ))}
+
+      {/* Static Backdrop Fallback (when collapsed) */}
+      {!isSelected && (event.backdrop || (event.images && event.images[0])) && (
+        <div
+          className="absolute inset-0 bg-cover bg-center pointer-events-none transition-all duration-700"
+          style={{
+            backgroundImage: `url("${event.backdrop || event.images[0]}")`,
+            opacity: 0.15,
+            zIndex: 1
+          }}
+        />
+      )}
+
+      {/* High-contrast gradient overlay to ensure text readability */}
+      <div
+        className={`absolute inset-0 bg-gradient-to-t from-[rgba(8,8,8,0.92)] via-[rgba(8,8,8,0.75)] to-[rgba(8,8,8,0.45)] pointer-events-none transition-opacity duration-700
+          ${isSelected ? "opacity-100" : "opacity-0"}
+        `}
+        style={{ zIndex: 2 }}
+      />
+
+      {/* Inner Content Grid */}
+      <div className="relative z-10 w-full h-full flex flex-col justify-between" style={{ zIndex: 10 }}>
+
+        {/* Top Bar: Date / Index */}
+        <div className="flex items-center justify-between w-full">
+          <span className="font-ui text-[9px] tracking-[0.2em] text-[var(--gold)] uppercase font-black">
+            {event.date[language] || event.date.en}
+          </span>
+          <span className="font-display font-black text-xs text-[var(--text-3)]">
+            0{idx + 1}
+          </span>
+        </div>
+
+        {/* Mid Area: Event Details (Visible only when expanded) */}
+        <div
+          className={`transition-all duration-700 mt-4 overflow-hidden
+            ${isSelected
+              ? "opacity-100 max-h-[400px] translate-y-0"
+              : "opacity-0 max-h-0 translate-y-2 pointer-events-none lg:hidden"
+            }
+          `}
+        >
+          <div className="text-[var(--text-2)] max-w-2xl">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-[10px] font-ui uppercase text-[var(--text-3)] font-bold">{t("softSkills.roleLabel")}:</span>
+              <span className="text-xs font-body font-semibold">{event.role[language] || event.role.en}</span>
+            </div>
+
+            <p className="font-body text-xs md:text-sm leading-relaxed">
+              {descriptionText}
+            </p>
+          </div>
+        </div>
+
+        {/* Bottom Bar: Title & Calligraphy Accent */}
+        <div className="w-full mt-auto relative min-h-[50px] flex items-end justify-between">
+
+          {/* 
+            Event Title
+            - Rotated vertically and wrapped cleanly when collapsed.
+            - Transitions to horizontal when expanded.
+          */}
+          <h3
+            className={`font-display font-black text-[15px] md:text-lg text-[var(--text-1)] tracking-wide transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform pr-8 lg:origin-bottom-left
+              ${isSelected
+                ? "whitespace-normal lg:relative lg:left-0 lg:bottom-0 lg:rotate-0 lg:translate-x-0 lg:translate-y-0 lg:max-w-none"
+                : "whitespace-normal lg:whitespace-normal lg:absolute lg:left-1/2 lg:bottom-0 lg:rotate-[-90deg] lg:translate-y-[-16px] lg:translate-x-[14px] lg:w-[360px] lg:leading-[1.1]"
+              }
+            `}
             style={{
-              backgroundImage: "linear-gradient(to bottom, var(--gold) 40%, transparent 40%)",
-              backgroundSize: "1px 12px",
-              backgroundRepeat: "repeat-y"
+              textOverflow: "ellipsis",
+              display: "-webkit-box",
+              WebkitBoxOrient: "vertical",
             }}
-          />
+          >
+            {event.title[language] || event.title.en}
+          </h3>
 
-          {/* Timeline Nodes */}
-          <div className="flex flex-col gap-16 md:gap-24 w-full">
-            {softSkillsData.map((item, index) => {
-              const isEven = index % 2 === 0;
-              return (
-                <div
-                  key={item.id}
-                  className={`flex flex-col md:flex-row w-full relative z-20 
-                    ${isEven ? "md:justify-start" : "md:justify-end"}
-                  `}
-                >
-                  {/* Timeline Pulse Dot on Central Line */}
-                  <div
-                    className="absolute left-[20px] md:left-1/2 top-8 w-2.5 h-2.5 rounded-full bg-[var(--bg)] border border-[var(--gold)] -translate-x-1/2 flex items-center justify-center z-30"
-                  >
-                    <div className="w-1 h-1 rounded-full bg-[var(--vermillion)] animate-ping" />
-                  </div>
-
-                  {/* Card Container */}
-                  <div
-                    className={`timeline-card w-full md:w-[46%] ml-10 md:ml-0 bg-[var(--bg-surface)] border border-[var(--border-gold)] rounded-lg p-6 md:p-8 hover:border-[var(--gold)] transition-all duration-500 hover:shadow-[0_4px_30px_rgba(232,160,32,0.02)]
-                      ${isEven ? "md:text-right md:items-end" : "md:text-left md:items-start"}
-                      flex flex-col justify-between overflow-hidden
-                    `}
-                  >
-                    <div className="w-full flex flex-col">
-                      <span className="font-ui text-[9px] uppercase tracking-widest text-[var(--gold)] font-bold mb-1">
-                        {item.date[language] || item.date.en}
-                      </span>
-                      <h3 className="font-display font-black text-xl md:text-2xl text-[var(--text-1)] mb-2">
-                        {item.title[language] || item.title.en}
-                      </h3>
-                      <div className="inline-flex items-center gap-2 mb-4">
-                        <span className="text-[10px] font-ui text-[var(--text-3)]">
-                          {t("softSkills.roleLabel")}:
-                        </span>
-                        <span className="text-[10px] font-ui text-[var(--text-2)] font-bold uppercase tracking-wider px-2 py-0.5 border border-[var(--border)] rounded bg-[var(--bg)]">
-                          {item.role[language] || item.role.en}
-                        </span>
-                      </div>
-                      <p className="font-body text-xs leading-relaxed text-[var(--text-2)] mb-6">
-                        {item.description[language] || item.description.en}
-                      </p>
-                    </div>
-
-                    {/* Inline Image Reveal Frame */}
-                    <div 
-                      onClick={() => setActivePhoto(item.poster || item.backdrop)}
-                      className="group/img relative w-full h-32 md:h-40 overflow-hidden rounded border border-[var(--border)] bg-[rgba(0,0,0,0.4)] cursor-pointer"
-                    >
-                      {/* Grayed background image, colorizes on card hover */}
-                      <img
-                        src={item.backdrop}
-                        alt="Event Backdrop"
-                        className="w-full h-full object-cover opacity-35 grayscale group-hover/img:grayscale-0 group-hover/img:scale-105 group-hover/img:opacity-85 transition-all duration-700 ease-[var(--ease-ink)]"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-surface)] to-transparent opacity-80" />
-                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/img:opacity-100 transition-opacity duration-350">
-                        <span className="font-ui text-[9px] uppercase tracking-[0.2em] px-3 py-1.5 border border-[var(--gold)] bg-[var(--bg)] text-[var(--gold)] font-black rounded backdrop-blur">
-                          {t("softSkills.viewPhotos")}
-                        </span>
-                      </div>
-                    </div>
-
-                  </div>
-                </div>
-              );
-            })}
+          {/* Small Calligraphic Accent */}
+          <div className="absolute right-0 bottom-0 text-[var(--vermillion)] font-black text-xl">
+            ✦
           </div>
 
         </div>
 
       </div>
 
-      {/* FULL SCREEN LIGHTBOX GALLERY MODAL */}
-      {activePhoto && (
-        <div
-          onClick={() => setActivePhoto(null)}
-          className="fixed inset-0 w-full h-full bg-[rgba(8,8,8,0.92)] z-[99999] flex flex-col items-center justify-center p-6 animate-fade-in cursor-zoom-out"
-        >
-          <button
-            onClick={() => setActivePhoto(null)}
-            className="absolute top-6 right-6 w-10 h-10 border border-[var(--border)] rounded-full flex items-center justify-center text-[var(--text-1)] hover:border-[var(--gold)] hover:text-[var(--gold)] transition-colors"
-          >
-            ✕
-          </button>
-          <div className="relative max-w-4xl max-h-[80vh] overflow-hidden flex items-center justify-center rounded-lg border border-[var(--border-gold)]">
-            <img
-              src={activePhoto}
-              alt="Expanded Event Media"
-              className="w-auto h-auto max-w-full max-h-[75vh] object-contain"
-            />
-          </div>
-          <span className="font-ui text-[10px] uppercase tracking-widest text-[var(--text-3)] mt-6">
-            {t("softSkills.closePhotos")}
-          </span>
-        </div>
-      )}
-    </section>
+    </div>
   );
 }
+
+export default SoftSkills;
