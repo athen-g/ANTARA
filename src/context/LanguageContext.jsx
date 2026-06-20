@@ -11,6 +11,8 @@ export function LanguageProvider({ children }) {
   useEffect(() => {
     localStorage.setItem('antara_lang', language);
     document.documentElement.setAttribute('lang', language);
+    const eraMap = { mr: 'past', en: 'present', ja: 'future' };
+    document.documentElement.setAttribute('data-era', eraMap[language] || 'present');
   }, [language]);
 
   const t = (key) => {

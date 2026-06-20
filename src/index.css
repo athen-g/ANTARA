@@ -60,6 +60,33 @@
   --border-gold: rgba(154, 92, 8, 0.2);
 }
 
+/* Era overrides — Past (Marathi) - Dark Mode */
+html[data-era="past"]:not([data-theme="light"]) {
+  --bg:          #0F0E0C;
+  --bg-surface:  #171512;
+  --bg-card:     #1E1B17;
+  --bg-raised:   #26221D;
+  --gold:        #D97706;
+  --gold-dim:    #B45309;
+  --text-1:      #F4EFE6;
+  --text-2:      #9C8E79;
+  --text-3:      #6E624E;
+}
+
+/* Era overrides — Future (Japanese) - Dark Mode */
+html[data-era="future"]:not([data-theme="light"]) {
+  --bg:          #030712;
+  --bg-surface:  #0B0F19;
+  --bg-card:     #111827;
+  --bg-raised:   #1F2937;
+  --gold:        #8B5CF6;
+  --gold-dim:    #6D28D9;
+  --text-1:      #F3F4F6;
+  --text-2:      #9CA3AF;
+  --text-3:      #4B5563;
+  --vermillion:  #EC4899;
+}
+
 /* ══════════════════════════════════════════════════════════════════════
    2. BASE RESET & GLOBAL STYLES
    ══════════════════════════════════════════════════════════════════════ */

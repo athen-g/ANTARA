@@ -176,47 +176,66 @@ export default function Navbar() {
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
           
           {/* Language selector squares — hidden on mobile */}
-          <div className="hidden md:flex" style={{ gap: '6px', marginRight: '4px' }}>
+          <div className="hidden md:flex" style={{ gap: '8px', marginRight: '4px', alignItems: 'flex-start' }}>
             {[
-              { lang: 'mr', label: 'अ' },
-              { lang: 'en', label: 'a' },
-              { lang: 'ja', label: 'ア' },
-            ].map(({ lang: l, label }) => (
-              <button
-                key={l}
-                onClick={() => setLanguage(l)}
-                style={{
-                  width: '28px',
-                  height: '28px',
-                  border: language === l ? '1px solid var(--gold)' : '0.5px solid var(--border)',
-                  borderRadius: '2px',
-                  background: language === l ? 'rgba(232, 160, 32, 0.08)' : 'transparent',
-                  color: language === l ? 'var(--gold)' : 'var(--text-2)',
-                  fontFamily: l === 'mr' ? "'Noto Serif Devanagari', serif" : (l === 'ja' ? 'sans-serif' : 'Inter, sans-serif'),
-                  fontSize: '11px',
-                  fontWeight: language === l ? '800' : '500',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  cursor: 'pointer',
-                  transition: 'all 0.3s',
-                  outline: 'none',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = 'var(--gold)'
-                  e.currentTarget.style.color = 'var(--gold)'
-                }}
-                onMouseLeave={(e) => {
-                  if (language !== l) {
-                    e.currentTarget.style.borderColor = 'var(--border)'
-                    e.currentTarget.style.color = 'var(--text-2)'
-                  }
-                }}
-                data-cursor="hover"
-                aria-label={`Switch language to ${l === 'mr' ? 'Marathi' : (l === 'ja' ? 'Japanese' : 'English')}`}
-              >
-                {label}
-              </button>
+              { lang: 'mr', label: 'अ', era: 'PAST' },
+              { lang: 'en', label: 'a', era: 'PRESENT' },
+              { lang: 'ja', label: 'ア', era: 'FUTURE' },
+            ].map(({ lang: l, label, era }) => (
+              <div key={l} className="flex flex-col items-center" style={{ gap: '3px' }}>
+                <button
+                  onClick={() => setLanguage(l)}
+                  style={{
+                    width: '28px',
+                    height: '28px',
+                    border: language === l ? '1px solid var(--gold)' : '0.5px solid var(--border)',
+                    borderRadius: '2px',
+                    background: language === l ? 'rgba(232, 160, 32, 0.08)' : 'transparent',
+                    color: language === l ? 'var(--gold)' : 'var(--text-2)',
+                    fontFamily: l === 'mr' ? "'Noto Serif Devanagari', serif" : (l === 'ja' ? 'sans-serif' : 'Inter, sans-serif'),
+                    fontSize: '11px',
+                    fontWeight: language === l ? '800' : '500',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s',
+                    outline: 'none',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = 'var(--gold)'
+                    e.currentTarget.style.color = 'var(--gold)'
+                    const labelSpan = e.currentTarget.nextSibling;
+                    if (labelSpan) labelSpan.style.color = 'var(--gold)';
+                  }}
+                  onMouseLeave={(e) => {
+                    if (language !== l) {
+                      e.currentTarget.style.borderColor = 'var(--border)'
+                      e.currentTarget.style.color = 'var(--text-2)'
+                      const labelSpan = e.currentTarget.nextSibling;
+                      if (labelSpan) labelSpan.style.color = 'var(--text-3)';
+                    }
+                  }}
+                  data-cursor="hover"
+                  aria-label={`Switch language to ${l === 'mr' ? 'Marathi' : (l === 'ja' ? 'Japanese' : 'English')}`}
+                >
+                  {label}
+                </button>
+                <span
+                  style={{
+                    fontSize: '7px',
+                    fontFamily: 'monospace',
+                    fontWeight: '700',
+                    letterSpacing: '0.05em',
+                    color: language === l ? 'var(--gold)' : 'var(--text-3)',
+                    transition: 'color 0.3s',
+                    userSelect: 'none',
+                    pointerEvents: 'none'
+                  }}
+                >
+                  {era}
+                </span>
+              </div>
             ))}
           </div>
 
@@ -406,38 +425,52 @@ export default function Navbar() {
         <div style={{ width: '40px', height: '0.5px', background: 'var(--border-gold)', margin: '8px 0' }} />
 
         {/* Language selectors in mobile menu */}
-        <div style={{ display: 'flex', gap: '8px' }}>
+        <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
           {[
-            { lang: 'mr', label: 'अ' },
-            { lang: 'en', label: 'a' },
-            { lang: 'ja', label: 'ア' },
-          ].map(({ lang: l, label }) => (
-            <button
-              key={l}
-              onClick={() => {
-                setLanguage(l)
-                // Keep menu open so they see language update, or close? Usually keeping it open is good
-              }}
-              style={{
-                width: '36px',
-                height: '36px',
-                border: language === l ? '1px solid var(--gold)' : '0.5px solid var(--border)',
-                borderRadius: '2px',
-                background: language === l ? 'rgba(232, 160, 32, 0.08)' : 'transparent',
-                color: language === l ? 'var(--gold)' : 'var(--text-2)',
-                fontFamily: l === 'mr' ? "'Noto Serif Devanagari', serif" : (l === 'ja' ? 'sans-serif' : 'Inter, sans-serif'),
-                fontSize: '13px',
-                fontWeight: language === l ? '800' : '500',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-                transition: 'all 0.3s',
-                outline: 'none',
-              }}
-            >
-              {label}
-            </button>
+            { lang: 'mr', label: 'अ', era: 'PAST' },
+            { lang: 'en', label: 'a', era: 'PRESENT' },
+            { lang: 'ja', label: 'ア', era: 'FUTURE' },
+          ].map(({ lang: l, label, era }) => (
+            <div key={l} className="flex flex-col items-center" style={{ gap: '3px' }}>
+              <button
+                onClick={() => {
+                  setLanguage(l)
+                }}
+                style={{
+                  width: '36px',
+                  height: '36px',
+                  border: language === l ? '1px solid var(--gold)' : '0.5px solid var(--border)',
+                  borderRadius: '2px',
+                  background: language === l ? 'rgba(232, 160, 32, 0.08)' : 'transparent',
+                  color: language === l ? 'var(--gold)' : 'var(--text-2)',
+                  fontFamily: l === 'mr' ? "'Noto Serif Devanagari', serif" : (l === 'ja' ? 'sans-serif' : 'Inter, sans-serif'),
+                  fontSize: '13px',
+                  fontWeight: language === l ? '800' : '500',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s',
+                  outline: 'none',
+                }}
+              >
+                {label}
+              </button>
+              <span
+                style={{
+                  fontSize: '7px',
+                  fontFamily: 'monospace',
+                  fontWeight: '700',
+                  letterSpacing: '0.05em',
+                  color: language === l ? 'var(--gold)' : 'var(--text-3)',
+                  transition: 'color 0.3s',
+                  userSelect: 'none',
+                  pointerEvents: 'none'
+                }}
+              >
+                {era}
+              </span>
+            </div>
           ))}
         </div>
 

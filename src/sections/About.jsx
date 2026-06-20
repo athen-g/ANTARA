@@ -306,6 +306,10 @@ export default function About() {
               color: 'var(--gold)',
               opacity: 0.85,
               letterSpacing: '0.1em',
+              textShadow: language === 'mr' ? '0 0 12px rgba(217, 119, 6, 0.5)' : 'none',
+              borderLeft: language === 'mr' ? '2px solid var(--gold)' : 'none',
+              paddingLeft: language === 'mr' ? '12px' : '0',
+              transition: 'all 0.5s ease',
             }}
           >
             {aboutQuote}

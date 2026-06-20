@@ -237,7 +237,12 @@ export function Process() {
             return (
               <div 
                 key={step.id} 
-                className="process-card p-6 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg hover:border-[var(--border-gold)] transition-colors duration-300 relative"
+                className="process-card p-6 bg-[var(--bg-card)] border rounded-lg hover:border-[var(--gold)] transition-all duration-300 relative"
+                style={{
+                  borderColor: language === 'ja' ? 'rgba(139, 92, 246, 0.25)' : 'var(--border)',
+                  boxShadow: language === 'ja' ? '0 8px 32px rgba(139, 92, 246, 0.06), inset 0 0 12px rgba(139, 92, 246, 0.03)' : 'none',
+                  backdropFilter: language === 'ja' ? 'blur(12px)' : 'none',
+                }}
               >
                 <div className="absolute top-4 right-4 text-[10px] font-ui text-[var(--gold-dim)] font-bold">
                   {step.id}
