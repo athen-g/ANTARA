@@ -271,19 +271,15 @@ function App() {
             let containerX = option.baseX;
             let containerY;
 
-            const maxIndex = menuOptions.length - 1;
-            const selectedUpshift = 50 + ((maxIndex - index) / maxIndex) * 30;
-
             if (isActive) {
               containerX = option.selectedX;
-              containerY = option.baseY + 80 - selectedUpshift;
+              containerY = option.baseY;
             } else if (index < activeIndex) {
               containerX = option.baseX;
-              const passedDownshift = (index / activeIndex) * 70;
-              containerY = option.baseY + passedDownshift;
+              containerY = option.baseY;
             } else {
               containerX = option.baseX;
-              containerY = option.baseY + 80;
+              containerY = option.baseY + 130;
             }
 
             // 2. Setup text relative offset inside container
