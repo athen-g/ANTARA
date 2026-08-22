@@ -276,7 +276,12 @@ function App() {
               containerY = option.name === 'SYSTEM' ? option.baseY + 130 : option.baseY;
             } else if (index < activeIndex) {
               containerX = option.baseX;
-              containerY = option.baseY;
+              if (activeIndex === menuOptions.length - 1) {
+                const passedDownshift = (index / activeIndex) * 120;
+                containerY = option.baseY + passedDownshift;
+              } else {
+                containerY = option.baseY;
+              }
             } else {
               containerX = option.baseX;
               containerY = option.baseY + 130;
