@@ -40,8 +40,8 @@ const selectedTextOffsets = {
 const frontTriangleOffsets = {
   'SKILL': { x: 0, y: 0 },
   'ITEM': { x: 0, y: 0 },
-  'EQUIP': { x: 0, y: -40 },
-  'PERSONA': { x: 0, y: -45 },
+  'EQUIP': { x: 0, y: -60 },
+  'PERSONA': { x: 0, y: -67.5 },
   'STATS': { x: 0, y: 0 },
   'QUEST': { x: 0, y: 0 },
   'SOCIAL LINK': { x: 0, y: 0 },
@@ -52,8 +52,8 @@ const frontTriangleOffsets = {
 const backTriangleOffsets = {
   'SKILL': { x: 36, y: 14 },
   'ITEM': { x: 41.5, y: 3.5 },
-  'EQUIP': { x: 29, y: -38.5 },
-  'PERSONA': { x: 0.5, y: -65.5 },
+  'EQUIP': { x: 29, y: -58.5 },
+  'PERSONA': { x: 0.5, y: -88 },
   'STATS': { x: 20.5, y: 6 },
   'QUEST': { x: 11.5, y: -11 },
   'SOCIAL LINK': { x: 2, y: 18 },
