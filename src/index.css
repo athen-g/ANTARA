@@ -130,6 +130,18 @@ html {
   object-fit: contain;
 }
 
+.light-blue-hair-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  animation: darkBlueHairWave 4.5s ease-in-out infinite;
+  transform-origin: bottom right;
+  will-change: transform;
+}
+
 
 
 /* Rotated Dynamic Left Index Styling */
