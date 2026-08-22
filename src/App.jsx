@@ -67,6 +67,9 @@ const menuOptions = [
     baseX: 824,
     baseY: 220,
     selectedX: 751,
+    selectedUpshift: 130,
+    passedUpshift: 130,
+    restingOffset: 130,
     frontPath: 'M381 0L343 137L0 228L381 0Z',
     backPath: 'M322 0L292 124L0 208L322 0Z',
     unselected: { fontSize: 66, letterSpacing: '-0.20em', skewX: 6, skewY: -26, fill: '#72FFFF' },
@@ -77,6 +80,9 @@ const menuOptions = [
     baseX: 869,
     baseY: 280,
     selectedX: 745,
+    selectedUpshift: 130,
+    passedUpshift: 130,
+    restingOffset: 130,
     frontPath: 'M437 0L351 147.5L0 168.5L437 0Z',
     backPath: 'M364.5 0L298 147L0 157L364.5 0Z',
     unselected: { fontSize: 64, letterSpacing: '-0.18em', skewX: -5, skewY: -15, fill: '#0BC9FE' },
@@ -87,6 +93,9 @@ const menuOptions = [
     baseX: 827,
     baseY: 360,
     selectedX: 725,
+    selectedUpshift: 130,
+    passedUpshift: 130,
+    restingOffset: 130,
     frontPath: 'M481.5 0L383.5 170.5L0 225.5L481.5 0Z',
     backPath: 'M434 0L348 162.5L0 230L434 0Z',
     unselected: { fontSize: 64, letterSpacing: '-0.15em', skewX: 4, skewY: -21, fill: '#6AE6FE' },
@@ -97,6 +106,9 @@ const menuOptions = [
     baseX: 779,
     baseY: 410,
     selectedX: 695,
+    selectedUpshift: 130,
+    passedUpshift: 130,
+    restingOffset: 130,
     frontPath: 'M537.5 0L474 180L0 183.5L537.5 0Z',
     backPath: 'M529 0L472.5 185.5L0 204L529 0Z',
     unselected: { fontSize: 68, letterSpacing: '-0.18em', skewX: -1, skewY: -20, fill: '#72FFFF' },
@@ -107,6 +119,9 @@ const menuOptions = [
     baseX: 835.11,
     baseY: 418,
     selectedX: 730,
+    selectedUpshift: 130,
+    passedUpshift: 130,
+    restingOffset: 130,
     frontPath: 'M522.5 0L432.5 141.5L0 152.5L522.5 0Z',
     backPath: 'M476.5 0L394 129.5L0 148.5L476.5 0Z',
     unselected: { fontSize: 64, letterSpacing: '-0.26em', skewX: -22, skewY: -3, fill: '#0BC9FE' },
@@ -117,6 +132,9 @@ const menuOptions = [
     baseX: 796.72,
     baseY: 490,
     selectedX: 720,
+    selectedUpshift: 130,
+    passedUpshift: 130,
+    restingOffset: 130,
     frontPath: 'M485.5 0L340 150L0 161L485.5 0Z',
     backPath: 'M464 0L327 154L0 177.5L464 0Z',
     unselected: { fontSize: 64, letterSpacing: '-0.24em', skewX: -5, skewY: -14, fill: '#6AE6FE' },
@@ -127,6 +145,9 @@ const menuOptions = [
     baseX: 813,
     baseY: 532,
     selectedX: 670,
+    selectedUpshift: 130,
+    passedUpshift: 130,
+    restingOffset: 130,
     frontPath: 'M706 0L563 193L0 187L706 0Z',
     backPath: 'M707 0L572 178.5L0 156L707 0Z',
     unselected: { fontSize: 64, letterSpacing: '-0.20em', skewX: -7, skewY: -8, fill: '#72FFFF' },
@@ -137,6 +158,9 @@ const menuOptions = [
     baseX: 756,
     baseY: 574,
     selectedX: 650,
+    selectedUpshift: 130,
+    passedUpshift: 130,
+    restingOffset: 130,
     frontPath: 'M690 0L568 164L0 127.5L690 0Z',
     backPath: 'M674 0L560.5 156L0 135.5L674 0Z',
     unselected: { fontSize: 64, letterSpacing: '-0.24em', skewX: -12, skewY: -4, fill: '#6AE6FE' },
@@ -147,6 +171,9 @@ const menuOptions = [
     baseX: 814,
     baseY: 618,
     selectedX: 700,
+    selectedUpshift: 0,
+    passedUpshift: 0,
+    restingOffset: 130,
     frontPath: 'M617 27.5L393 167.5L0 0L617 27.5Z',
     backPath: 'M675 0L441 165.5L0 6L675 0Z',
     unselected: { fontSize: 64, letterSpacing: '-0.22em', skewX: -28, skewY: 10, fill: '#0BC9FE' },
@@ -273,13 +300,13 @@ function App() {
 
             if (isActive) {
               containerX = option.selectedX;
-              containerY = option.baseY;
+              containerY = option.baseY + option.restingOffset - option.selectedUpshift;
             } else if (index < activeIndex) {
               containerX = option.baseX;
-              containerY = option.baseY;
+              containerY = option.baseY + option.restingOffset - option.passedUpshift;
             } else {
               containerX = option.baseX;
-              containerY = option.baseY + 130;
+              containerY = option.baseY + option.restingOffset;
             }
 
             // 2. Setup text relative offset inside container
