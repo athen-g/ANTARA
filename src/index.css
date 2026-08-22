@@ -78,7 +78,7 @@ html {
   display: block;
 }
 
-/* Dark-Blue Hair Layer (Jigsaw Piece) */
+/* Combined Unified Animated Hair Layer (Both Jigsaw Pieces Together) */
 @keyframes darkBlueHairWave {
   0% {
     transform: translate(0px, 0px) rotate(0deg) scale(1) skewX(0deg);
@@ -94,22 +94,46 @@ html {
   }
 }
 
-.dark-blue-hair-bg {
+.animated-hair-group {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1920px;
+  height: 1080px;
+  z-index: 4;
+  pointer-events: none;
+  animation: darkBlueHairWave 4.5s ease-in-out infinite;
+  transform-origin: 716px 1080px;
+  will-change: transform;
+}
+
+.dark-blue-hair-piece {
   position: absolute;
   left: 118.78px;
   top: 654px;
   width: 599px;
   height: 426px;
-  z-index: 2;
   pointer-events: none;
-  animation: darkBlueHairWave 4.5s ease-in-out infinite;
-  transform-origin: bottom right;
-  will-change: transform;
 }
 
-.dark-blue-hair-bg img {
+.dark-blue-hair-piece img {
   width: 100%;
   height: 100%;
+  display: block;
+}
+
+.light-blue-hair-piece {
+  position: absolute;
+  left: 135.83px;
+  top: -7px;
+  width: auto;
+  height: 100%;
+  pointer-events: none;
+}
+
+.light-blue-hair-piece svg {
+  height: 100%;
+  width: auto;
   display: block;
 }
 
@@ -128,18 +152,6 @@ html {
   height: 100%;
   width: auto;
   object-fit: contain;
-}
-
-.light-blue-hair-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  animation: darkBlueHairWave 4.5s ease-in-out infinite;
-  transform-origin: bottom right;
-  will-change: transform;
 }
 
 
