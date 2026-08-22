@@ -84,10 +84,10 @@ html {
     transform: translate(0px, 0px) rotate(0deg) scale(1) skewX(0deg);
   }
   28% {
-    transform: translate(-10px, -7px) rotate(1.6deg) scale(1.02, 1.015) skewX(-1.4deg);
+    transform: translate(-5px, -3.5px) rotate(0.8deg) scale(1.01, 1.008) skewX(-0.7deg);
   }
   64% {
-    transform: translate(6px, 4px) rotate(-1.2deg) scale(0.99, 1.01) skewX(1deg);
+    transform: translate(3px, 2px) rotate(-0.6deg) scale(0.995, 1.005) skewX(0.5deg);
   }
   100% {
     transform: translate(0px, 0px) rotate(0deg) scale(1) skewX(0deg);
@@ -102,7 +102,7 @@ html {
   height: 1080px;
   z-index: 4;
   pointer-events: none;
-  animation: darkBlueHairWave 4.5s ease-in-out infinite;
+  animation: darkBlueHairWave 5s ease-in-out infinite;
   transform-origin: 35% 85%;
   will-change: transform;
 }
