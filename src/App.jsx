@@ -65,7 +65,7 @@ const menuOptions = [
   {
     name: 'SKILL',
     baseX: 824,
-    baseY: 220,
+    baseY: 230,
     selectedX: 751,
     frontPath: 'M381 0L343 137L0 228L381 0Z',
     backPath: 'M322 0L292 124L0 208L322 0Z',
