@@ -271,17 +271,12 @@ function App() {
             let containerX = option.baseX;
             let containerY;
 
-            const maxIndex = menuOptions.length - 1;
-            const factor = (maxIndex - index) / maxIndex;
-            const selectedUpshift = factor * 110;
-            const passedUpshift = factor * 75;
-
             if (isActive) {
               containerX = option.selectedX;
-              containerY = option.baseY + 130 - selectedUpshift;
+              containerY = option.baseY + 45;
             } else if (index < activeIndex) {
               containerX = option.baseX;
-              containerY = option.baseY + 130 - passedUpshift;
+              containerY = option.baseY + 30;
             } else {
               containerX = option.baseX;
               containerY = option.baseY + 130;
