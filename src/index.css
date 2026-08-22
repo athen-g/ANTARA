@@ -79,6 +79,21 @@ html {
 }
 
 /* Protagonist Vector Animation Layer */
+@keyframes protagonistHairWave {
+  0% {
+    transform: translateY(0px) rotate(0deg) skewX(0deg);
+  }
+  35% {
+    transform: translateY(-2px) rotate(0.35deg) skewX(-0.25deg);
+  }
+  70% {
+    transform: translateY(1.5px) rotate(-0.25deg) skewX(0.2deg);
+  }
+  100% {
+    transform: translateY(0px) rotate(0deg) skewX(0deg);
+  }
+}
+
 .vectors-bg {
   position: absolute;
   left: 135.83px;
@@ -87,12 +102,17 @@ html {
   height: 100%;
   z-index: 3;
   pointer-events: none;
+  animation: protagonistHairWave 5.5s ease-in-out infinite;
+  transform-origin: bottom left;
+  will-change: transform;
 }
 
 .vectors-bg img {
   height: 100%;
   width: auto;
   object-fit: contain;
+  filter: url(#p3r-hair-wave);
+  will-change: filter;
 }
 
 

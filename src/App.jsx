@@ -259,6 +259,34 @@ function App() {
         ))}
       </div>
 
+      {/* SVG Fluid Hair Wave Displacement Filter */}
+      <svg style={{ position: 'absolute', width: 0, height: 0, pointerEvents: 'none' }}>
+        <defs>
+          <filter id="p3r-hair-wave" x="-5%" y="-5%" width="110%" height="110%">
+            <feTurbulence
+              type="fractalNoise"
+              baseFrequency="0.012 0.022"
+              numOctaves="2"
+              result="waveNoise"
+            >
+              <animate
+                attributeName="baseFrequency"
+                dur="4.5s"
+                values="0.012 0.022; 0.016 0.035; 0.010 0.018; 0.012 0.022"
+                repeatCount="indefinite"
+              />
+            </feTurbulence>
+            <feDisplacementMap
+              in="SourceGraphic"
+              in2="waveNoise"
+              scale="4"
+              xChannelSelector="R"
+              yChannelSelector="G"
+            />
+          </filter>
+        </defs>
+      </svg>
+
       {/* Single protagonist vector sequence instance */}
       <div className="vectors-bg">
         <img
