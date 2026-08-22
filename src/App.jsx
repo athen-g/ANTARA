@@ -28,8 +28,8 @@ const selectedDims = {
 const selectedTextOffsets = {
   'SKILL': { x: 25, y: 135 },
   'ITEM': { x: 50, y: 70 },
-  'EQUIP': { x: 50, y: 90 },
-  'PERSONA': { x: 35, y: 80 },
+  'EQUIP': { x: 50, y: 50 },
+  'PERSONA': { x: 25, y: 35 },
   'STATS': { x: 55, y: 45 },
   'QUEST': { x: 40, y: 65 },
   'SOCIAL LINK': { x: 35, y: 60 },
