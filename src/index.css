@@ -64,32 +64,32 @@ html {
 /* Blue Visual Background */
 @keyframes blueBgWave {
   0% {
-    transform: translateY(0px) rotate(0deg) scale(1) skewX(0deg);
+    transform: translate(0px, 0px) rotate(0deg) scale(1) skewX(0deg);
   }
   25% {
-    transform: translateY(-14px) rotate(0.9deg) scale(1.02, 1.01) skewX(-1.2deg);
+    transform: translate(-10px, -12px) rotate(0.7deg) scale(1.015, 1.01) skewX(-0.9deg);
   }
   50% {
-    transform: translateY(8px) rotate(-0.6deg) scale(0.99, 1.02) skewX(0.9deg);
+    transform: translate(8px, 6px) rotate(-0.5deg) scale(0.995, 1.015) skewX(0.7deg);
   }
   75% {
-    transform: translateY(-9px) rotate(0.5deg) scale(1.015, 0.99) skewX(-0.6deg);
+    transform: translate(-6px, -8px) rotate(0.4deg) scale(1.01, 0.995) skewX(-0.5deg);
   }
   100% {
-    transform: translateY(0px) rotate(0deg) scale(1) skewX(0deg);
+    transform: translate(0px, 0px) rotate(0deg) scale(1) skewX(0deg);
   }
 }
 
 .blue-bg {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top: -20px;
+  left: -20px;
+  width: calc(100% + 40px);
+  height: calc(100% + 40px);
   z-index: 1;
   pointer-events: none;
   animation: blueBgWave 6.5s ease-in-out infinite;
-  transform-origin: bottom right;
+  transform-origin: 35% 85%;
   will-change: transform;
 }
 
