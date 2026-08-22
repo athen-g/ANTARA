@@ -262,7 +262,7 @@ function App() {
           pointerEvents: 'none'
         }}
       >
-        <g transform="translate(0, 150) scale(1.1)">
+        <g transform="translate(0, 100) scale(1.1)">
           {menuOptions.map((option, index) => {
             const isActive = activeIndex === index;
             const typography = isActive ? option.selected : option.unselected;
