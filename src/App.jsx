@@ -271,17 +271,17 @@ function App() {
             let containerX = option.baseX;
             let containerY;
 
+            const maxIndex = menuOptions.length - 1;
+            const factor = (maxIndex - index) / maxIndex;
+            const selectedUpshift = factor * 110;
+            const passedUpshift = factor * 75;
+
             if (isActive) {
               containerX = option.selectedX;
-              containerY = option.name === 'SYSTEM' ? option.baseY + 130 : option.baseY;
+              containerY = option.baseY + 130 - selectedUpshift;
             } else if (index < activeIndex) {
               containerX = option.baseX;
-              if (activeIndex === menuOptions.length - 1) {
-                const passedDownshift = (index / activeIndex) * 120;
-                containerY = option.baseY + passedDownshift;
-              } else {
-                containerY = option.baseY;
-              }
+              containerY = option.baseY + 130 - passedUpshift;
             } else {
               containerX = option.baseX;
               containerY = option.baseY + 130;
