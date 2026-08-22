@@ -1,6 +1,18 @@
 export const projects = [
   {
     id: "01",
+    title: "Hyperspace XR SIG",
+    url: "https://hyperspacesig.tech",
+    tags: ["XR", "Unity", "Design"],
+    description: {
+      en: "I architected and built the official full-stack platform for Hyperspace XR SIG, featuring an immersive cyberpunk interface and scroll-driven storytelling. Engineered a serverless backend to handle real-time registration, attendance tracking, and admin dashboards for 100+ active student members.",
+      mr: "मी हायपरस्पेस एक्सआर एसआयजी (Hyperspace XR SIG) चे अधिकृत फुल-स्टॅक प्लॅटफॉर्म तयार केले आहे, ज्यामध्ये इमर्सिव्ह सायबरपंक इंटरफेस आणि स्क्रोल-चालित कथाकथन आहे. एकाच वेळी १००+ हून अधिक सक्रिय विद्यार्थ्यांसाठी रिअल-टाइम नोंदणी, उपस्थिती ट्रॅकिंग आणि ॲडमिन डॅशबोर्ड हाताळण्यासाठी सर्व्हरलेस बॅकएंड विकसित केले.",
+      ja: "Hyperspace XR SIGの公式フルスタックプラットフォームを構築し、没入感のあるサイバーパンク風UIとスクロール駆動の演出を実装しました。サーバーレスのバックエンドでリアルタイム登録と出席管理を処理し、100名以上の参加学生向けの管理用ダッシュボードを開発しました。"
+    },
+    accent: ["#E8A020", "#9E6B0F"]
+  },
+  {
+    id: "02",
     title: "FutureU",
     url: "https://futureu.dev/?iframe=true",
     tags: ["Fullstack", "React", "Node.js"],
@@ -12,7 +24,7 @@ export const projects = [
     accent: ["#E8A020", "#C1392B"] // gold, vermillion
   },
   {
-    id: "02",
+    id: "03",
     title: "unimark",
     url: "https://theunimark.in",
     tags: ["Database", "Web App", "Education"],
@@ -24,7 +36,7 @@ export const projects = [
     accent: ["#2FC4A0", "#0F3830"] // teal, teal-dim
   },
   {
-    id: "03",
+    id: "04",
     title: "Hanasaku (花咲く)",
     url: "https://hanasaku-seven.vercel.app/",
     tags: ["Health Tech", "Next.js", "PostgreSQL"],
@@ -36,19 +48,19 @@ export const projects = [
     accent: ["#FF6B8B", "#E03B5B"] // pink accents
   },
   {
-    id: "04",
+    id: "05",
     title: "MGC Cosmetics",
     url: "https://atharvanitinghule.wixstudio.com/mcgcosmetics",
     tags: ["E-commerce", "Wix", "UI/UX"],
     description: {
       en: "A premium e-commerce storefront engineered for beauty and cosmetic cataloging. Built with custom interactive hover modules, product filters, and a highly optimized mobile checkout pipeline.",
-      mr: "सौंदर्य आणि कॉस्मेटिक उत्पादनांच्या कॅटलॉगिंगसाठी डिझाइन केलेले एक प्रीमियम ई-कॉमर्स स्टोअरफ्रंट. सानुकूल परस्परसंवादी हॉव्हर मॉड्युल्स, उत्पादन फिल्टर आणि अत्यंत ऑप्टिमाइझ केलेल्या मोबाईल चेकआउट पर्यायांसह तयार केले आहे.",
+      mr: "सौंदर्य आणि कॉस्मेटिक उत्पादनांच्या कॅटलॉगिंगसाठी डिझाइन केलेले एक प्रीमियम ई-कॉमर्स स्टोअरफ्रंट. सानुकूल परस्परसंवादी हॉव्हर मॉड्युल्स, उत्पादन फिल्टर आणि अत्यंत ऑप्टिमाइझ केलेल्या मोबाईल चेकアウト पर्यायांसह तयार केले आहे.",
       ja: "美容・化粧品のカタログ化のために設計されたプレミアムEコマースストアフロント。カスタムのインタラクティブなホバーモジュール、製品フィルター、高度に最適化されたモバイルチェックアウトパイプラインを備えています。"
     },
     accent: ["#C1392B", "#7A1A10"] // vermillion, deeper red
   },
   {
-    id: "05",
+    id: "06",
     title: "Green Life",
     url: "https://atharvanitinghule.wixstudio.com/greenlife",
     tags: ["Web Design", "Wix", "Branding"],
