@@ -44,7 +44,7 @@ const frontTriangleOffsets = {
   'PERSONA': { x: 0, y: -67.5 },
   'STATS': { x: 0, y: 0 },
   'QUEST': { x: 0, y: 0 },
-  'SOCIAL LINK': { x: 0, y: -20 },
+  'SOCIAL LINK': { x: 0, y: -40 },
   'CALENDAR': { x: 0, y: 0 },
   'SYSTEM': { x: 0, y: 0 }
 };
@@ -56,7 +56,7 @@ const backTriangleOffsets = {
   'PERSONA': { x: 0.5, y: -88 },
   'STATS': { x: 20.5, y: 6 },
   'QUEST': { x: 11.5, y: -11 },
-  'SOCIAL LINK': { x: 2, y: -2 },
+  'SOCIAL LINK': { x: 2, y: -22 },
   'CALENDAR': { x: -7, y: -9 },
   'SYSTEM': { x: -34, y: 4 }
 };
