@@ -271,19 +271,19 @@ function App() {
           let containerY;
 
           const maxIndex = menuOptions.length - 1;
-          const factor = (maxIndex - index) / maxIndex;
-          const selectedUpshift = factor * 130;
-          const pastUpshift = factor * 30;
+          const factor = Math.pow((maxIndex - index) / maxIndex, 0.6);
+          const selectedUpshift = factor * 80;
+          const pastUpshift = factor * 15;
 
           if (isActive) {
             containerX = option.selectedX;
-            containerY = option.baseY + 130 - selectedUpshift;
+            containerY = option.baseY + 80 - selectedUpshift;
           } else if (index < activeIndex) {
             containerX = option.baseX;
-            containerY = option.baseY + 130 - selectedUpshift - pastUpshift;
+            containerY = option.baseY + 80 - selectedUpshift - pastUpshift;
           } else {
             containerX = option.baseX;
-            containerY = option.baseY + 130;
+            containerY = option.baseY + 80;
           }
 
           // 2. Setup text relative offset inside container
