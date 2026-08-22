@@ -206,7 +206,7 @@ function App() {
         if (!isMounted) return;
         setCurrentFrame(f);
         await new Promise((resolve) => {
-          timeoutId = setTimeout(resolve, 80);
+          timeoutId = setTimeout(resolve, Math.round(1000 / 24));
         });
       }
 
