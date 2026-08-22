@@ -262,87 +262,89 @@ function App() {
           pointerEvents: 'none'
         }}
       >
-        {menuOptions.map((option, index) => {
-          const isActive = activeIndex === index;
-          const typography = isActive ? option.selected : option.unselected;
+        <g transform="translate(0, 150) scale(1.1)">
+          {menuOptions.map((option, index) => {
+            const isActive = activeIndex === index;
+            const typography = isActive ? option.selected : option.unselected;
 
-          // 1. Calculate parent container coordinate (X, Y)
-          let containerX = option.baseX;
-          let containerY;
+            // 1. Calculate parent container coordinate (X, Y)
+            let containerX = option.baseX;
+            let containerY;
 
-          if (isActive) {
-            containerX = option.selectedX;
-            containerY = option.baseY;
-          } else if (index < activeIndex) {
-            containerX = option.baseX;
-            const passedDownshift = (index / activeIndex) * 115;
-            containerY = option.baseY + passedDownshift;
-          } else {
-            containerX = option.baseX;
-            containerY = option.name === 'SYSTEM' ? option.baseY : option.baseY + 130;
-          }
+            if (isActive) {
+              containerX = option.selectedX;
+              containerY = option.baseY;
+            } else if (index < activeIndex) {
+              containerX = option.baseX;
+              const passedDownshift = (index / activeIndex) * 115;
+              containerY = option.baseY + passedDownshift;
+            } else {
+              containerX = option.baseX;
+              containerY = option.name === 'SYSTEM' ? option.baseY : option.baseY + 130;
+            }
 
-          // 2. Setup text relative offset inside container
-          const textOffset = isActive ? selectedTextOffsets[option.name] : { x: 0, y: 0 };
+            // 2. Setup text relative offset inside container
+            const textOffset = isActive ? selectedTextOffsets[option.name] : { x: 0, y: 0 };
 
-          // 3. Setup backdrop elements (Back / Front triangles) relative positions
-          const backOffset = isActive ? backTriangleOffsets[option.name] : null;
-          const frontOffset = isActive ? frontTriangleOffsets[option.name] : null;
+            // 3. Setup backdrop elements (Back / Front triangles) relative positions
+            const backOffset = isActive ? backTriangleOffsets[option.name] : null;
+            const frontOffset = isActive ? frontTriangleOffsets[option.name] : null;
 
-          return (
-            <g
-              key={option.name}
-              transform={`translate(${containerX}, ${containerY})`}
-              style={{
-                pointerEvents: 'auto',
-                isolation: 'isolate',
-                transition: 'transform 0.25s cubic-bezier(0.25, 1, 0.5, 1)'
-              }}
-            >
-              {/* 1. White Backdrop Triangle (BOTTOM) */}
-              {isActive && backOffset && (
-                <path
-                  d={option.backPath}
-                  fill="#FFF"
-                  transform={`translate(${backOffset.x || 0}, ${backOffset.y || 0})`}
-                />
-              )}
-
-              {/* 2. Black Text (MIDDLE) */}
-              <text
-                x={0}
-                y={0}
-                fill={typography.fill}
-                dominantBaseline="hanging"
-                transform={`translate(${textOffset.x}, ${textOffset.y}) skewX(${typography.skewX}) skewY(${typography.skewY})`}
+            return (
+              <g
+                key={option.name}
+                transform={`translate(${containerX}, ${containerY})`}
                 style={{
-                  fontFamily: "'Archivo Black', sans-serif",
-                  fontWeight: 'normal',
-                  fontSize: `${typography.fontSize}px`,
-                  letterSpacing: typography.letterSpacing,
-                  transition: 'all 0.25s cubic-bezier(0.25, 1, 0.5, 1)',
-                  cursor: 'pointer',
-                  userSelect: 'none'
+                  pointerEvents: 'auto',
+                  isolation: 'isolate',
+                  transition: 'transform 0.25s cubic-bezier(0.25, 1, 0.5, 1)'
                 }}
-                onClick={() => setActiveIndex(index)}
               >
-                {option.name}
-              </text>
-
-              {/* 3. Red Front Triangle with Lighten Blend Mode (TOP) */}
-              {isActive && frontOffset && (
-                <g transform={`translate(${frontOffset.x || 0}, ${frontOffset.y || 0})`}>
+                {/* 1. White Backdrop Triangle (BOTTOM) */}
+                {isActive && backOffset && (
                   <path
-                    className="front-triangle-path"
-                    d={option.frontPath}
-                    fill="#E03636"
-                    style={{ mixBlendMode: 'lighten' }}
+                    d={option.backPath}
+                    fill="#FFF"
+                    transform={`translate(${backOffset.x || 0}, ${backOffset.y || 0})`}
                   />
-                </g>
-              )}
-            </g>
-          );
-        })}
+                )}
+
+                {/* 2. Black Text (MIDDLE) */}
+                <text
+                  x={0}
+                  y={0}
+                  fill={typography.fill}
+                  dominantBaseline="hanging"
+                  transform={`translate(${textOffset.x}, ${textOffset.y}) skewX(${typography.skewX}) skewY(${typography.skewY})`}
+                  style={{
+                    fontFamily: "'Archivo Black', sans-serif",
+                    fontWeight: 'normal',
+                    fontSize: `${typography.fontSize}px`,
+                    letterSpacing: typography.letterSpacing,
+                    transition: 'all 0.25s cubic-bezier(0.25, 1, 0.5, 1)',
+                    cursor: 'pointer',
+                    userSelect: 'none'
+                  }}
+                  onClick={() => setActiveIndex(index)}
+                >
+                  {option.name}
+                </text>
+
+                {/* 3. Red Front Triangle with Lighten Blend Mode (TOP) */}
+                {isActive && frontOffset && (
+                  <g transform={`translate(${frontOffset.x || 0}, ${frontOffset.y || 0})`}>
+                    <path
+                      className="front-triangle-path"
+                      d={option.frontPath}
+                      fill="#E03636"
+                      style={{ mixBlendMode: 'lighten' }}
+                    />
+                  </g>
+                )}
+              </g>
+            );
+          })}
+        </g>
       </svg>
     </div>
   );
