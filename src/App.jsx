@@ -273,7 +273,7 @@ function App() {
 
             if (isActive) {
               containerX = option.selectedX;
-              containerY = option.baseY;
+              containerY = option.name === 'SYSTEM' ? option.baseY + 130 : option.baseY;
             } else if (index < activeIndex) {
               containerX = option.baseX;
               containerY = option.baseY;
