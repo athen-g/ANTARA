@@ -91,10 +91,10 @@ const menuOptions = [
   {
     name: 'EQUIP',
     baseX: 827,
-    baseY: 360,
+    baseY: 350,
     selectedX: 725,
     selectedUpshift: 150,
-    passedUpshift: 100,
+    passedUpshift: 90,
     restingOffset: 130,
     frontPath: 'M481.5 0L383.5 170.5L0 225.5L481.5 0Z',
     backPath: 'M434 0L348 162.5L0 230L434 0Z',
@@ -290,7 +290,8 @@ function App() {
         }}
       >
         <g transform="translate(0, 50) scale(1.1)">
-          {menuOptions.map((option, index) => {
+          {[...menuOptions].reverse().map((option) => {
+            const index = menuOptions.findIndex((o) => o.name === option.name);
             const isActive = activeIndex === index;
             const typography = isActive ? option.selected : option.unselected;
 
