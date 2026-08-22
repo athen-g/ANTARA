@@ -276,7 +276,7 @@ function App() {
               containerY = option.baseY;
             } else if (index < activeIndex) {
               containerX = option.baseX;
-              containerY = option.name === 'SKILL' ? option.baseY + 10 : option.baseY;
+              containerY = option.baseY;
             } else {
               containerX = option.baseX;
               containerY = option.baseY + 130;
