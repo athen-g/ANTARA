@@ -145,7 +145,7 @@ const menuOptions = [
   {
     name: 'SYSTEM',
     baseX: 814,
-    baseY: 618,
+    baseY: 748,
     selectedX: 700,
     frontPath: 'M617 27.5L393 167.5L0 0L617 27.5Z',
     backPath: 'M675 0L441 165.5L0 6L675 0Z',
@@ -272,18 +272,17 @@ function App() {
 
           const maxIndex = menuOptions.length - 1;
           const factor = Math.pow((maxIndex - index) / maxIndex, 0.6);
-          const selectedUpshift = factor * 130;
           const pastUpshift = factor * 15;
 
           if (isActive) {
             containerX = option.selectedX;
-            containerY = option.baseY + 130 - selectedUpshift;
+            containerY = option.baseY;
           } else if (index < activeIndex) {
             containerX = option.baseX;
-            containerY = option.baseY + 130 - selectedUpshift - pastUpshift;
+            containerY = option.baseY - pastUpshift;
           } else {
             containerX = option.baseX;
-            containerY = option.baseY + 130;
+            containerY = option.name === 'SYSTEM' ? option.baseY : option.baseY + 130;
           }
 
           // 2. Setup text relative offset inside container
