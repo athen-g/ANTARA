@@ -198,29 +198,31 @@ function App() {
 
   // Background liquid vectors frame loop with 8-second delay between cycles
   useEffect(() => {
-    let intervalId;
     let timeoutId;
+    let isMounted = true;
 
-    const startAnimation = () => {
-      intervalId = setInterval(() => {
-        setCurrentFrame((prev) => {
-          if (prev === 10) {
-            clearInterval(intervalId);
-            timeoutId = setTimeout(() => {
-              setCurrentFrame(1);
-              startAnimation();
-            }, 8000);
-            return 10;
-          }
-          return prev + 1;
+    const runCycle = async () => {
+      for (let f = 1; f <= 10; f++) {
+        if (!isMounted) return;
+        setCurrentFrame(f);
+        await new Promise((resolve) => {
+          timeoutId = setTimeout(resolve, 80);
         });
-      }, 80);
+      }
+
+      if (!isMounted) return;
+      await new Promise((resolve) => {
+        timeoutId = setTimeout(resolve, 8000);
+      });
+
+      if (!isMounted) return;
+      runCycle();
     };
 
-    startAnimation();
+    runCycle();
 
     return () => {
-      clearInterval(intervalId);
+      isMounted = false;
       clearTimeout(timeoutId);
     };
   }, []);
