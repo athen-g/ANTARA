@@ -28,8 +28,8 @@ const selectedDims = {
 const selectedTextOffsets = {
   'SKILL': { x: 25, y: 135 },
   'ITEM': { x: 50, y: 70 },
-  'EQUIP': { x: 50, y: 50 },
-  'PERSONA': { x: 25, y: 35 },
+  'EQUIP': { x: 50, y: 90 },
+  'PERSONA': { x: 35, y: 80 },
   'STATS': { x: 55, y: 45 },
   'QUEST': { x: 40, y: 65 },
   'SOCIAL LINK': { x: 35, y: 60 },
@@ -40,8 +40,8 @@ const selectedTextOffsets = {
 const frontTriangleOffsets = {
   'SKILL': { x: 0, y: 0 },
   'ITEM': { x: 0, y: 0 },
-  'EQUIP': { x: 0, y: 0 },
-  'PERSONA': { x: 0, y: 0 },
+  'EQUIP': { x: 0, y: -40 },
+  'PERSONA': { x: 0, y: -45 },
   'STATS': { x: 0, y: 0 },
   'QUEST': { x: 0, y: 0 },
   'SOCIAL LINK': { x: 0, y: 0 },
@@ -52,8 +52,8 @@ const frontTriangleOffsets = {
 const backTriangleOffsets = {
   'SKILL': { x: 36, y: 14 },
   'ITEM': { x: 41.5, y: 3.5 },
-  'EQUIP': { x: 29, y: 1.5 },
-  'PERSONA': { x: 0.5, y: -20.5 },
+  'EQUIP': { x: 29, y: -38.5 },
+  'PERSONA': { x: 0.5, y: -65.5 },
   'STATS': { x: 20.5, y: 6 },
   'QUEST': { x: 11.5, y: -11 },
   'SOCIAL LINK': { x: 2, y: 18 },
