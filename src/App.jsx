@@ -169,7 +169,7 @@ const menuOptions = [
   {
     name: 'SYSTEM',
     baseX: 814,
-    baseY: 618,
+    baseY: 608,
     selectedX: 700,
     selectedUpshift: 0,
     passedUpshift: 0,
