@@ -65,7 +65,7 @@ const menuOptions = [
   {
     name: 'SKILL',
     baseX: 824,
-    baseY: 230,
+    baseY: 220,
     selectedX: 751,
     frontPath: 'M381 0L343 137L0 228L381 0Z',
     backPath: 'M322 0L292 124L0 208L322 0Z',
@@ -276,7 +276,7 @@ function App() {
               containerY = option.baseY;
             } else if (index < activeIndex) {
               containerX = option.baseX;
-              containerY = option.baseY;
+              containerY = option.name === 'SKILL' ? option.baseY + 10 : option.baseY;
             } else {
               containerX = option.baseX;
               containerY = option.baseY + 130;
