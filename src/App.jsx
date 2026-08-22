@@ -93,7 +93,7 @@ const menuOptions = [
     baseX: 827,
     baseY: 360,
     selectedX: 725,
-    selectedUpshift: 130,
+    selectedUpshift: 150,
     passedUpshift: 100,
     restingOffset: 130,
     frontPath: 'M481.5 0L383.5 170.5L0 225.5L481.5 0Z',
