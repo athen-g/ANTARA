@@ -103,7 +103,7 @@ html {
   z-index: 4;
   pointer-events: none;
   animation: darkBlueHairWave 4.5s ease-in-out infinite;
-  transform-origin: 716px 1080px;
+  transform-origin: 35% 85%;
   will-change: transform;
 }
 
