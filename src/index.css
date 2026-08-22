@@ -62,38 +62,34 @@ html {
 }
 
 /* Blue Visual Background */
-@keyframes blueBgWave {
-  0% {
-    transform: translate(0px, 0px) rotate(0deg) scale(1) skewX(0deg);
-  }
-  25% {
-    transform: translate(-3.5px, -4px) rotate(0.25deg) scale(1.006, 1.004) skewX(-0.35deg);
-  }
-  50% {
-    transform: translate(2.5px, 2px) rotate(-0.18deg) scale(0.998, 1.005) skewX(0.25deg);
-  }
-  75% {
-    transform: translate(-2px, -2.5px) rotate(0.15deg) scale(1.004, 0.998) skewX(-0.2deg);
-  }
-  100% {
-    transform: translate(0px, 0px) rotate(0deg) scale(1) skewX(0deg);
-  }
-}
-
 .blue-bg {
   position: absolute;
-  top: -10px;
-  left: -10px;
-  width: calc(100% + 20px);
-  height: calc(100% + 20px);
+  top: 0;
+  left: 0;
+  width: 1920px;
+  height: 1080px;
   z-index: 1;
   pointer-events: none;
-  animation: blueBgWave 7.5s ease-in-out infinite;
-  transform-origin: 35% 85%;
-  will-change: transform;
 }
 
-.blue-bg svg {
+.blue-bg img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Dark-Blue Hair Layer (Jigsaw Piece) */
+.dark-blue-hair-bg {
+  position: absolute;
+  left: 117.78px;
+  top: 654px;
+  width: 599px;
+  height: 426px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.dark-blue-hair-bg img {
   width: 100%;
   height: 100%;
   display: block;
