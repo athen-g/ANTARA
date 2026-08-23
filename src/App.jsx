@@ -28,12 +28,12 @@ function IntroSequence({ onComplete }) {
     return () => clearTimeout(fadeTimer);
   }, [waterSliding]);
 
-  // Phase 2: Fade out 2 seconds prior to video end
+  // Phase 2: Fade out 5 seconds prior to video end (3 seconds earlier)
   const handleTimeUpdate = useCallback(() => {
     if (introVideoRef.current) {
       const duration = introVideoRef.current.duration;
       const currentTime = introVideoRef.current.currentTime;
-      if (duration && duration - currentTime <= 2.0 && !videoFading) {
+      if (duration && duration - currentTime <= 5.0 && !videoFading) {
         setVideoFading(true);
         setTimeout(() => {
           onComplete();
