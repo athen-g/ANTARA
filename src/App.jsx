@@ -329,22 +329,7 @@ const menuOptions = [
 function BlueBackground() {
   return (
     <div className="blue-bg">
-      <div
-        style={{
-          position: 'absolute',
-          right: 0,
-          top: 0,
-          width: '1240px',
-          height: '100%',
-          backgroundColor: '#0018B4',
-          zIndex: 0
-        }}
-      />
-      <img
-        src="/blue.svg"
-        alt="Blue Background"
-        style={{ position: 'relative', zIndex: 1 }}
-      />
+      <img src="/blue.svg" alt="Blue Background" />
     </div>
   );
 }
