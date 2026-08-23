@@ -15,7 +15,7 @@ function IntroSequence({ onComplete }) {
     return () => clearTimeout(timer);
   }, []);
 
-  // Phase 1→2: After water slide completes (~3s), smoothly fade to intro video
+  // Phase 1→2: After water slide completes (~3.8s), smoothly fade to intro video
   useEffect(() => {
     if (!waterSliding) return;
     const timer = setTimeout(() => {
@@ -23,7 +23,7 @@ function IntroSequence({ onComplete }) {
       setTimeout(() => {
         setPhase('intro');
       }, 800);
-    }, 3800);
+    }, 4800);
     return () => clearTimeout(timer);
   }, [waterSliding]);
 
@@ -55,7 +55,7 @@ function IntroSequence({ onComplete }) {
             </p>
           </div>
 
-          {/* Solid water fill (#029EEB) covering screen and sliding down */}
+          {/* Solid water fill (#029EEB gradient) covering screen and sliding down */}
           <div className={`water-fill ${waterSliding ? 'sliding' : ''}`}>
             {/* Waves sit at the bottom edge of the sliding water fill */}
             <div className="wave-edge">
@@ -72,12 +72,28 @@ function IntroSequence({ onComplete }) {
                     id="gentle-wave"
                     d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"
                   />
+                  <linearGradient id="wave-grad-1" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#029EEB" stopOpacity="0.7" />
+                    <stop offset="100%" stopColor="#0288D1" stopOpacity="0.7" />
+                  </linearGradient>
+                  <linearGradient id="wave-grad-2" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#029EEB" stopOpacity="0.5" />
+                    <stop offset="100%" stopColor="#0288D1" stopOpacity="0.5" />
+                  </linearGradient>
+                  <linearGradient id="wave-grad-3" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#029EEB" stopOpacity="0.2" />
+                    <stop offset="100%" stopColor="#0288D1" stopOpacity="0.2" />
+                  </linearGradient>
+                  <linearGradient id="wave-grad-4" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#029EEB" stopOpacity="1" />
+                    <stop offset="100%" stopColor="#0288D1" stopOpacity="1" />
+                  </linearGradient>
                 </defs>
                 <g className="parallax">
-                  <use xlinkHref="#gentle-wave" x="48" y="0" fill="rgba(2, 158, 235, 0.7)" />
-                  <use xlinkHref="#gentle-wave" x="48" y="3" fill="rgba(2, 158, 235, 0.5)" />
-                  <use xlinkHref="#gentle-wave" x="48" y="5" fill="rgba(2, 158, 235, 0.3)" />
-                  <use xlinkHref="#gentle-wave" x="48" y="7" fill="#029eeb" />
+                  <use xlinkHref="#gentle-wave" x="48" y="0" fill="url(#wave-grad-1)" />
+                  <use xlinkHref="#gentle-wave" x="48" y="3" fill="url(#wave-grad-2)" />
+                  <use xlinkHref="#gentle-wave" x="48" y="5" fill="url(#wave-grad-3)" />
+                  <use xlinkHref="#gentle-wave" x="48" y="7" fill="url(#wave-grad-4)" />
                 </g>
               </svg>
             </div>
