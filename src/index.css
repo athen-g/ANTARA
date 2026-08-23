@@ -87,10 +87,10 @@
   transform: translateY(115%);
 }
 
-/* Waves attached at the bottom edge of the water fill */
+/* Waves attached at the top leading edge of the water fill */
 .wave-edge {
   position: absolute;
-  bottom: -40px;
+  top: -40px;
   left: 0;
   width: 100%;
   height: 80px;

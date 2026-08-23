@@ -15,7 +15,7 @@ function IntroSequence({ onComplete }) {
     return () => clearTimeout(timer);
   }, []);
 
-  // Phase 1→2: After water slide completes (~3.8s), smoothly fade to intro video
+  // Phase 1→2: After water slide completes, smoothly fade to intro video
   useEffect(() => {
     if (!waterSliding) return;
     const timer = setTimeout(() => {
@@ -23,7 +23,7 @@ function IntroSequence({ onComplete }) {
       setTimeout(() => {
         setPhase('intro');
       }, 800);
-    }, 4800);
+    }, 3800);
     return () => clearTimeout(timer);
   }, [waterSliding]);
 
