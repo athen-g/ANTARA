@@ -28,13 +28,13 @@ function IntroSequence({ onComplete }) {
     return () => clearTimeout(fadeTimer);
   }, [waterSliding]);
 
-  // Phase 2: Strong fade out after 1-second mark of video playback
+  // Phase 2: Smooth fade out after 1-second mark of video playback
   const handleTimeUpdate = useCallback(() => {
     if (introVideoRef.current && introVideoRef.current.currentTime >= 1.0 && !videoFading) {
       setVideoFading(true);
       setTimeout(() => {
         onComplete();
-      }, 400); // 400ms strong fade out into menu
+      }, 750); // 750ms smooth, softer fade out into menu
     }
   }, [videoFading, onComplete]);
 

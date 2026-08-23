@@ -156,7 +156,7 @@
   z-index: 1;
   background-color: #000000;
   opacity: 1;
-  transition: opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  transition: opacity 0.75s ease-in-out;
 }
 
 .intro-video.strong-fade-out {
