@@ -155,7 +155,7 @@
    MENU OVERLAYS (Water Loop & Image 5)
    ═══════════════════════════════════════════════ */
 
-/* Water Overlay Video: Loop with blend mode lighten */
+/* Water Overlay Video: Loop with blend mode lighten, masked strictly to blue ocean */
 .water-overlay-video {
   position: absolute;
   top: 0;
@@ -167,9 +167,15 @@
   pointer-events: none;
   mix-blend-mode: lighten;
   opacity: 1;
+  -webkit-mask-image: url(/blue.svg);
+  mask-image: url(/blue.svg);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
 }
 
-/* Image 5 Asset: Screen blend mode overlay */
+/* Image 5 Asset: Screen blend mode overlay, masked strictly to blue ocean */
 .image5-overlay {
   position: absolute;
   top: 0;
@@ -181,6 +187,12 @@
   pointer-events: none;
   mix-blend-mode: screen;
   opacity: 0.75;
+  -webkit-mask-image: url(/blue.svg);
+  mask-image: url(/blue.svg);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
 }
 
 body,
