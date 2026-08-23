@@ -34,12 +34,18 @@
   align-items: center;
 }
 
-/* Black text on white background (revealed as water drops) */
+/* Black text on white background (revealed as water drops, then dissolves to white) */
 .water-text-layer {
   position: relative;
   z-index: 1;
   text-align: center;
   user-select: none;
+  opacity: 1;
+  transition: opacity 0.7s ease-in-out;
+}
+
+.water-text-layer.fade-to-white {
+  opacity: 0;
 }
 
 .water-title {

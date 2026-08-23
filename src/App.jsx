@@ -5,6 +5,7 @@ function IntroSequence({ onComplete }) {
   // Phases: 'water' → 'intro' → 'done'
   const [phase, setPhase] = useState('water');
   const [waterSliding, setWaterSliding] = useState(false);
+  const [textFading, setTextFading] = useState(false);
   const introVideoRef = useRef(null);
 
   // Phase 1: After 0.6s, start sliding water down
@@ -15,13 +16,21 @@ function IntroSequence({ onComplete }) {
     return () => clearTimeout(timer);
   }, []);
 
-  // Phase 1→2: After water slide completes (~2.2s), hard cut directly to intro video
+  // Phase 1.5: Fade only the text to white, then cut to intro video
   useEffect(() => {
     if (!waterSliding) return;
-    const timer = setTimeout(() => {
+    const fadeTimer = setTimeout(() => {
+      setTextFading(true);
+    }, 2200);
+
+    const cutTimer = setTimeout(() => {
       setPhase('intro');
-    }, 2400);
-    return () => clearTimeout(timer);
+    }, 2900);
+
+    return () => {
+      clearTimeout(fadeTimer);
+      clearTimeout(cutTimer);
+    };
   }, [waterSliding]);
 
   // Phase 2: Play intro video, on ended → hard cut directly to menu
@@ -42,8 +51,8 @@ function IntroSequence({ onComplete }) {
     <div id="intro-sequence">
       {phase === 'water' && (
         <div id="water-reveal">
-          {/* White background with black text underneath */}
-          <div className="water-text-layer">
+          {/* White background with black text underneath that fades to white */}
+          <div className={`water-text-layer ${textFading ? 'fade-to-white' : ''}`}>
             <h1 className="water-title">Memento Mori</h1>
             <p className="water-subtitle">
               Remember, You Will Die.<br />
