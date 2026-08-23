@@ -4,6 +4,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 function IntroSequence({ onComplete }) {
   const [waterSliding, setWaterSliding] = useState(false);
   const [loaderFading, setLoaderFading] = useState(false);
+  const [videoFading, setVideoFading] = useState(false);
   const introVideoRef = useRef(null);
 
   // Phase 1: After 0.6s, start sliding water down
@@ -14,7 +15,7 @@ function IntroSequence({ onComplete }) {
     return () => clearTimeout(timer);
   }, []);
 
-  // Phase 1.5: Smoothly fade out the loader overlay revealing the playing video underneath (like Sega website)
+  // Phase 1.5: Smoothly fade out loader overlay revealing playing video underneath
   useEffect(() => {
     if (!waterSliding) return;
     const fadeTimer = setTimeout(() => {
@@ -27,19 +28,30 @@ function IntroSequence({ onComplete }) {
     return () => clearTimeout(fadeTimer);
   }, [waterSliding]);
 
+  // Phase 2: Strong fade out after 1-second mark of video playback
+  const handleTimeUpdate = useCallback(() => {
+    if (introVideoRef.current && introVideoRef.current.currentTime >= 1.0 && !videoFading) {
+      setVideoFading(true);
+      setTimeout(() => {
+        onComplete();
+      }, 400); // 400ms strong fade out into menu
+    }
+  }, [videoFading, onComplete]);
+
   const handleIntroEnded = useCallback(() => {
     onComplete();
   }, [onComplete]);
 
   return (
     <div id="intro-sequence">
-      {/* Intro video playing underneath */}
+      {/* Intro video playing underneath with strong fade out after 1s */}
       <video
         ref={introVideoRef}
-        className="intro-video"
+        className={`intro-video ${videoFading ? 'strong-fade-out' : ''}`}
         src="/intro.mp4"
         muted
         playsInline
+        onTimeUpdate={handleTimeUpdate}
         onEnded={handleIntroEnded}
       />
 
