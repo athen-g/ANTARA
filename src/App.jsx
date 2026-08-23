@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 
 /* ── P3R Multi-Phase Cinematic Intro ── */
 function IntroSequence({ onComplete }) {
-  // Phases: 'water' → 'fade-to-video' → 'intro' → 'done'
+  // Phases: 'water' → 'intro' → 'done'
   const [phase, setPhase] = useState('water');
   const [waterSliding, setWaterSliding] = useState(false);
   const introVideoRef = useRef(null);
@@ -15,14 +15,11 @@ function IntroSequence({ onComplete }) {
     return () => clearTimeout(timer);
   }, []);
 
-  // Phase 1→2: After water slide completes (~2.2s), smoothly fade to intro video
+  // Phase 1→2: After water slide completes (~2.2s), hard cut directly to intro video
   useEffect(() => {
     if (!waterSliding) return;
     const timer = setTimeout(() => {
-      setPhase('fade-to-video');
-      setTimeout(() => {
-        setPhase('intro');
-      }, 500);
+      setPhase('intro');
     }, 2400);
     return () => clearTimeout(timer);
   }, [waterSliding]);
@@ -43,8 +40,8 @@ function IntroSequence({ onComplete }) {
 
   return (
     <div id="intro-sequence">
-      {(phase === 'water' || phase === 'fade-to-video') && (
-        <div id="water-reveal" className={phase === 'fade-to-video' ? 'fade-out' : ''}>
+      {phase === 'water' && (
+        <div id="water-reveal">
           {/* White background with black text underneath */}
           <div className="water-text-layer">
             <h1 className="water-title">Memento Mori</h1>

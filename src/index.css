@@ -32,13 +32,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  opacity: 1;
-  transition: opacity 0.5s ease-in-out;
-}
-
-#water-reveal.fade-out {
-  opacity: 0;
-  pointer-events: none;
 }
 
 /* Black text on white background (revealed as water drops) */
