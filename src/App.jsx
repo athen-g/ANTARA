@@ -395,11 +395,11 @@ function App() {
 
   return (
     <div id="app">
-      {/* Cinematic Intro Sequence */}
+      {/* Cinematic Intro Sequence (Transparent container over live menu) */}
       {!introComplete && <IntroSequence onComplete={handleIntroComplete} />}
 
-      {/* Water overlay + Image5 blend (only after intro) */}
-      {introComplete && <WaterOverlay />}
+      {/* Water overlay + Image5 blend (live under intro and menu) */}
+      <WaterOverlay />
 
       {/* White page background with the inline blue SVG background */}
       <BlueBackground />

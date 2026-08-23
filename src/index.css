@@ -18,7 +18,7 @@
   height: 100%;
   z-index: 9999;
   overflow: hidden;
-  background-color: #ffffff;
+  background-color: transparent;
 }
 
 #water-reveal {
