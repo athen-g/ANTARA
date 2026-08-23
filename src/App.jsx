@@ -2,10 +2,8 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 
 /* ── P3R Multi-Phase Cinematic Intro ── */
 function IntroSequence({ onComplete }) {
-  // Phases: 'water' → 'intro' → 'done'
-  const [phase, setPhase] = useState('water');
   const [waterSliding, setWaterSliding] = useState(false);
-  const [textFading, setTextFading] = useState(false);
+  const [loaderFading, setLoaderFading] = useState(false);
   const introVideoRef = useRef(null);
 
   // Phase 1: After 0.6s, start sliding water down
@@ -16,108 +14,91 @@ function IntroSequence({ onComplete }) {
     return () => clearTimeout(timer);
   }, []);
 
-  // Phase 1.5: Fade only the text to white, then cut to intro video
+  // Phase 1.5: Smoothly fade out the loader overlay revealing the playing video underneath (like Sega website)
   useEffect(() => {
     if (!waterSliding) return;
     const fadeTimer = setTimeout(() => {
-      setTextFading(true);
+      setLoaderFading(true);
+      if (introVideoRef.current) {
+        introVideoRef.current.play().catch(() => {});
+      }
     }, 2200);
 
-    const cutTimer = setTimeout(() => {
-      setPhase('intro');
-    }, 2900);
-
-    return () => {
-      clearTimeout(fadeTimer);
-      clearTimeout(cutTimer);
-    };
+    return () => clearTimeout(fadeTimer);
   }, [waterSliding]);
 
-  // Phase 2: Play intro video, on ended → hard cut directly to menu
-  useEffect(() => {
-    if (phase === 'intro' && introVideoRef.current) {
-      introVideoRef.current.play().catch(() => {});
-    }
-  }, [phase]);
-
   const handleIntroEnded = useCallback(() => {
-    setPhase('done');
     onComplete();
   }, [onComplete]);
 
-  if (phase === 'done') return null;
-
   return (
     <div id="intro-sequence">
-      {phase === 'water' && (
-        <div id="water-reveal">
-          {/* White background with black text underneath that fades to white */}
-          <div className={`water-text-layer ${textFading ? 'fade-to-white' : ''}`}>
-            <h1 className="water-title">Memento Mori</h1>
-            <p className="water-subtitle">
-              Remember, You Will Die.<br />
-              Time never waits.<br />
-              It delivers all equally to the same end.
-            </p>
-          </div>
+      {/* Intro video playing underneath */}
+      <video
+        ref={introVideoRef}
+        className="intro-video"
+        src="/intro.mp4"
+        muted
+        playsInline
+        onEnded={handleIntroEnded}
+      />
 
-          {/* Solid water fill (#029EEB gradient) covering screen and sliding down */}
-          <div className={`water-fill ${waterSliding ? 'sliding' : ''}`}>
-            {/* Waves sit at the bottom edge of the sliding water fill */}
-            <div className="wave-edge">
-              <svg
-                className="waves"
-                xmlns="http://www.w3.org/2000/svg"
-                xmlnsXlink="http://www.w3.org/1999/xlink"
-                viewBox="0 24 150 28"
-                preserveAspectRatio="none"
-                shapeRendering="auto"
-              >
-                <defs>
-                  <path
-                    id="gentle-wave"
-                    d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"
-                  />
-                  <linearGradient id="wave-grad-1" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stopColor="#029EEB" stopOpacity="0.7" />
-                    <stop offset="100%" stopColor="#0288D1" stopOpacity="0.7" />
-                  </linearGradient>
-                  <linearGradient id="wave-grad-2" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stopColor="#029EEB" stopOpacity="0.5" />
-                    <stop offset="100%" stopColor="#0288D1" stopOpacity="0.5" />
-                  </linearGradient>
-                  <linearGradient id="wave-grad-3" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stopColor="#029EEB" stopOpacity="0.2" />
-                    <stop offset="100%" stopColor="#0288D1" stopOpacity="0.2" />
-                  </linearGradient>
-                  <linearGradient id="wave-grad-4" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stopColor="#029EEB" stopOpacity="1" />
-                    <stop offset="100%" stopColor="#0288D1" stopOpacity="1" />
-                  </linearGradient>
-                </defs>
-                <g className="parallax">
-                  <use xlinkHref="#gentle-wave" x="48" y="0" fill="url(#wave-grad-1)" />
-                  <use xlinkHref="#gentle-wave" x="48" y="3" fill="url(#wave-grad-2)" />
-                  <use xlinkHref="#gentle-wave" x="48" y="5" fill="url(#wave-grad-3)" />
-                  <use xlinkHref="#gentle-wave" x="48" y="7" fill="url(#wave-grad-4)" />
-                </g>
-              </svg>
-            </div>
+      {/* Loading & Reveal overlay that fades out to reveal the video */}
+      <div id="water-reveal" className={loaderFading ? 'fade-out' : ''}>
+        {/* White background with black text underneath */}
+        <div className="water-text-layer">
+          <h1 className="water-title">Memento Mori</h1>
+          <p className="water-subtitle">
+            Remember, You Will Die.<br />
+            Time never waits.<br />
+            It delivers all equally to the same end.
+          </p>
+        </div>
+
+        {/* Solid water fill (#029EEB gradient) covering screen and sliding down */}
+        <div className={`water-fill ${waterSliding ? 'sliding' : ''}`}>
+          {/* Waves sit at the top edge of the sliding water fill */}
+          <div className="wave-edge">
+            <svg
+              className="waves"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlnsXlink="http://www.w3.org/1999/xlink"
+              viewBox="0 24 150 28"
+              preserveAspectRatio="none"
+              shapeRendering="auto"
+            >
+              <defs>
+                <path
+                  id="gentle-wave"
+                  d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"
+                />
+                <linearGradient id="wave-grad-1" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#029EEB" stopOpacity="0.7" />
+                  <stop offset="100%" stopColor="#0288D1" stopOpacity="0.7" />
+                </linearGradient>
+                <linearGradient id="wave-grad-2" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#029EEB" stopOpacity="0.5" />
+                  <stop offset="100%" stopColor="#0288D1" stopOpacity="0.5" />
+                </linearGradient>
+                <linearGradient id="wave-grad-3" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#029EEB" stopOpacity="0.2" />
+                  <stop offset="100%" stopColor="#0288D1" stopOpacity="0.2" />
+                </linearGradient>
+                <linearGradient id="wave-grad-4" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#029EEB" stopOpacity="1" />
+                  <stop offset="100%" stopColor="#0288D1" stopOpacity="1" />
+                </linearGradient>
+              </defs>
+              <g className="parallax">
+                <use xlinkHref="#gentle-wave" x="48" y="0" fill="url(#wave-grad-1)" />
+                <use xlinkHref="#gentle-wave" x="48" y="3" fill="url(#wave-grad-2)" />
+                <use xlinkHref="#gentle-wave" x="48" y="5" fill="url(#wave-grad-3)" />
+                <use xlinkHref="#gentle-wave" x="48" y="7" fill="url(#wave-grad-4)" />
+              </g>
+            </svg>
           </div>
         </div>
-      )}
-
-      {phase === 'intro' && (
-        <video
-          ref={introVideoRef}
-          className="intro-video"
-          src="/intro.mp4"
-          autoPlay
-          muted
-          playsInline
-          onEnded={handleIntroEnded}
-        />
-      )}
+      </div>
     </div>
   );
 }
