@@ -155,7 +155,7 @@
    MENU OVERLAYS (Water Loop & Image 5)
    ═══════════════════════════════════════════════ */
 
-/* Water Overlay Video: Loop with blend mode to eliminate background and blend water highlights with blue SVG */
+/* Water Overlay Video: Loop with blend mode lighten */
 .water-overlay-video {
   position: absolute;
   top: 0;
@@ -165,8 +165,8 @@
   object-fit: cover;
   z-index: 2;
   pointer-events: none;
-  mix-blend-mode: screen;
-  opacity: 0.85;
+  mix-blend-mode: lighten;
+  opacity: 1;
 }
 
 /* Image 5 Asset: Screen blend mode overlay */
