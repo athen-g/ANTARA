@@ -1,4 +1,70 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+
+/* ── P3R Loading Screen ── */
+function LoadingScreen({ onFinished }) {
+  const [phase, setPhase] = useState('visible'); // 'visible' | 'fading' | 'done'
+
+  useEffect(() => {
+    // Minimum display time of 3.5s, then begin fade
+    const minTimer = setTimeout(() => {
+      setPhase('fading');
+    }, 3500);
+
+    return () => clearTimeout(minTimer);
+  }, []);
+
+  useEffect(() => {
+    if (phase === 'fading') {
+      const fadeTimer = setTimeout(() => {
+        setPhase('done');
+        onFinished();
+      }, 1200); // matches CSS transition duration
+      return () => clearTimeout(fadeTimer);
+    }
+  }, [phase, onFinished]);
+
+  if (phase === 'done') return null;
+
+  return (
+    <div
+      id="loading-screen"
+      className={phase === 'fading' ? 'loading-fade-out' : ''}
+    >
+      <div className="loading-text-box">
+        <h1 className="loading-title">Memento Mori</h1>
+        <p className="loading-text">
+          Remember, You Will Die.<br />
+          Time never waits.<br />
+          It delivers all equally to the same end.
+        </p>
+      </div>
+
+      <div className="wave-box">
+        <svg
+          className="waves"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+          viewBox="0 24 150 28"
+          preserveAspectRatio="none"
+          shapeRendering="auto"
+        >
+          <defs>
+            <path
+              id="gentle-wave"
+              d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"
+            />
+          </defs>
+          <g className="parallax">
+            <use xlinkHref="#gentle-wave" x="48" y="0" fill="rgba(2, 158, 235, 0.7)" />
+            <use xlinkHref="#gentle-wave" x="48" y="3" fill="rgba(2, 158, 235, 0.5)" />
+            <use xlinkHref="#gentle-wave" x="48" y="5" fill="rgba(2, 158, 235, 0.2)" />
+            <use xlinkHref="#gentle-wave" x="48" y="7" fill="#029eeb" />
+          </g>
+        </svg>
+      </div>
+    </div>
+  );
+}
 
 // Bounding box dimensions & relative offsets
 const unselectedDims = {
@@ -192,6 +258,11 @@ function BlueBackground() {
 function App() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [currentFrame, setCurrentFrame] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const handleLoadingFinished = useCallback(() => {
+    setIsLoading(false);
+  }, []);
 
   // Background liquid vectors frame loop with 8-second delay between cycles
   useEffect(() => {
@@ -246,6 +317,8 @@ function App() {
 
   return (
     <div id="app">
+      {/* P3R Loading Screen */}
+      {isLoading && <LoadingScreen onFinished={handleLoadingFinished} />}
       {/* White page background with the inline blue SVG background */}
       <BlueBackground />
 

@@ -1,7 +1,126 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap');
+
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+
+/* ═══════════════════════════════════════════════
+   P3R LOADING SCREEN
+   ═══════════════════════════════════════════════ */
+
+#loading-screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  background: linear-gradient(180deg, #0a1628 0%, #0d2847 40%, #0f3460 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  opacity: 1;
+  transition: opacity 1.2s ease-in-out;
+}
+
+#loading-screen.loading-fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Text Container */
+.loading-text-box {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  animation: loadingTextFadeIn 2s ease-out forwards;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+@keyframes loadingTextFadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.loading-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-style: italic;
+  font-size: 72px;
+  color: #e8f4fd;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 28px;
+  text-shadow: 0 0 40px rgba(2, 158, 235, 0.4), 0 0 80px rgba(2, 158, 235, 0.15);
+}
+
+.loading-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 1.8;
+  color: rgba(200, 225, 245, 0.75);
+  letter-spacing: 0.06em;
+}
+
+/* ── Wave Container ── */
+.wave-box {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 20%;
+  z-index: 1;
+}
+
+.waves {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 100px;
+}
+
+/* ── Parallax Wave Animation ── */
+.parallax > use {
+  animation: moveForever 25s cubic-bezier(0.55, 0.5, 0.45, 0.5) infinite;
+}
+
+.parallax > use:nth-child(1) {
+  animation-delay: -2s;
+  animation-duration: 7s;
+}
+
+.parallax > use:nth-child(2) {
+  animation-delay: -3s;
+  animation-duration: 10s;
+}
+
+.parallax > use:nth-child(3) {
+  animation-delay: -4s;
+  animation-duration: 13s;
+}
+
+.parallax > use:nth-child(4) {
+  animation-delay: -5s;
+  animation-duration: 20s;
+}
+
+@keyframes moveForever {
+  0% {
+    transform: translate3d(-90px, 0, 0);
+  }
+  100% {
+    transform: translate3d(85px, 0, 0);
+  }
 }
 
 body,
