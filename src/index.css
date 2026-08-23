@@ -7,89 +7,105 @@
 }
 
 /* ═══════════════════════════════════════════════
-   P3R LOADING SCREEN
+   P3R CINEMATIC INTRO & WATER REVEAL
    ═══════════════════════════════════════════════ */
 
-#loading-screen {
+#intro-sequence {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   z-index: 9999;
-  background: linear-gradient(180deg, #0a1628 0%, #0d2847 40%, #0f3460 100%);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   overflow: hidden;
-  opacity: 1;
-  transition: opacity 1.2s ease-in-out;
+  background-color: #ffffff;
 }
 
-#loading-screen.loading-fade-out {
+/* ── Phase 1: Water Reveal ── */
+#water-reveal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 1;
+  transition: opacity 0.8s ease-in-out;
+}
+
+#water-reveal.fade-out {
   opacity: 0;
   pointer-events: none;
 }
 
-/* Text Container */
-.loading-text-box {
+/* Black text on white background (revealed as water drops) */
+.water-text-layer {
   position: relative;
-  z-index: 2;
+  z-index: 1;
   text-align: center;
-  animation: loadingTextFadeIn 2s ease-out forwards;
-  opacity: 0;
-  transform: translateY(20px);
+  user-select: none;
 }
 
-@keyframes loadingTextFadeIn {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.loading-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-weight: 300;
-  font-style: italic;
-  font-size: 72px;
-  color: #e8f4fd;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  margin-bottom: 28px;
-  text-shadow: 0 0 40px rgba(2, 158, 235, 0.4), 0 0 80px rgba(2, 158, 235, 0.15);
-}
-
-.loading-text {
+.water-title {
   font-family: 'Cormorant Garamond', serif;
   font-weight: 400;
-  font-size: 22px;
-  line-height: 1.8;
-  color: rgba(200, 225, 245, 0.75);
-  letter-spacing: 0.06em;
+  font-style: italic;
+  font-size: 82px;
+  color: #111111;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 24px;
 }
 
-/* ── Wave Container ── */
-.wave-box {
+.water-subtitle {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 1.8;
+  color: #222222;
+  letter-spacing: 0.08em;
+}
+
+/* Solid #029EEB Water that covers the screen and slides down */
+.water-fill {
   position: absolute;
-  bottom: 0;
+  top: 0;
   left: 0;
   width: 100%;
-  height: 20%;
-  z-index: 1;
+  height: 100%;
+  background-color: #029eeb;
+  z-index: 2;
+  transform: translateY(0);
+  transition: transform 2.8s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+.water-fill.sliding {
+  transform: translateY(115%);
+}
+
+/* Waves attached at the bottom edge of the water fill */
+.wave-edge {
+  position: absolute;
+  bottom: -40px;
+  left: 0;
+  width: 100%;
+  height: 80px;
 }
 
 .waves {
   position: absolute;
-  bottom: 0;
+  top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  min-height: 100px;
+  min-height: 80px;
 }
 
-/* ── Parallax Wave Animation ── */
+/* Parallax wave animations */
 .parallax > use {
   animation: moveForever 25s cubic-bezier(0.55, 0.5, 0.45, 0.5) infinite;
 }
@@ -121,6 +137,50 @@
   100% {
     transform: translate3d(85px, 0, 0);
   }
+}
+
+/* ── Phase 2: Intro Video ── */
+.intro-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 10;
+  background-color: #000000;
+}
+
+/* ═══════════════════════════════════════════════
+   MENU OVERLAYS (Water Loop & Image 5)
+   ═══════════════════════════════════════════════ */
+
+/* Water Overlay Video: Loop with blend mode to eliminate white background and blend with blue SVG */
+.water-overlay-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 2;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  opacity: 0.9;
+}
+
+/* Image 5 Asset: Screen blend mode overlay */
+.image5-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 5;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  opacity: 0.75;
 }
 
 body,

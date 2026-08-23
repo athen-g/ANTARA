@@ -1,68 +1,131 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 
-/* ── P3R Loading Screen ── */
-function LoadingScreen({ onFinished }) {
-  const [phase, setPhase] = useState('visible'); // 'visible' | 'fading' | 'done'
+/* ── P3R Multi-Phase Cinematic Intro ── */
+function IntroSequence({ onComplete }) {
+  // Phases: 'water' → 'fade-to-video' → 'intro' → 'done'
+  const [phase, setPhase] = useState('water');
+  const [waterSliding, setWaterSliding] = useState(false);
+  const introVideoRef = useRef(null);
 
+  // Phase 1: After 1.2s, start sliding water down
   useEffect(() => {
-    // Minimum display time of 3.5s, then begin fade
-    const minTimer = setTimeout(() => {
-      setPhase('fading');
-    }, 3500);
-
-    return () => clearTimeout(minTimer);
+    const timer = setTimeout(() => {
+      setWaterSliding(true);
+    }, 1200);
+    return () => clearTimeout(timer);
   }, []);
 
+  // Phase 1→2: After water slide completes (~3s), smoothly fade to intro video
   useEffect(() => {
-    if (phase === 'fading') {
-      const fadeTimer = setTimeout(() => {
-        setPhase('done');
-        onFinished();
-      }, 1200); // matches CSS transition duration
-      return () => clearTimeout(fadeTimer);
+    if (!waterSliding) return;
+    const timer = setTimeout(() => {
+      setPhase('fade-to-video');
+      setTimeout(() => {
+        setPhase('intro');
+      }, 800);
+    }, 3800);
+    return () => clearTimeout(timer);
+  }, [waterSliding]);
+
+  // Phase 2: Play intro video, on ended → hard cut directly to menu
+  useEffect(() => {
+    if (phase === 'intro' && introVideoRef.current) {
+      introVideoRef.current.play().catch(() => {});
     }
-  }, [phase, onFinished]);
+  }, [phase]);
+
+  const handleIntroEnded = useCallback(() => {
+    setPhase('done');
+    onComplete();
+  }, [onComplete]);
 
   if (phase === 'done') return null;
 
   return (
-    <div
-      id="loading-screen"
-      className={phase === 'fading' ? 'loading-fade-out' : ''}
-    >
-      <div className="loading-text-box">
-        <h1 className="loading-title">Memento Mori</h1>
-        <p className="loading-text">
-          Remember, You Will Die.<br />
-          Time never waits.<br />
-          It delivers all equally to the same end.
-        </p>
-      </div>
+    <div id="intro-sequence">
+      {(phase === 'water' || phase === 'fade-to-video') && (
+        <div id="water-reveal" className={phase === 'fade-to-video' ? 'fade-out' : ''}>
+          {/* White background with black text underneath */}
+          <div className="water-text-layer">
+            <h1 className="water-title">Memento Mori</h1>
+            <p className="water-subtitle">
+              Remember, You Will Die.<br />
+              Time never waits.<br />
+              It delivers all equally to the same end.
+            </p>
+          </div>
 
-      <div className="wave-box">
-        <svg
-          className="waves"
-          xmlns="http://www.w3.org/2000/svg"
-          xmlnsXlink="http://www.w3.org/1999/xlink"
-          viewBox="0 24 150 28"
-          preserveAspectRatio="none"
-          shapeRendering="auto"
-        >
-          <defs>
-            <path
-              id="gentle-wave"
-              d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"
-            />
-          </defs>
-          <g className="parallax">
-            <use xlinkHref="#gentle-wave" x="48" y="0" fill="rgba(2, 158, 235, 0.7)" />
-            <use xlinkHref="#gentle-wave" x="48" y="3" fill="rgba(2, 158, 235, 0.5)" />
-            <use xlinkHref="#gentle-wave" x="48" y="5" fill="rgba(2, 158, 235, 0.2)" />
-            <use xlinkHref="#gentle-wave" x="48" y="7" fill="#029eeb" />
-          </g>
-        </svg>
-      </div>
+          {/* Solid water fill (#029EEB) covering screen and sliding down */}
+          <div className={`water-fill ${waterSliding ? 'sliding' : ''}`}>
+            {/* Waves sit at the bottom edge of the sliding water fill */}
+            <div className="wave-edge">
+              <svg
+                className="waves"
+                xmlns="http://www.w3.org/2000/svg"
+                xmlnsXlink="http://www.w3.org/1999/xlink"
+                viewBox="0 24 150 28"
+                preserveAspectRatio="none"
+                shapeRendering="auto"
+              >
+                <defs>
+                  <path
+                    id="gentle-wave"
+                    d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"
+                  />
+                </defs>
+                <g className="parallax">
+                  <use xlinkHref="#gentle-wave" x="48" y="0" fill="rgba(2, 158, 235, 0.7)" />
+                  <use xlinkHref="#gentle-wave" x="48" y="3" fill="rgba(2, 158, 235, 0.5)" />
+                  <use xlinkHref="#gentle-wave" x="48" y="5" fill="rgba(2, 158, 235, 0.3)" />
+                  <use xlinkHref="#gentle-wave" x="48" y="7" fill="#029eeb" />
+                </g>
+              </svg>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {phase === 'intro' && (
+        <video
+          ref={introVideoRef}
+          className="intro-video"
+          src="/intro.mp4"
+          autoPlay
+          muted
+          playsInline
+          onEnded={handleIntroEnded}
+        />
+      )}
     </div>
+  );
+}
+
+/* ── Water Overlay (looping blend on menu) ── */
+function WaterOverlay() {
+  const videoRef = useRef(null);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.play().catch(() => {});
+    }
+  }, []);
+
+  return (
+    <>
+      <video
+        ref={videoRef}
+        className="water-overlay-video"
+        src="/water-overlay.mp4"
+        muted
+        loop
+        playsInline
+      />
+      <img
+        className="image5-overlay"
+        src="/image 5.png"
+        alt="Image 5 Overlay"
+      />
+    </>
   );
 }
 
@@ -258,10 +321,10 @@ function BlueBackground() {
 function App() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [currentFrame, setCurrentFrame] = useState(1);
-  const [isLoading, setIsLoading] = useState(true);
+  const [introComplete, setIntroComplete] = useState(false);
 
-  const handleLoadingFinished = useCallback(() => {
-    setIsLoading(false);
+  const handleIntroComplete = useCallback(() => {
+    setIntroComplete(true);
   }, []);
 
   // Background liquid vectors frame loop with 8-second delay between cycles
@@ -317,8 +380,12 @@ function App() {
 
   return (
     <div id="app">
-      {/* P3R Loading Screen */}
-      {isLoading && <LoadingScreen onFinished={handleLoadingFinished} />}
+      {/* Cinematic Intro Sequence */}
+      {!introComplete && <IntroSequence onComplete={handleIntroComplete} />}
+
+      {/* Water overlay + Image5 blend (only after intro) */}
+      {introComplete && <WaterOverlay />}
+
       {/* White page background with the inline blue SVG background */}
       <BlueBackground />
 
