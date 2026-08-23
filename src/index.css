@@ -335,6 +335,17 @@ html {
 
 
 
+.visual-stage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1920px;
+  height: 1080px;
+  isolation: isolate;
+  z-index: 1;
+  pointer-events: none;
+}
+
 /* Rotated Dynamic Left Index Styling */
 .dynamic-left-index {
   position: absolute;
@@ -368,7 +379,7 @@ html {
   top: 295px;
   width: 934px;
   height: 431px;
-  z-index: 6;
+  z-index: 0;
   pointer-events: none;
   user-select: none;
   transform: rotate(90deg) skewX(-10deg);
