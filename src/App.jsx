@@ -28,16 +28,19 @@ function IntroSequence({ onComplete }) {
     return () => clearTimeout(fadeTimer);
   }, [waterSliding]);
 
-  // Phase 2: Smooth transition as the video clip reaches completion (like Sega website)
+  // Phase 2: Fade out 2 seconds prior to video end
   const handleTimeUpdate = useCallback(() => {
     if (introVideoRef.current) {
       const duration = introVideoRef.current.duration;
       const currentTime = introVideoRef.current.currentTime;
-      if (duration && duration - currentTime <= 0.6 && !videoFading) {
+      if (duration && duration - currentTime <= 2.0 && !videoFading) {
         setVideoFading(true);
+        setTimeout(() => {
+          onComplete();
+        }, 750);
       }
     }
-  }, [videoFading]);
+  }, [videoFading, onComplete]);
 
   const handleIntroEnded = useCallback(() => {
     onComplete();
