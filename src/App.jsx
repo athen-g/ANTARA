@@ -7,23 +7,23 @@ function IntroSequence({ onComplete }) {
   const [waterSliding, setWaterSliding] = useState(false);
   const introVideoRef = useRef(null);
 
-  // Phase 1: After 1.2s, start sliding water down
+  // Phase 1: After 0.6s, start sliding water down
   useEffect(() => {
     const timer = setTimeout(() => {
       setWaterSliding(true);
-    }, 1200);
+    }, 600);
     return () => clearTimeout(timer);
   }, []);
 
-  // Phase 1→2: After water slide completes, smoothly fade to intro video
+  // Phase 1→2: After water slide completes (~2.2s), smoothly fade to intro video
   useEffect(() => {
     if (!waterSliding) return;
     const timer = setTimeout(() => {
       setPhase('fade-to-video');
       setTimeout(() => {
         setPhase('intro');
-      }, 800);
-    }, 3800);
+      }, 500);
+    }, 2400);
     return () => clearTimeout(timer);
   }, [waterSliding]);
 

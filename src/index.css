@@ -33,7 +33,7 @@
   justify-content: center;
   align-items: center;
   opacity: 1;
-  transition: opacity 0.8s ease-in-out;
+  transition: opacity 0.5s ease-in-out;
 }
 
 #water-reveal.fade-out {
@@ -79,7 +79,7 @@
   background: linear-gradient(180deg, #029eeb 0%, #0288d1 75%, #0277bd 100%);
   z-index: 2;
   transform: translateY(0);
-  transition: transform 3.8s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 2.2s cubic-bezier(0.4, 0, 0.2, 1);
   will-change: transform;
 }
 
@@ -155,7 +155,7 @@
    MENU OVERLAYS (Water Loop & Image 5)
    ═══════════════════════════════════════════════ */
 
-/* Water Overlay Video: Loop with blend mode to eliminate white background and blend with blue SVG */
+/* Water Overlay Video: Loop with blend mode to eliminate background and blend water highlights with blue SVG */
 .water-overlay-video {
   position: absolute;
   top: 0;
@@ -165,8 +165,8 @@
   object-fit: cover;
   z-index: 2;
   pointer-events: none;
-  mix-blend-mode: multiply;
-  opacity: 0.9;
+  mix-blend-mode: screen;
+  opacity: 0.85;
 }
 
 /* Image 5 Asset: Screen blend mode overlay */
