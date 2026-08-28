@@ -1,11 +1,181 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 
-/* ── P3R Multi-Phase Cinematic Intro ── */
+/* ── P3R Multi-Phase Cinematic Intro with Custom SVG Underwater Animation ── */
+const shardsData = [
+  { points: "0,0 25,45 50,15", x: 280, delay: 0.2, dur: 4.2, scale: 1.2, fill: "url(#shard-cyan)" },
+  { points: "0,20 40,0 30,55", x: 520, delay: 1.0, dur: 5.1, scale: 0.9, fill: "url(#shard-white)" },
+  { points: "10,0 45,30 0,60", x: 840, delay: 0.5, dur: 4.6, scale: 1.4, fill: "url(#shard-cyan)" },
+  { points: "0,15 35,0 50,45", x: 1100, delay: 1.8, dur: 3.9, scale: 1.1, fill: "url(#shard-red)" },
+  { points: "15,0 60,25 20,70", x: 1350, delay: 0.7, dur: 5.5, scale: 1.3, fill: "url(#shard-white)" },
+  { points: "0,0 30,50 60,20", x: 1620, delay: 1.4, dur: 4.8, scale: 0.85, fill: "url(#shard-cyan)" },
+  { points: "5,0 40,35 0,45", x: 420, delay: 2.2, dur: 4.4, scale: 1.0, fill: "url(#shard-white)" },
+  { points: "0,25 50,0 40,65", x: 960, delay: 2.8, dur: 5.0, scale: 1.5, fill: "url(#shard-cyan)" },
+  { points: "10,0 55,20 25,60", x: 1480, delay: 2.1, dur: 4.7, scale: 0.95, fill: "url(#shard-white)" },
+  { points: "0,10 40,0 35,50", x: 720, delay: 3.2, dur: 4.3, scale: 1.15, fill: "url(#shard-red)" },
+];
+
+const bubblesData = [
+  { cx: 340, r: 12, delay: 0.3, dur: 3.8 },
+  { cx: 480, r: 6, delay: 1.2, dur: 4.5 },
+  { cx: 620, r: 18, delay: 0.6, dur: 3.4 },
+  { cx: 780, r: 8, delay: 1.9, dur: 4.8 },
+  { cx: 890, r: 24, delay: 0.1, dur: 3.2 },
+  { cx: 1040, r: 14, delay: 1.5, dur: 4.0 },
+  { cx: 1180, r: 9, delay: 2.4, dur: 4.6 },
+  { cx: 1320, r: 22, delay: 0.8, dur: 3.5 },
+  { cx: 1460, r: 7, delay: 1.7, dur: 5.0 },
+  { cx: 1590, r: 16, delay: 0.4, dur: 3.7 },
+  { cx: 690, r: 11, delay: 2.8, dur: 4.2 },
+  { cx: 990, r: 20, delay: 2.0, dur: 3.6 },
+];
+
+function IntroSvgAnimation({ isFading }) {
+  return (
+    <svg
+      className={`intro-svg-scene ${isFading ? 'fading-out' : ''}`}
+      viewBox="0 0 1920 1080"
+      preserveAspectRatio="xMidYMid slice"
+    >
+      <defs>
+        {/* Ocean Depth Gradient */}
+        <linearGradient id="intro-ocean-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stopColor="#01529a" />
+          <stop offset="35%" stopColor="#0018B4" />
+          <stop offset="70%" stopColor="#021468" />
+          <stop offset="100%" stopColor="#040a1c" />
+        </linearGradient>
+
+        {/* Volumetric Light Beams */}
+        <linearGradient id="ray-grad-1" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#ffffff" stopOpacity="0.45" />
+          <stop offset="40%" stopColor="#01CCF3" stopOpacity="0.25" />
+          <stop offset="100%" stopColor="#0018B4" stopOpacity="0" />
+        </linearGradient>
+        <linearGradient id="ray-grad-2" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#ffffff" stopOpacity="0.35" />
+          <stop offset="50%" stopColor="#029EEB" stopOpacity="0.15" />
+          <stop offset="100%" stopColor="#0018B4" stopOpacity="0" />
+        </linearGradient>
+        <linearGradient id="ray-grad-3" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#01CCF3" stopOpacity="0.4" />
+          <stop offset="60%" stopColor="#0288D1" stopOpacity="0.1" />
+          <stop offset="100%" stopColor="#0018B4" stopOpacity="0" />
+        </linearGradient>
+
+        {/* Crystal Shard Gradients */}
+        <linearGradient id="shard-cyan" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#ffffff" stopOpacity="0.9" />
+          <stop offset="60%" stopColor="#01CCF3" stopOpacity="0.75" />
+          <stop offset="100%" stopColor="#0018B4" stopOpacity="0.4" />
+        </linearGradient>
+        <linearGradient id="shard-white" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
+          <stop offset="70%" stopColor="#b4e4ff" stopOpacity="0.65" />
+          <stop offset="100%" stopColor="#029EEB" stopOpacity="0.3" />
+        </linearGradient>
+        <linearGradient id="shard-red" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#ffffff" stopOpacity="0.9" />
+          <stop offset="50%" stopColor="#E03636" stopOpacity="0.8" />
+          <stop offset="100%" stopColor="#800b0b" stopOpacity="0.4" />
+        </linearGradient>
+
+        {/* Bubble Gradients */}
+        <radialGradient id="bubble-grad" cx="35%" cy="35%" r="65%">
+          <stop offset="0%" stopColor="#ffffff" stopOpacity="0.9" />
+          <stop offset="40%" stopColor="#80e2ff" stopOpacity="0.4" />
+          <stop offset="85%" stopColor="#01CCF3" stopOpacity="0.2" />
+          <stop offset="100%" stopColor="#0018B4" stopOpacity="0.6" />
+        </radialGradient>
+      </defs>
+
+      {/* 1. Deep Ocean Background */}
+      <rect width="1920" height="1080" fill="url(#intro-ocean-grad)" />
+
+      {/* 2. Concentric Expanding Ripple Rings */}
+      <g opacity="0.6">
+        <ellipse className="ripple-ring" cx="960" cy="540" rx="40" ry="20" fill="none" stroke="#01CCF3" strokeWidth="2.5" style={{ animationDelay: '0s' }} />
+        <ellipse className="ripple-ring" cx="960" cy="540" rx="40" ry="20" fill="none" stroke="#ffffff" strokeWidth="1.5" style={{ animationDelay: '1.2s' }} />
+        <ellipse className="ripple-ring" cx="960" cy="540" rx="40" ry="20" fill="none" stroke="#029EEB" strokeWidth="2" style={{ animationDelay: '2.4s' }} />
+      </g>
+
+      {/* 3. Volumetric Shimmering Light Beams */}
+      <g>
+        <polygon className="light-ray-1" points="250,0 550,0 800,1080 300,1080" fill="url(#ray-grad-1)" />
+        <polygon className="light-ray-2" points="750,0 1150,0 1500,1080 900,1080" fill="url(#ray-grad-2)" />
+        <polygon className="light-ray-3" points="1250,0 1680,0 1900,1080 1350,1080" fill="url(#ray-grad-3)" />
+      </g>
+
+      {/* 4. Underwater Floating Protagonist Silhouette & Wavy Hair Group */}
+      <g className="intro-protagonist-group" transform="translate(180, 40) scale(1.05)">
+        <image href="/vectors-anim/Property 1=Vectors-1.svg" x="135" y="-7" width="754" height="1054" opacity="0.92" />
+        <g className="animated-hair-group" style={{ opacity: 0.95 }}>
+          <image href="/dark-blue-hair.svg" x="118.78" y="654" width="599" height="441" />
+        </g>
+      </g>
+
+      {/* 5. Floating Persona 3 Reload Crystal Glass Shards */}
+      <g>
+        {shardsData.map((s, idx) => (
+          <g
+            key={idx}
+            className="shard"
+            style={{
+              animationDelay: `${s.delay}s`,
+              animationDuration: `${s.dur}s`,
+              transformOrigin: `${s.x}px 500px`
+            }}
+          >
+            <polygon
+              points={s.points}
+              transform={`translate(${s.x}, 0) scale(${s.scale})`}
+              fill={s.fill}
+              stroke="#ffffff"
+              strokeWidth="0.8"
+              strokeOpacity="0.8"
+            />
+          </g>
+        ))}
+      </g>
+
+      {/* 6. Rising Oxygen Bubbles */}
+      <g>
+        {bubblesData.map((b, idx) => (
+          <g
+            key={idx}
+            className="bubble"
+            style={{
+              animationDelay: `${b.delay}s`,
+              animationDuration: `${b.dur}s`
+            }}
+          >
+            <circle
+              cx={b.cx}
+              cy={0}
+              r={b.r}
+              fill="url(#bubble-grad)"
+              stroke="#ffffff"
+              strokeWidth="0.75"
+              strokeOpacity="0.7"
+            />
+            {/* Sparkle Reflection */}
+            <circle
+              cx={b.cx - b.r * 0.3}
+              cy={-b.r * 0.3}
+              r={b.r * 0.22}
+              fill="#ffffff"
+              opacity="0.85"
+            />
+          </g>
+        ))}
+      </g>
+    </svg>
+  );
+}
+
 function IntroSequence({ onComplete, onFadeStart }) {
   const [waterSliding, setWaterSliding] = useState(false);
   const [loaderFading, setLoaderFading] = useState(false);
-  const [videoFading, setVideoFading] = useState(false);
-  const introVideoRef = useRef(null);
+  const [sceneFading, setSceneFading] = useState(false);
 
   // Phase 1: After 0.6s, start sliding water down
   useEffect(() => {
@@ -15,52 +185,43 @@ function IntroSequence({ onComplete, onFadeStart }) {
     return () => clearTimeout(timer);
   }, []);
 
-  // Phase 1.5: Smoothly fade out loader overlay revealing playing video underneath
+  // Phase 1.5: Smoothly fade out loader overlay revealing SVG underwater animation
   useEffect(() => {
     if (!waterSliding) return;
     const fadeTimer = setTimeout(() => {
       setLoaderFading(true);
-      if (introVideoRef.current) {
-        introVideoRef.current.play().catch(() => {});
-      }
     }, 2200);
 
     return () => clearTimeout(fadeTimer);
   }, [waterSliding]);
 
-  // Phase 2: Fade out 5 seconds prior to video end (3 seconds earlier)
-  const handleTimeUpdate = useCallback(() => {
-    if (introVideoRef.current) {
-      const duration = introVideoRef.current.duration;
-      const currentTime = introVideoRef.current.currentTime;
-      if (duration && duration - currentTime <= 5.0 && !videoFading) {
-        setVideoFading(true);
-        if (onFadeStart) onFadeStart();
-        setTimeout(() => {
-          onComplete();
-        }, 750);
-      }
-    }
-  }, [videoFading, onFadeStart, onComplete]);
+  // Phase 2: Fade out SVG intro scene and trigger menu fade-in
+  useEffect(() => {
+    if (!loaderFading) return;
 
-  const handleIntroEnded = useCallback(() => {
-    onComplete();
-  }, [onComplete]);
+    // After 2.5s of SVG animation, trigger menu fade-in & intro fade-out
+    const fadeOutTimer = setTimeout(() => {
+      setSceneFading(true);
+      if (onFadeStart) onFadeStart();
+    }, 2500);
+
+    // Complete intro after 750ms transition
+    const completeTimer = setTimeout(() => {
+      onComplete();
+    }, 3250);
+
+    return () => {
+      clearTimeout(fadeOutTimer);
+      clearTimeout(completeTimer);
+    };
+  }, [loaderFading, onFadeStart, onComplete]);
 
   return (
     <div id="intro-sequence">
-      {/* Intro video playing underneath with strong fade out after 1s */}
-      <video
-        ref={introVideoRef}
-        className={`intro-video ${videoFading ? 'strong-fade-out' : ''}`}
-        src="/intro.mp4"
-        muted
-        playsInline
-        onTimeUpdate={handleTimeUpdate}
-        onEnded={handleIntroEnded}
-      />
+      {/* Dynamic Underwater SVG Scene */}
+      <IntroSvgAnimation isFading={sceneFading} />
 
-      {/* Loading & Reveal overlay that fades out to reveal the video */}
+      {/* Loading & Reveal overlay that fades out to reveal the SVG scene */}
       <div id="water-reveal" className={loaderFading ? 'fade-out' : ''}>
         {/* White background with black text underneath */}
         <div className="water-text-layer">
