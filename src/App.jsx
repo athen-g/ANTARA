@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 
 /* ── P3R Multi-Phase Cinematic Intro ── */
-function IntroSequence({ onComplete }) {
+function IntroSequence({ onComplete, onFadeStart }) {
   const [waterSliding, setWaterSliding] = useState(false);
   const [loaderFading, setLoaderFading] = useState(false);
   const [videoFading, setVideoFading] = useState(false);
@@ -35,12 +35,13 @@ function IntroSequence({ onComplete }) {
       const currentTime = introVideoRef.current.currentTime;
       if (duration && duration - currentTime <= 5.0 && !videoFading) {
         setVideoFading(true);
+        if (onFadeStart) onFadeStart();
         setTimeout(() => {
           onComplete();
         }, 750);
       }
     }
-  }, [videoFading, onComplete]);
+  }, [videoFading, onFadeStart, onComplete]);
 
   const handleIntroEnded = useCallback(() => {
     onComplete();
@@ -341,9 +342,15 @@ function App() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [currentFrame, setCurrentFrame] = useState(1);
   const [introComplete, setIntroComplete] = useState(false);
+  const [menuFadeIn, setMenuFadeIn] = useState(false);
+
+  const handleFadeStart = useCallback(() => {
+    setMenuFadeIn(true);
+  }, []);
 
   const handleIntroComplete = useCallback(() => {
     setIntroComplete(true);
+    setMenuFadeIn(true);
   }, []);
 
   // Background liquid vectors frame loop with 8-second delay between cycles
@@ -397,10 +404,17 @@ function App() {
     return `/vectors-anim/Property 1=Vectors-${frame}.svg`;
   };
 
+  const isMenuVisible = menuFadeIn || introComplete;
+
   return (
     <div id="app">
       {/* Cinematic Intro Sequence (Transparent container over live menu) */}
-      {!introComplete && <IntroSequence onComplete={handleIntroComplete} />}
+      {!introComplete && (
+        <IntroSequence
+          onComplete={handleIntroComplete}
+          onFadeStart={handleFadeStart}
+        />
+      )}
 
       {/* Water overlay + Image5 blend (live under intro and menu) */}
       <WaterOverlay />
@@ -447,15 +461,16 @@ function App() {
       </div>
 
       {/* Rotated dynamic left index (01 to 09) and MAIN vertical text */}
-      <div className="dynamic-left-index">
+      <div className={`dynamic-left-index ${isMenuVisible ? 'menu-fade-in' : 'menu-hidden'}`}>
         {String(activeIndex + 1).padStart(2, '0')}
       </div>
-      <div className="dynamic-left-main">
+      <div className={`dynamic-left-main ${isMenuVisible ? 'menu-fade-in' : 'menu-hidden'}`}>
         MAIN
       </div>
 
       {/* Absolute Coordinate SVG Canvas with container rectangles */}
       <svg
+        className={`menu-canvas ${isMenuVisible ? 'menu-fade-in' : 'menu-hidden'}`}
         width="1920"
         height="1080"
         viewBox="0 0 1920 1080"

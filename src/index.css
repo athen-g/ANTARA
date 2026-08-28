@@ -411,3 +411,17 @@ html {
   line-height: 1;
   text-transform: uppercase;
 }
+
+/* ═══════════════════════════════════════════════
+   MENU FADE-IN SYNCHRONIZATION WITH INTRO
+   ═══════════════════════════════════════════════ */
+
+.menu-hidden {
+  opacity: 0 !important;
+  pointer-events: none;
+}
+
+.menu-fade-in {
+  opacity: 1 !important;
+  transition: opacity 0.75s ease-in-out;
+}
