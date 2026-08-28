@@ -518,7 +518,6 @@ function App() {
                 transform={`translate(${containerX}, ${containerY})`}
                 style={{
                   pointerEvents: 'auto',
-                  isolation: 'isolate',
                   transition: 'transform 0.25s cubic-bezier(0.25, 1, 0.5, 1)'
                 }}
               >
