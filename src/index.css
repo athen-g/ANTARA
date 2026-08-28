@@ -187,24 +187,18 @@
   mask-repeat: no-repeat;
 }
 
-/* Image 5 Asset: Screen blend mode overlay, masked strictly to blue ocean */
+/* Image 5 Asset: Screen blend mode overlay */
 .image5-overlay {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  top: 141px;
+  left: -89px;
+  width: 1914px;
+  height: 939px;
+  transform: rotate(-4.707deg);
   z-index: 5;
   pointer-events: none;
   mix-blend-mode: screen;
   opacity: 0.75;
-  -webkit-mask-image: url(/blue.svg);
-  mask-image: url(/blue.svg);
-  -webkit-mask-size: 100% 100%;
-  mask-size: 100% 100%;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
 }
 
 body,
