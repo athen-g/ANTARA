@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 const EYE_FRAMES = [
   '/skill/eye-right.svg',   // Frame 1: Initial resting open eye (no number)
@@ -51,11 +50,10 @@ function SkillWaterOverlay() {
 }
 
 export default function SkillPage({ onBack, isEntering = false }) {
-  const navigate = useNavigate();
   const [activeProjectIndex, setActiveProjectIndex] = useState(0);
   const [eyeFrameIndex, setEyeFrameIndex] = useState(0);
 
-  const handleBack = onBack || (() => navigate('/'));
+  const handleBack = onBack || (() => {});
 
   // 10-Frame Right Eye Blinking Loop at 24fps with 8-second delay
   useEffect(() => {
