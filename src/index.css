@@ -625,17 +625,19 @@ html {
 /* 10-Frame Blinking Right Eye overlay over vector eye socket */
 .skill-eye-container {
   position: absolute;
-  left: 523px;
-  top: 928px;
-  width: 108px;
-  height: 81px;
+  left: 527px;
+  top: 934px;
+  width: 34.67px;
+  height: 28px;
   z-index: 5;
+  pointer-events: none;
 }
 
 .skill-eye-frame {
   width: 100%;
   height: 100%;
   display: block;
+  object-fit: contain;
 }
 
 /* 5. Rotating Lens Flare Light Rays around the Evoker */
