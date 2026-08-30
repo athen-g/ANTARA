@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import BlobTransition from './components/BlobTransition';
+import SkillPage from './components/SkillPage';
 
 /* ── P3R Multi-Phase Cinematic Intro ── */
 function IntroSequence({ onComplete, onFadeStart }) {
@@ -344,6 +346,10 @@ function App() {
   const [introComplete, setIntroComplete] = useState(false);
   const [menuFadeIn, setMenuFadeIn] = useState(false);
 
+  // View state: 'menu' | 'transitioning' | 'skill'
+  const [viewState, setViewState] = useState('menu');
+  const [transitionOrigin, setTransitionOrigin] = useState({ x: 960, y: 540 });
+
   const handleFadeStart = useCallback(() => {
     setMenuFadeIn(true);
   }, []);
@@ -384,18 +390,37 @@ function App() {
     };
   }, []);
 
+  // Confirm selection (e.g. Pressing Enter on SKILL)
+  const handleConfirm = useCallback(() => {
+    if (viewState !== 'menu') return;
+    const currentOption = menuOptions[activeIndex];
+    if (currentOption && currentOption.name === 'SKILL') {
+      const originX = (currentOption.selectedX || 400) + 200;
+      const originY = (currentOption.baseY || 100) + (currentOption.restingOffset || 0) - (currentOption.selectedUpshift || 0) + 50;
+      setTransitionOrigin({ x: originX, y: originY });
+      setViewState('transitioning');
+    }
+  }, [viewState, activeIndex]);
+
   // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e) => {
+      if (viewState !== 'menu') return;
+
       if (e.key === 'ArrowDown') {
+        e.preventDefault();
         setActiveIndex((prev) => Math.min(prev + 1, 8));
       } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
         setActiveIndex((prev) => Math.max(prev - 1, 0));
+      } else if (e.key === 'Enter' || e.key === ' ' || e.key === 'b' || e.key === 'B') {
+        e.preventDefault();
+        handleConfirm();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  }, [viewState, handleConfirm]);
 
   const getVectorFrameSrc = (frame) => {
     if (frame === 10) {
@@ -407,166 +432,197 @@ function App() {
   const isMenuVisible = menuFadeIn || introComplete;
 
   return (
-    <div id="app">
-      {/* Cinematic Intro Sequence (Transparent container over live menu) */}
-      {!introComplete && (
-        <IntroSequence
-          onComplete={handleIntroComplete}
-          onFadeStart={handleFadeStart}
-        />
+    <div id="app" className={`app-root view-${viewState}`}>
+      {/* ── SKILL PAGE VIEW ── */}
+      {viewState === 'skill' && (
+        <SkillPage onBack={() => setViewState('menu')} />
       )}
 
-      {/* Water overlay + Image5 blend (live under intro and menu) */}
-      <WaterOverlay />
+      {/* ── TWO-PHASE BLUE BLOB TRANSITION ── */}
+      {viewState === 'transitioning' && (
+        <BlobTransition
+          originX={transitionOrigin.x}
+          originY={transitionOrigin.y}
+          onComplete={() => setViewState('skill')}
+        >
+          <SkillPage onBack={() => setViewState('menu')} isEntering={true} />
+        </BlobTransition>
+      )}
 
-      {/* White page background with the inline blue SVG background */}
-      <BlueBackground />
-
-      {/* Preload all animation frames to prevent repeated filesystem requests */}
-      <div style={{ display: 'none' }}>
-        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((f) => (
-          <img key={f} src={getVectorFrameSrc(f)} alt="" />
-        ))}
-      </div>
-
-      {/* Single protagonist vector sequence instance */}
-      <div className="vectors-bg">
-        <img
-          id="vector-frame"
-          src={getVectorFrameSrc(currentFrame)}
-          alt="Protagonist Vector"
-        />
-      </div>
-
-      {/* Combined Unified Animated Hair Layer (Moving as one interlocking jigsaw piece) */}
-      <div className="animated-hair-group">
-        <div className="dark-blue-hair-piece">
-          <img src="/dark-blue-hair.svg" alt="Dark Blue Hair" />
-        </div>
-        <div className="light-blue-hair-piece">
-          <svg
-            viewBox="0 0 754 1054"
-            style={{
-              height: '100%',
-              width: 'auto',
-              display: 'block'
-            }}
-          >
-            <g transform="translate(0, 590.224)">
-              <path d="M105.673 236C102.243 225.876 101.68 219.618 100.173 209.5C98.3588 197.319 98.1731 179.001 98.1731 179.001C98.1731 179.001 90.4092 197.77 88.6731 210.501C87.1731 221.5 87.1731 226.5 83.6731 235.501C83.6731 235.501 82.1731 254.5 81.1731 263.5C81.1731 263.5 79.854 278.296 79.1731 287.5C78.3514 298.606 79.3437 317.342 78.6731 316C77.6731 313.999 67.6731 281 59.6731 260.001C52.7477 241.822 50.0086 230.842 45.1731 212C41.892 199.215 38.9516 182.249 36.8399 169.972L33.6731 154.001C33.1731 154.001 31.4174 165.254 30.1731 172.501C28.7996 180.5 29.1731 185 28.1731 185.001C27.7429 185.001 27.0811 175.78 26.3672 165.337L23.6731 136.001L24.6731 131.5L26.1731 123L37.1731 146L49.6731 183.5L45.1731 127.5L43.1731 70L40.6731 53.5L45.1731 64.5L48.1731 28L59.6731 0L65.1731 30.5L81.1731 57L96.6731 77L94.1731 58L114.673 71.5L102.173 113V140.5L105.673 172.501L112.673 197.5L107.673 217L105.673 236Z" fill="#01CCF3"/>
-              <path d="M17.6731 270.5C21.1731 258.499 20.4041 261.998 20.6731 249.5C17.1731 252 15.6588 238.725 8.67309 226.5C4.67309 219.5 0.173086 200 0.173086 200C-0.326908 202.999 0.33317 223.5 1.17308 231.001C2.01298 238.502 6.17308 260.001 9.17308 280.501C12.8223 305.437 17.6731 345.5 19.1731 344.001C20.6731 342.502 16.2268 329.606 16.6731 320.316C17.6731 299.5 17.6731 270.5 17.6731 270.5Z" fill="#01CCF3"/>
-            </g>
-          </svg>
-        </div>
-      </div>
-
-      {/* Rotated dynamic left index (01 to 09) and MAIN vertical text */}
-      <div className={`dynamic-left-index ${isMenuVisible ? 'menu-fade-in' : 'menu-hidden'}`}>
-        {String(activeIndex + 1).padStart(2, '0')}
-      </div>
-      <div className={`dynamic-left-main ${isMenuVisible ? 'menu-fade-in' : 'menu-hidden'}`}>
-        MAIN
-      </div>
-
-      {/* Absolute Coordinate SVG Canvas with container rectangles */}
-      <svg
-        className={`menu-canvas ${isMenuVisible ? 'menu-fade-in' : 'menu-hidden'}`}
-        width="1920"
-        height="1080"
-        viewBox="0 0 1920 1080"
+      {/* ── MAIN MENU VIEW ── */}
+      <div
+        className={`main-menu-stage ${viewState === 'transitioning' ? 'menu-magnifying' : ''}`}
         style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '1920px',
-          height: '1080px',
-          zIndex: 7,
-          pointerEvents: 'none'
+          transformOrigin: `${transitionOrigin.x}px ${transitionOrigin.y}px`,
+          display: viewState === 'skill' ? 'none' : 'block'
         }}
       >
-        <g transform="translate(0, 50) scale(1.1)">
-          {[...menuOptions].reverse().map((option) => {
-            const index = menuOptions.findIndex((o) => o.name === option.name);
-            const isActive = activeIndex === index;
-            const typography = isActive ? option.selected : option.unselected;
+        {/* Cinematic Intro Sequence (Transparent container over live menu) */}
+        {!introComplete && (
+          <IntroSequence
+            onComplete={handleIntroComplete}
+            onFadeStart={handleFadeStart}
+          />
+        )}
 
-            // 1. Calculate parent container coordinate (X, Y)
-            let containerX = option.baseX;
-            let containerY;
+        {/* Water overlay + Image5 blend (live under intro and menu) */}
+        <WaterOverlay />
 
-            if (isActive) {
-              containerX = option.selectedX;
-              containerY = option.baseY + option.restingOffset - option.selectedUpshift;
-            } else if (index < activeIndex) {
-              containerX = option.baseX;
-              containerY = option.baseY + option.restingOffset - option.passedUpshift;
-            } else {
-              containerX = option.baseX;
-              containerY = option.baseY + option.restingOffset;
-            }
+        {/* White page background with the inline blue SVG background */}
+        <BlueBackground />
 
-            // 2. Setup text relative offset inside container
-            const textOffset = isActive ? selectedTextOffsets[option.name] : { x: 0, y: 0 };
+        {/* Preload all animation frames to prevent repeated filesystem requests */}
+        <div style={{ display: 'none' }}>
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((f) => (
+            <img key={f} src={getVectorFrameSrc(f)} alt="" />
+          ))}
+        </div>
 
-            // 3. Setup backdrop elements (Back / Front triangles) relative positions
-            const backOffset = isActive ? backTriangleOffsets[option.name] : null;
-            const frontOffset = isActive ? frontTriangleOffsets[option.name] : null;
+        {/* Single protagonist vector sequence instance */}
+        <div className="vectors-bg">
+          <img
+            id="vector-frame"
+            src={getVectorFrameSrc(currentFrame)}
+            alt="Protagonist Vector"
+          />
+        </div>
 
-            return (
-              <g
-                key={option.name}
-                transform={`translate(${containerX}, ${containerY})`}
-                style={{
-                  pointerEvents: 'auto',
-                  transition: 'transform 0.25s cubic-bezier(0.25, 1, 0.5, 1)'
-                }}
-              >
-                {/* 1. White Backdrop Triangle (BOTTOM) */}
-                {isActive && backOffset && (
-                  <path
-                    d={option.backPath}
-                    fill="#FFF"
-                    transform={`translate(${backOffset.x || 0}, ${backOffset.y || 0})`}
-                  />
-                )}
-
-                {/* 2. Black Text (MIDDLE) */}
-                <text
-                  x={0}
-                  y={0}
-                  fill={typography.fill}
-                  dominantBaseline="hanging"
-                  transform={`translate(${textOffset.x}, ${textOffset.y}) skewX(${typography.skewX}) skewY(${typography.skewY})`}
-                  style={{
-                    fontFamily: "'Archivo Black', sans-serif",
-                    fontWeight: 'normal',
-                    fontSize: `${typography.fontSize}px`,
-                    letterSpacing: typography.letterSpacing,
-                    transition: 'all 0.25s cubic-bezier(0.25, 1, 0.5, 1)',
-                    cursor: 'pointer',
-                    userSelect: 'none'
-                  }}
-                  onClick={() => setActiveIndex(index)}
-                >
-                  {option.name}
-                </text>
-
-                {/* 3. Red Front Triangle with Lighten Blend Mode (TOP) */}
-                {isActive && frontOffset && (
-                  <g transform={`translate(${frontOffset.x || 0}, ${frontOffset.y || 0})`}>
-                    <path
-                      className="front-triangle-path"
-                      d={option.frontPath}
-                      fill="#E03636"
-                      style={{ mixBlendMode: 'lighten' }}
-                    />
-                  </g>
-                )}
+        {/* Combined Unified Animated Hair Layer */}
+        <div className="animated-hair-group">
+          <div className="dark-blue-hair-piece">
+            <img src="/dark-blue-hair.svg" alt="Dark Blue Hair" />
+          </div>
+          <div className="light-blue-hair-piece">
+            <svg
+              viewBox="0 0 754 1054"
+              style={{
+                height: '100%',
+                width: 'auto',
+                display: 'block'
+              }}
+            >
+              <g transform="translate(0, 590.224)">
+                <path d="M105.673 236C102.243 225.876 101.68 219.618 100.173 209.5C98.3588 197.319 98.1731 179.001 98.1731 179.001C98.1731 179.001 90.4092 197.77 88.6731 210.501C87.1731 221.5 87.1731 226.5 83.6731 235.501C83.6731 235.501 82.1731 254.5 81.1731 263.5C81.1731 263.5 79.854 278.296 79.1731 287.5C78.3514 298.606 79.3437 317.342 78.6731 316C77.6731 313.999 67.6731 281 59.6731 260.001C52.7477 241.822 50.0086 230.842 45.1731 212C41.892 199.215 38.9516 182.249 36.8399 169.972L33.6731 154.001C33.1731 154.001 31.4174 165.254 30.1731 172.501C28.7996 180.5 29.1731 185 28.1731 185.001C27.7429 185.001 27.0811 175.78 26.3672 165.337L23.6731 136.001L24.6731 131.5L26.1731 123L37.1731 146L49.6731 183.5L45.1731 127.5L43.1731 70L40.6731 53.5L45.1731 64.5L48.1731 28L59.6731 0L65.1731 30.5L81.1731 57L96.6731 77L94.1731 58L114.673 71.5L102.173 113V140.5L105.673 172.501L112.673 197.5L107.673 217L105.673 236Z" fill="#01CCF3"/>
+                <path d="M17.6731 270.5C21.1731 258.499 20.4041 261.998 20.6731 249.5C17.1731 252 15.6588 238.725 8.67309 226.5C4.67309 219.5 0.173086 200 0.173086 200C-0.326908 202.999 0.33317 223.5 1.17308 231.001C2.01298 238.502 6.17308 260.001 9.17308 280.501C12.8223 305.437 17.6731 345.5 19.1731 344.001C20.6731 342.502 16.2268 329.606 16.6731 320.316C17.6731 299.5 17.6731 270.5 17.6731 270.5Z" fill="#01CCF3"/>
               </g>
-            );
-          })}
-        </g>
-      </svg>
+            </svg>
+          </div>
+        </div>
+
+        {/* Rotated dynamic left index (01 to 09) and MAIN vertical text */}
+        <div className={`dynamic-left-index ${isMenuVisible ? 'menu-fade-in' : 'menu-hidden'}`}>
+          {String(activeIndex + 1).padStart(2, '0')}
+        </div>
+        <div className={`dynamic-left-main ${isMenuVisible ? 'menu-fade-in' : 'menu-hidden'}`}>
+          MAIN
+        </div>
+
+        {/* Absolute Coordinate SVG Canvas with container rectangles */}
+        <svg
+          className={`menu-canvas ${isMenuVisible ? 'menu-fade-in' : 'menu-hidden'}`}
+          width="1920"
+          height="1080"
+          viewBox="0 0 1920 1080"
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '1920px',
+            height: '1080px',
+            zIndex: 7,
+            pointerEvents: 'none'
+          }}
+        >
+          <g transform="translate(0, 50) scale(1.1)">
+            {[...menuOptions].reverse().map((option) => {
+              const index = menuOptions.findIndex((o) => o.name === option.name);
+              const isActive = activeIndex === index;
+              const typography = isActive ? option.selected : option.unselected;
+
+              // 1. Calculate parent container coordinate (X, Y)
+              let containerX = option.baseX;
+              let containerY;
+
+              if (isActive) {
+                containerX = option.selectedX;
+                containerY = option.baseY + option.restingOffset - option.selectedUpshift;
+              } else if (index < activeIndex) {
+                containerX = option.baseX;
+                containerY = option.baseY + option.restingOffset - option.passedUpshift;
+              } else {
+                containerX = option.baseX;
+                containerY = option.baseY + option.restingOffset;
+              }
+
+              // 2. Setup text relative offset inside container
+              const textOffset = isActive ? selectedTextOffsets[option.name] : { x: 0, y: 0 };
+
+              // 3. Setup backdrop elements (Back / Front triangles) relative positions
+              const backOffset = isActive ? backTriangleOffsets[option.name] : null;
+              const frontOffset = isActive ? frontTriangleOffsets[option.name] : null;
+
+              return (
+                <g
+                  key={option.name}
+                  transform={`translate(${containerX}, ${containerY})`}
+                  style={{
+                    pointerEvents: 'auto',
+                    transition: 'transform 0.25s cubic-bezier(0.25, 1, 0.5, 1)'
+                  }}
+                >
+                  {/* 1. White Backdrop Triangle (BOTTOM) */}
+                  {isActive && backOffset && (
+                    <path
+                      d={option.backPath}
+                      fill="#FFF"
+                      transform={`translate(${backOffset.x || 0}, ${backOffset.y || 0})`}
+                    />
+                  )}
+
+                  {/* 2. Black Text (MIDDLE) */}
+                  <text
+                    x={0}
+                    y={0}
+                    fill={typography.fill}
+                    dominantBaseline="hanging"
+                    transform={`translate(${textOffset.x}, ${textOffset.y}) skewX(${typography.skewX}) skewY(${typography.skewY})`}
+                    style={{
+                      fontFamily: "'Archivo Black', sans-serif",
+                      fontWeight: 'normal',
+                      fontSize: `${typography.fontSize}px`,
+                      letterSpacing: typography.letterSpacing,
+                      transition: 'all 0.25s cubic-bezier(0.25, 1, 0.5, 1)',
+                      cursor: 'pointer',
+                      userSelect: 'none'
+                    }}
+                    onClick={() => {
+                      if (activeIndex === index) {
+                        handleConfirm();
+                      } else {
+                        setActiveIndex(index);
+                      }
+                    }}
+                  >
+                    {option.name}
+                  </text>
+
+                  {/* 3. Red Front Triangle with Lighten Blend Mode (TOP) */}
+                  {isActive && frontOffset && (
+                    <g transform={`translate(${frontOffset.x || 0}, ${frontOffset.y || 0})`}>
+                      <path
+                        className="front-triangle-path"
+                        d={option.frontPath}
+                        fill="#E03636"
+                        style={{ mixBlendMode: 'lighten' }}
+                      />
+                    </g>
+                  )}
+                </g>
+              );
+            })}
+          </g>
+        </svg>
+      </div>
     </div>
   );
 }
