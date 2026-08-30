@@ -532,6 +532,50 @@ body {
 }
 
 /* ═══════════════════════════════════════════════
+   DOUBLE CIRCLE REVEAL (Return to Menu)
+   ═══════════════════════════════════════════════ */
+.double-circle-transition-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1920px;
+  height: 1080px;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.double-circle-revealed-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  will-change: clip-path;
+}
+
+@keyframes circleRevealGrow {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.double-circle-bl {
+  transform-origin: 380px 940px;
+  animation: circleRevealGrow 0.65s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  will-change: transform;
+}
+
+.double-circle-tr {
+  transform-origin: 1450px 180px;
+  animation: circleRevealGrow 0.65s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  will-change: transform;
+}
+
+/* ═══════════════════════════════════════════════
    SKILL PAGE (Figma 103:3303)
    ═══════════════════════════════════════════════ */
 
