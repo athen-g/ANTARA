@@ -273,6 +273,11 @@ function App() {
         <img id="vector-frame" src={getVectorFrameSrc(currentFrame)} alt="Protagonist Vector" />
       </div>
 
+      {/* Protagonist Nose and Mouth Overlay (Figma Node 136:225) */}
+      <div className="nose-and-mouth-wrapper">
+        <img src="/nose and mouth.svg" alt="Protagonist Nose and Mouth" className="nose-and-mouth-img" />
+      </div>
+
       <div className="animated-hair-group">
         <div className="dark-blue-hair-piece">
           <img src="/dark-blue-hair.svg" alt="Dark Blue Hair" />
