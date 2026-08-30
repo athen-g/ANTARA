@@ -203,17 +203,49 @@
   opacity: 0.75;
 }
 
-body,
-html {
-  width: 100%;
-  height: 100%;
+html,
+body {
+  width: 100vw;
+  height: 100vh;
   overflow: hidden;
   background-color: #000000;
-  /* Letterbox background */
   font-family: 'Outfit', sans-serif;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ── 16:9 Viewport Letterbox ── */
+.viewport-letterbox {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #000;
+  overflow: hidden;
+}
+
+/* Inner 1920×1080 scaler — JS sets transform + left/top to center */
+.app-scaler {
+  position: absolute;
+  width: 1920px;
+  height: 1080px;
+  background-color: white;
+  overflow: hidden;
+  box-shadow: 0 10px 60px rgba(0, 0, 0, 0.9);
+}
+
+/* app-root fills the scaler */
+.app-root {
+  position: relative;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
 }
 
 #app {
@@ -222,7 +254,6 @@ html {
   height: 1080px;
   overflow: hidden;
   background-color: white;
-  /* Plain white base page background */
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
 }
 
@@ -516,6 +547,36 @@ html {
   z-index: 10;
 }
 
+/* Water overlay video on Skill page — same as main menu */
+.skill-water-overlay-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 9;
+  pointer-events: none;
+  mix-blend-mode: lighten;
+  opacity: 1;
+}
+
+/* Image 6 overlay — Figma node 103:3322: left:173px, top:-228px, 2085x1414px,
+   mix-blend-mode:lighten, scaleY(-1) + rotate(10.6deg) */
+.skill-image6-overlay {
+  position: absolute;
+  left: 173px;
+  top: -228px;
+  width: 2085.915px;
+  height: 1414.784px;
+  transform: scaleY(-1) rotate(10.6deg);
+  transform-origin: center center;
+  mix-blend-mode: lighten;
+  opacity: 0.6;
+  z-index: 8;
+  pointer-events: none;
+}
+
 /* Falling in animation for Skill Page elements */
 @keyframes skillFallIn {
   0% {
@@ -650,6 +711,7 @@ html {
   height: 1600.523px;
   z-index: 6;
   pointer-events: none;
+  overflow: visible;
   transform-origin: 1000px 735px;
 }
 

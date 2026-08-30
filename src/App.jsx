@@ -1,6 +1,34 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import BlobTransition from './components/BlobTransition';
 import SkillPage from './components/SkillPage';
+
+/* ── 16:9 Viewport Scaler Hook ── */
+function useViewportScale() {
+  const [scale, setScale] = useState(1);
+  const [offset, setOffset] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const DESIGN_W = 1920;
+    const DESIGN_H = 1080;
+
+    const compute = () => {
+      const scaleX = window.innerWidth / DESIGN_W;
+      const scaleY = window.innerHeight / DESIGN_H;
+      const s = Math.min(scaleX, scaleY);
+      const ox = (window.innerWidth - DESIGN_W * s) / 2;
+      const oy = (window.innerHeight - DESIGN_H * s) / 2;
+      setScale(s);
+      setOffset({ x: ox, y: oy });
+    };
+
+    compute();
+    window.addEventListener('resize', compute);
+    return () => window.removeEventListener('resize', compute);
+  }, []);
+
+  return { scale, offset };
+}
 
 /* ── P3R Multi-Phase Cinematic Intro ── */
 function IntroSequence({ onComplete, onFadeStart }) {
@@ -340,13 +368,15 @@ function BlueBackground() {
   );
 }
 
-function App() {
+/* ── Main Menu Page ── */
+function MenuPage() {
+  const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState(0);
   const [currentFrame, setCurrentFrame] = useState(1);
   const [introComplete, setIntroComplete] = useState(false);
   const [menuFadeIn, setMenuFadeIn] = useState(false);
 
-  // View state: 'menu' | 'transitioning' | 'skill'
+  // View state for blob transition
   const [viewState, setViewState] = useState('menu');
   const [transitionOrigin, setTransitionOrigin] = useState({ x: 960, y: 540 });
 
@@ -433,19 +463,14 @@ function App() {
 
   return (
     <div id="app" className={`app-root view-${viewState}`}>
-      {/* ── SKILL PAGE VIEW ── */}
-      {viewState === 'skill' && (
-        <SkillPage onBack={() => setViewState('menu')} />
-      )}
-
       {/* ── TWO-PHASE BLUE BLOB TRANSITION ── */}
       {viewState === 'transitioning' && (
         <BlobTransition
           originX={transitionOrigin.x}
           originY={transitionOrigin.y}
-          onComplete={() => setViewState('skill')}
+          onComplete={() => navigate('/skill')}
         >
-          <SkillPage onBack={() => setViewState('menu')} isEntering={true} />
+          <SkillPage onBack={() => navigate('/')} isEntering={true} />
         </BlobTransition>
       )}
 
@@ -454,7 +479,6 @@ function App() {
         className={`main-menu-stage ${viewState === 'transitioning' ? 'menu-magnifying' : ''}`}
         style={{
           transformOrigin: `${transitionOrigin.x}px ${transitionOrigin.y}px`,
-          display: viewState === 'skill' ? 'none' : 'block'
         }}
       >
         {/* Cinematic Intro Sequence (Transparent container over live menu) */}
@@ -622,6 +646,30 @@ function App() {
             })}
           </g>
         </svg>
+      </div>
+    </div>
+  );
+}
+
+/* ── Root App with Router + 16:9 Scaler ── */
+function App() {
+  const { scale, offset } = useViewportScale();
+
+  return (
+    <div className="viewport-letterbox">
+      <div
+        className="app-scaler"
+        style={{
+          transform: `scale(${scale})`,
+          transformOrigin: 'top left',
+          left: `${offset.x}px`,
+          top: `${offset.y}px`,
+        }}
+      >
+        <Routes>
+          <Route path="/" element={<MenuPage />} />
+          <Route path="/skill" element={<SkillPage onBack={() => window.history.back()} />} />
+        </Routes>
       </div>
     </div>
   );

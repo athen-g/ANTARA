@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const EYE_FRAMES = [
   '/skill/eye-right.svg',   // Frame 1: Initial resting open eye (no number)
@@ -19,9 +20,42 @@ const PROJECTS = [
   { id: 2, name: 'Project 3', top: 656 }
 ];
 
+/* Water Overlay for skill page — same looping blend as main menu */
+function SkillWaterOverlay() {
+  const videoRef = useRef(null);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.play().catch(() => {});
+    }
+  }, []);
+
+  return (
+    <>
+      <video
+        ref={videoRef}
+        className="skill-water-overlay-video"
+        src="/water-overlay.mp4"
+        muted
+        loop
+        playsInline
+      />
+      {/* Image 6: halftone texture overlay — flipped vertically & rotated 10.6deg per Figma node 103:3322 */}
+      <img
+        className="skill-image6-overlay"
+        src="/image 5.png"
+        alt="Skill Texture Overlay"
+      />
+    </>
+  );
+}
+
 export default function SkillPage({ onBack, isEntering = false }) {
+  const navigate = useNavigate();
   const [activeProjectIndex, setActiveProjectIndex] = useState(0);
   const [eyeFrameIndex, setEyeFrameIndex] = useState(0);
+
+  const handleBack = onBack || (() => navigate('/'));
 
   // 10-Frame Right Eye Blinking Loop at 24fps with 8-second delay
   useEffect(() => {
@@ -70,16 +104,20 @@ export default function SkillPage({ onBack, isEntering = false }) {
         setActiveProjectIndex((prev) => (prev < PROJECTS.length - 1 ? prev + 1 : 0));
       } else if (e.key === 'Escape' || e.key === 'Backspace') {
         e.preventDefault();
-        if (onBack) onBack();
+        handleBack();
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [onBack]);
+  }, [handleBack]);
 
   return (
     <div id="skill-page" className={`skill-page-container ${isEntering ? 'skill-entering' : ''}`}>
+
+      {/* Water overlay video + texture image — same as main menu */}
+      <SkillWaterOverlay />
+
       {/* 1. Protagonist Shadow Silhouette */}
       <div className="skill-shadow-layer skill-fall-elem">
         <img src="/skill/shadow.svg" alt="Shadow" className="skill-shadow-img" />
@@ -184,7 +222,7 @@ export default function SkillPage({ onBack, isEntering = false }) {
       <div className="skill-bottom-bar">
         <span className="skill-cmd-hint">Use a Skill</span>
         <div className="skill-cmd-buttons">
-          <button className="skill-btn-back" onClick={onBack} title="Back to Menu">
+          <button className="skill-btn-back" onClick={handleBack} title="Back to Menu">
             <span className="skill-btn-circle">Ⓐ</span> Close (Esc)
           </button>
         </div>
