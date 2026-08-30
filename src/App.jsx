@@ -254,13 +254,8 @@ function App() {
   const isMenuVisible = menuFadeIn || introComplete;
 
   // Render the Main Menu View
-  const renderMainMenuContent = (isTransitioning = false) => (
-    <div
-      className={`main-menu-stage ${isTransitioning ? 'menu-magnifying' : ''}`}
-      style={{
-        transformOrigin: `${transitionOrigin.x}px ${transitionOrigin.y}px`,
-      }}
-    >
+  const renderMainMenuContent = () => (
+    <div className="main-menu-stage">
       {!introComplete && (
         <IntroSequence onComplete={handleIntroComplete} onFadeStart={handleFadeStart} />
       )}
@@ -404,14 +399,14 @@ function App() {
             <>
               <SkillPage onBack={() => {}} />
               <DoubleCircleTransition onComplete={() => setViewState('menu')}>
-                {renderMainMenuContent(false)}
+                {renderMainMenuContent()}
               </DoubleCircleTransition>
             </>
           )}
 
           {/* ── MAIN MENU VIEW (Resting / Entering) ── */}
           {(viewState === 'menu' || viewState === 'transitioning') && (
-            renderMainMenuContent(viewState === 'transitioning')
+            renderMainMenuContent()
           )}
         </div>
       </div>
