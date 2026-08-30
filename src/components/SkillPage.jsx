@@ -113,9 +113,6 @@ export default function SkillPage({ onBack }) {
   return (
     <div id="skill-page" className="skill-page-container">
 
-      {/* Water overlay video + texture image — same as main menu */}
-      <SkillWaterOverlay />
-
       {/* 1. Protagonist Shadow Silhouette */}
       <div className="skill-shadow-layer skill-fall-elem">
         <img src="/skill/shadow.svg" alt="Shadow" className="skill-shadow-img" />
@@ -128,7 +125,10 @@ export default function SkillPage({ onBack }) {
         </div>
       </div>
 
-      {/* 3. Rotated 'SKILL' Typography */}
+      {/* Water overlay video + texture image — kept below the SKILL text */}
+      <SkillWaterOverlay />
+
+      {/* 3. Rotated 'SKILL' Typography (Above video overlay) */}
       <div className="skill-typo-wrapper skill-fall-elem">
         <div className="skill-typo-rotator">
           <span className="skill-typo-text">SKILL</span>

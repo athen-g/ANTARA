@@ -494,7 +494,7 @@ body {
   z-index: 10;
 }
 
-/* Water overlay video on Skill page — same as main menu */
+/* Water overlay video on Skill page — kept below SKILL typography */
 .skill-water-overlay-video {
   position: absolute;
   top: 0;
@@ -502,14 +502,13 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  z-index: 9;
+  z-index: 3;
   pointer-events: none;
   mix-blend-mode: lighten;
   opacity: 1;
 }
 
-/* Image 6 overlay — Figma node 103:3322: left:173px, top:-228px, 2085x1414px,
-   mix-blend-mode:lighten, scaleY(-1) + rotate(10.6deg) */
+/* Image 6 overlay — kept below SKILL typography */
 .skill-image6-overlay {
   position: absolute;
   left: 173px;
@@ -520,7 +519,7 @@ body {
   transform-origin: center center;
   mix-blend-mode: lighten;
   opacity: 0.6;
-  z-index: 8;
+  z-index: 3;
   pointer-events: none;
 }
 
@@ -582,7 +581,7 @@ body {
   height: 1260.766px;
 }
 
-/* 3. Rotated 'SKILL' Typography */
+/* 3. Rotated 'SKILL' Typography (Above video overlay) */
 .skill-typo-wrapper {
   position: absolute;
   left: -154px;
@@ -593,7 +592,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 3;
+  z-index: 6;
   pointer-events: none;
 }
 
@@ -656,7 +655,7 @@ body {
   top: -515px;
   width: 2006.407px;
   height: 1600.523px;
-  z-index: 6;
+  z-index: 7;
   pointer-events: none;
   overflow: visible;
   transform-origin: 1000px 735px;
@@ -688,7 +687,7 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 7;
+  z-index: 8;
   pointer-events: none;
 }
 
