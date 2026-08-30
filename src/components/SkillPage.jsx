@@ -215,16 +215,6 @@ export default function SkillPage({ onBack }) {
           <img src="/skill/skill-2.svg" alt="Skill 2" className="skill-card-img" />
         </div>
       </div>
-
-      {/* 8. Bottom-Right Navigation Command Bar */}
-      <div className="skill-bottom-bar">
-        <span className="skill-cmd-hint">Use a Skill</span>
-        <div className="skill-cmd-buttons">
-          <button className="skill-btn-back" onClick={handleBack} title="Back to Menu">
-            <span className="skill-btn-circle">Ⓐ</span> Close (Esc)
-          </button>
-        </div>
-      </div>
     </div>
   );
 }
