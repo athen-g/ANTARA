@@ -1,6 +1,4 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import BlobTransition from './components/BlobTransition';
-import DoubleCircleTransition from './components/DoubleCircleTransition';
 import SkillPage from './components/SkillPage';
 
 /* ── 16:9 Viewport Scaler Hook ── */
@@ -190,9 +188,8 @@ function App() {
   const [introComplete, setIntroComplete] = useState(false);
   const [menuFadeIn, setMenuFadeIn] = useState(false);
 
-  // View state: 'menu' | 'transitioning' (to skill) | 'skill' | 'transitioning_back' (to menu)
+  // View state: 'menu' | 'skill'
   const [viewState, setViewState] = useState('menu');
-  const [transitionOrigin, setTransitionOrigin] = useState({ x: 960, y: 540 });
 
   const handleFadeStart = useCallback(() => setMenuFadeIn(true), []);
   const handleIntroComplete = useCallback(() => { setIntroComplete(true); setMenuFadeIn(true); }, []);
@@ -222,18 +219,13 @@ function App() {
     if (viewState !== 'menu') return;
     const currentOption = menuOptions[activeIndex];
     if (currentOption && currentOption.name === 'SKILL') {
-      const originX = (currentOption.selectedX || 400) + 200;
-      const originY = (currentOption.baseY || 100) + (currentOption.restingOffset || 0) - (currentOption.selectedUpshift || 0) + 50;
-      setTransitionOrigin({ x: originX, y: originY });
-      setViewState('transitioning');
+      setViewState('skill');
     }
   }, [viewState, activeIndex]);
 
   const handleBackToMenu = useCallback(() => {
-    if (viewState === 'skill') {
-      setViewState('transitioning_back');
-    }
-  }, [viewState]);
+    setViewState('menu');
+  }, []);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -383,34 +375,9 @@ function App() {
         }}
       >
         <div id="app" className={`app-root view-${viewState}`}>
-          {/* ── SKILL PAGE VIEW ── */}
-          {viewState === 'skill' && (
+          {viewState === 'skill' ? (
             <SkillPage onBack={handleBackToMenu} />
-          )}
-
-          {/* ── TWO-PHASE BLUE BLOB TRANSITION (To Skill) ── */}
-          {viewState === 'transitioning' && (
-            <BlobTransition
-              originX={transitionOrigin.x}
-              originY={transitionOrigin.y}
-              onComplete={() => setViewState('skill')}
-            >
-              <SkillPage onBack={handleBackToMenu} isEntering={true} />
-            </BlobTransition>
-          )}
-
-          {/* ── DOUBLE CIRCLE REVEAL TRANSITION (Back to Menu) ── */}
-          {viewState === 'transitioning_back' && (
-            <>
-              <SkillPage onBack={() => {}} />
-              <DoubleCircleTransition onComplete={() => setViewState('menu')}>
-                {renderMainMenuContent()}
-              </DoubleCircleTransition>
-            </>
-          )}
-
-          {/* ── MAIN MENU VIEW (Resting / Entering) ── */}
-          {(viewState === 'menu' || viewState === 'transitioning') && (
+          ) : (
             renderMainMenuContent()
           )}
         </div>

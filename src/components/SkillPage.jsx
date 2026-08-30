@@ -49,7 +49,7 @@ function SkillWaterOverlay() {
   );
 }
 
-export default function SkillPage({ onBack, isEntering = false }) {
+export default function SkillPage({ onBack }) {
   const [activeProjectIndex, setActiveProjectIndex] = useState(0);
   const [eyeFrameIndex, setEyeFrameIndex] = useState(0);
 
@@ -111,7 +111,7 @@ export default function SkillPage({ onBack, isEntering = false }) {
   }, [handleBack]);
 
   return (
-    <div id="skill-page" className={`skill-page-container ${isEntering ? 'skill-entering' : ''}`}>
+    <div id="skill-page" className="skill-page-container">
 
       {/* Water overlay video + texture image — same as main menu */}
       <SkillWaterOverlay />

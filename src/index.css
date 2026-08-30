@@ -470,119 +470,12 @@ body {
   transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ═══════════════════════════════════════════════
-   TWO-PHASE BLUE BLOB TRANSITION
-   ═══════════════════════════════════════════════ */
-
 .main-menu-stage {
   position: absolute;
   top: 0;
   left: 0;
   width: 1920px;
   height: 1080px;
-}
-
-.blob-transition-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 999;
-  pointer-events: none;
-  overflow: hidden;
-}
-
-.outer-blob-svg {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 1920px;
-  height: 1080px;
-  pointer-events: none;
-}
-
-@keyframes outerBlobGrow {
-  0% {
-    transform: scale(0.12);
-    opacity: 0.85;
-  }
-  100% {
-    transform: scale(6.8);
-    opacity: 0.96;
-  }
-}
-
-.outer-blob-scaler {
-  animation: outerBlobGrow 0.48s cubic-bezier(0.35, 0, 0.2, 1) forwards;
-  will-change: transform;
-}
-
-@keyframes innerBlobReveal {
-  0% {
-    transform: scale(0);
-  }
-  100% {
-    transform: scale(6.8);
-  }
-}
-
-.inner-blob-active {
-  animation: innerBlobReveal 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-  will-change: transform;
-}
-
-.blob-revealed-destination {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 1920px;
-  height: 1080px;
-  pointer-events: auto;
-}
-
-/* ═══════════════════════════════════════════════
-   DOUBLE CIRCLE REVEAL (Return to Menu)
-   ═══════════════════════════════════════════════ */
-.double-circle-transition-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 1920px;
-  height: 1080px;
-  z-index: 20;
-  pointer-events: none;
-}
-
-.double-circle-revealed-layer {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 1920px;
-  height: 1080px;
-  overflow: hidden;
-  will-change: clip-path;
-}
-
-@keyframes circleRevealGrow {
-  0% {
-    transform: scale(0);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-.double-circle-bl {
-  transform-origin: 380px 940px;
-  animation: circleRevealGrow 0.65s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-  will-change: transform;
-}
-
-.double-circle-tr {
-  transform-origin: 1450px 180px;
-  animation: circleRevealGrow 0.65s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-  will-change: transform;
 }
 
 /* ═══════════════════════════════════════════════
