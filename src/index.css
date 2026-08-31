@@ -494,7 +494,7 @@ body {
   z-index: 10;
 }
 
-/* Water overlay video on Skill page — above protagonist, below SKILL typography */
+/* Water overlay video on Skill page — darker moody blend */
 .skill-water-overlay-video {
   position: absolute;
   top: 0;
@@ -505,10 +505,11 @@ body {
   z-index: 5;
   pointer-events: none;
   mix-blend-mode: lighten;
-  opacity: 1;
+  opacity: 0.45;
+  filter: brightness(0.8) contrast(1.25);
 }
 
-/* Image 6 overlay — above protagonist, below SKILL typography */
+/* Image 6 overlay — darker texture */
 .skill-image6-overlay {
   position: absolute;
   left: 173px;
@@ -518,7 +519,7 @@ body {
   transform: scaleY(-1) rotate(10.6deg);
   transform-origin: center center;
   mix-blend-mode: lighten;
-  opacity: 0.6;
+  opacity: 0.35;
   z-index: 5;
   pointer-events: none;
 }
