@@ -80,7 +80,7 @@ export default function SkillPage({ onBack }) {
   const [eyeFrameIndex, setEyeFrameIndex] = useState(0);
   const [shakeKey, setShakeKey] = useState(0); // increments to re-trigger envelope shake
   const [raysSpinKey, setRaysSpinKey] = useState(0); // increments to re-trigger rays rotation
-  const [hasProjectSelected, setHasProjectSelected] = useState(false);
+  const [raysSpinType, setRaysSpinType] = useState('initial'); // 'initial' | 'forward' | 'reverse'
 
   const handleBack = onBack || (() => {});
 
@@ -125,7 +125,7 @@ export default function SkillPage({ onBack }) {
 
   // Keyboard navigation for two-tier selection:
   // In 'project' mode: ArrowUp/Down to browse, Enter to select, Esc to return to main menu
-  // In 'skill' mode: ArrowUp/Down to browse skills, Esc to return to project mode
+  // In 'skill' mode: ArrowUp/Down to browse skills, Esc to return to project mode (with reverse rays spin)
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (navMode === 'project') {
@@ -141,7 +141,7 @@ export default function SkillPage({ onBack }) {
           e.preventDefault();
           setNavMode('skill');
           setActiveSkillIndex(0);
-          setHasProjectSelected(true);
+          setRaysSpinType('forward');
           setRaysSpinKey((k) => k + 1);
         } else if (e.key === 'Escape' || e.key === 'Backspace') {
           e.preventDefault();
@@ -157,6 +157,8 @@ export default function SkillPage({ onBack }) {
         } else if (e.key === 'Escape' || e.key === 'Backspace') {
           e.preventDefault();
           setNavMode('project');
+          setRaysSpinType('reverse');
+          setRaysSpinKey((k) => k + 1);
         }
       }
     };
@@ -215,7 +217,13 @@ export default function SkillPage({ onBack }) {
           key={raysSpinKey}
           src="/skill/rays.svg"
           alt="Light Rays"
-          className={`skill-rays-img ${hasProjectSelected ? 'skill-rays-project-spin' : 'skill-rays-initial-spin'}`}
+          className={`skill-rays-img ${
+            raysSpinType === 'forward'
+              ? 'skill-rays-project-spin'
+              : raysSpinType === 'reverse'
+              ? 'skill-rays-reverse-spin'
+              : 'skill-rays-initial-spin'
+          }`}
         />
       </div>
 
@@ -243,7 +251,7 @@ export default function SkillPage({ onBack }) {
                 } else {
                   setNavMode('skill');
                   setActiveSkillIndex(0);
-                  setHasProjectSelected(true);
+                  setRaysSpinType('forward');
                   setRaysSpinKey((k) => k + 1);
                 }
               }}
