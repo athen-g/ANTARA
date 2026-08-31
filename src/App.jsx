@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import SkillPage from './components/SkillPage';
+import DoubleCircleTransition from './components/DoubleCircleTransition';
 
 /* ── 16:9 Viewport Scaler Hook ── */
 function useViewportScale() {
@@ -215,28 +216,35 @@ function App() {
     return () => { isMounted = false; clearTimeout(timeoutId); };
   }, []);
 
+  const [isExitingToMenu, setIsExitingToMenu] = useState(false);
+
   const handleConfirm = useCallback(() => {
-    if (viewState !== 'menu') return;
+    if (viewState !== 'menu' || isExitingToMenu) return;
     const currentOption = menuOptions[activeIndex];
     if (currentOption && currentOption.name === 'SKILL') {
       setViewState('skill');
     }
-  }, [viewState, activeIndex]);
+  }, [viewState, isExitingToMenu, activeIndex]);
 
   const handleBackToMenu = useCallback(() => {
+    setIsExitingToMenu(true);
+  }, []);
+
+  const handleTransitionComplete = useCallback(() => {
     setViewState('menu');
+    setIsExitingToMenu(false);
   }, []);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (viewState !== 'menu') return;
+      if (viewState !== 'menu' || isExitingToMenu) return;
       if (e.key === 'ArrowDown') { e.preventDefault(); setActiveIndex((prev) => Math.min(prev + 1, 8)); }
       else if (e.key === 'ArrowUp') { e.preventDefault(); setActiveIndex((prev) => Math.max(prev - 1, 0)); }
       else if (e.key === 'Enter' || e.key === ' ' || e.key === 'b' || e.key === 'B') { e.preventDefault(); handleConfirm(); }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [viewState, handleConfirm]);
+  }, [viewState, isExitingToMenu, handleConfirm]);
 
   const getVectorFrameSrc = (frame) => {
     if (frame === 10) return '/vectors-anim/Property 1=Vectors-1.svg';
@@ -375,7 +383,16 @@ function App() {
         }}
       >
         <div id="app" className={`app-root view-${viewState}`}>
-          {viewState === 'skill' ? (
+          {isExitingToMenu ? (
+            <>
+              {/* Main Menu rendered underneath */}
+              {renderMainMenuContent()}
+              {/* Skill Menu rendered on top with DoubleCircleTransition reveal mask */}
+              <DoubleCircleTransition onComplete={handleTransitionComplete}>
+                <SkillPage onBack={() => {}} />
+              </DoubleCircleTransition>
+            </>
+          ) : viewState === 'skill' ? (
             <SkillPage onBack={handleBackToMenu} />
           ) : (
             renderMainMenuContent()

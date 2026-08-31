@@ -870,3 +870,44 @@ body {
   display: block;
   object-fit: contain;
 }
+
+/* ═══════════════════════════════════════════════
+   BIDIRECTIONAL MENU TRANSITIONS
+   ═══════════════════════════════════════════════ */
+
+/* Double Circle Reveal Transition (Skill Menu -> Main Menu) */
+.double-circle-transition-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1920px;
+  height: 1080px;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.skill-exit-masked {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1920px;
+  height: 1080px;
+  -webkit-mask-image: url(#double-circle-reveal-mask);
+  mask-image: url(#double-circle-reveal-mask);
+  pointer-events: none;
+}
+
+@keyframes doubleCircleRevealGrow {
+  0% {
+    r: 0px;
+  }
+  100% {
+    r: 1700px;
+  }
+}
+
+.reveal-circle-1,
+.reveal-circle-2 {
+  animation: doubleCircleRevealGrow 0.52s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  will-change: r;
+}
