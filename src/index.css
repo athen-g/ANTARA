@@ -698,15 +698,10 @@ body {
   height: 91px;
   cursor: pointer;
   pointer-events: auto;
-  transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .skill-entering .skill-project-item {
   animation: skillFallIn 0.55s cubic-bezier(0.25, 1, 0.5, 1) both;
-}
-
-.skill-project-item:hover {
-  transform: translateX(12px);
 }
 
 .skill-project-svg {
@@ -727,6 +722,7 @@ body {
   letter-spacing: -3.36px;
   font-weight: 500;
   text-transform: uppercase;
+  transition: text-shadow 0.25s ease, color 0.25s ease, filter 0.25s ease;
 }
 
 .skill-project-label.text-black {
@@ -737,36 +733,92 @@ body {
   color: #FFFFFF;
 }
 
-/* 7. Right Skill SP Display Cards */
-.skill-cards-list {
+/* Subtle yellow glow when project is confirmed and user is in skill selection mode */
+.skill-project-label.project-glow {
+  color: #000000;
+  text-shadow: 0 0 10px rgba(255, 220, 50, 0.85), 0 0 20px rgba(255, 200, 0, 0.6), 0 0 4px #FFF8C0;
+  filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.75));
+}
+
+/* 8. Right Skill SP Display Cards with Dynamic Offset & Selector */
+.skill-cards-container {
   position: absolute;
-  left: 1172px;
-  top: 156px;
-  width: 670px;
-  height: 120px;
+  top: 0;
+  left: 0;
+  width: 1920px;
+  height: 1080px;
   z-index: 8;
   pointer-events: none;
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: transform;
+}
+
+.skill-cards-container.resting-offset {
+  transform: translateX(120px);
+}
+
+.skill-cards-container.focused-offset {
+  transform: translateX(0px);
+}
+
+/* Dynamic Skill Selector Envelope (Figma node 142:431) */
+.skill-selector-envelope {
+  position: absolute;
+  left: 1076px;
+  width: 845px;
+  height: 77px;
+  pointer-events: none;
+  z-index: 1;
+  transition: top 0.22s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.25s ease, transform 0.25s ease;
+}
+
+.skill-selector-envelope.inactive {
+  opacity: 0;
+  transform: scale(0.97);
+}
+
+.skill-selector-envelope.active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.skill-selector-img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Skill Items List */
+.skill-items-list {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: auto;
+  z-index: 2;
 }
 
 .skill-card-item {
   position: absolute;
-  left: 0;
-  width: 663px;
+  width: 662.5px;
   height: 38px;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: transform 0.15s ease;
 }
 
 .skill-card-1 {
-  top: 0px;
-  left: 7.5px;
+  left: 1123.5px;
 }
 
 .skill-card-2 {
-  top: 55px;
-  left: 0px;
+  left: 1116px;
 }
 
 .skill-card-img {
   width: 100%;
   height: 100%;
   display: block;
+  object-fit: contain;
 }

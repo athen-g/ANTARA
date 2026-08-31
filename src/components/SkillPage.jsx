@@ -14,9 +14,33 @@ const EYE_FRAMES = [
 ];
 
 const PROJECTS = [
-  { id: 0, name: 'Project 1', top: 471 },
-  { id: 1, name: 'Project 2', top: 566 },
-  { id: 2, name: 'Project 3', top: 656 }
+  {
+    id: 0,
+    name: 'Project 1',
+    top: 471,
+    skills: [
+      { id: 0, name: 'Skill 1', img: '/skill/skill-1.svg', selectorTop: 131, itemTop: 156 },
+      { id: 1, name: 'Skill 2', img: '/skill/skill-2.svg', selectorTop: 186, itemTop: 211 }
+    ]
+  },
+  {
+    id: 1,
+    name: 'Project 2',
+    top: 566,
+    skills: [
+      { id: 0, name: 'Skill 1', img: '/skill/skill-1.svg', selectorTop: 131, itemTop: 156 },
+      { id: 1, name: 'Skill 2', img: '/skill/skill-2.svg', selectorTop: 186, itemTop: 211 }
+    ]
+  },
+  {
+    id: 2,
+    name: 'Project 3',
+    top: 656,
+    skills: [
+      { id: 0, name: 'Skill 1', img: '/skill/skill-1.svg', selectorTop: 131, itemTop: 156 },
+      { id: 1, name: 'Skill 2', img: '/skill/skill-2.svg', selectorTop: 186, itemTop: 211 }
+    ]
+  }
 ];
 
 /* Water Overlay for skill page — same looping blend as main menu */
@@ -51,9 +75,14 @@ function SkillWaterOverlay() {
 
 export default function SkillPage({ onBack }) {
   const [activeProjectIndex, setActiveProjectIndex] = useState(0);
+  const [navMode, setNavMode] = useState('project'); // 'project' | 'skill'
+  const [activeSkillIndex, setActiveSkillIndex] = useState(0);
   const [eyeFrameIndex, setEyeFrameIndex] = useState(0);
 
   const handleBack = onBack || (() => {});
+
+  const currentProject = PROJECTS[activeProjectIndex];
+  const currentSkills = currentProject.skills;
 
   // 10-Frame Right Eye Blinking Loop at 24fps with 8-second delay
   useEffect(() => {
@@ -91,24 +120,43 @@ export default function SkillPage({ onBack }) {
     };
   }, []);
 
-  // Keyboard navigation: ArrowUp, ArrowDown, Escape
+  // Keyboard navigation for two-tier selection:
+  // In 'project' mode: ArrowUp/Down to browse, Enter to select, Esc to return to main menu
+  // In 'skill' mode: ArrowUp/Down to browse skills, Esc to return to project mode
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (e.key === 'ArrowUp') {
-        e.preventDefault();
-        setActiveProjectIndex((prev) => (prev > 0 ? prev - 1 : PROJECTS.length - 1));
-      } else if (e.key === 'ArrowDown') {
-        e.preventDefault();
-        setActiveProjectIndex((prev) => (prev < PROJECTS.length - 1 ? prev + 1 : 0));
-      } else if (e.key === 'Escape' || e.key === 'Backspace') {
-        e.preventDefault();
-        handleBack();
+      if (navMode === 'project') {
+        if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          setActiveProjectIndex((prev) => (prev > 0 ? prev - 1 : PROJECTS.length - 1));
+        } else if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          setActiveProjectIndex((prev) => (prev < PROJECTS.length - 1 ? prev + 1 : 0));
+        } else if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          setNavMode('skill');
+          setActiveSkillIndex(0);
+        } else if (e.key === 'Escape' || e.key === 'Backspace') {
+          e.preventDefault();
+          handleBack();
+        }
+      } else if (navMode === 'skill') {
+        if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          setActiveSkillIndex((prev) => (prev > 0 ? prev - 1 : currentSkills.length - 1));
+        } else if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          setActiveSkillIndex((prev) => (prev < currentSkills.length - 1 ? prev + 1 : 0));
+        } else if (e.key === 'Escape' || e.key === 'Backspace') {
+          e.preventDefault();
+          setNavMode('project');
+        }
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [handleBack]);
+  }, [navMode, currentSkills.length, handleBack]);
 
   return (
     <div id="skill-page" className="skill-page-container">
@@ -154,7 +202,7 @@ export default function SkillPage({ onBack }) {
         </div>
       </div>
 
-      {/* 5. Rotating Lens Flare Light Rays around the Evoker */}
+      {/* 6. Rotating Lens Flare Light Rays around the Evoker */}
       <div className="skill-rays-wrapper">
         <img
           src="/skill/rays.svg"
@@ -163,25 +211,38 @@ export default function SkillPage({ onBack }) {
         />
       </div>
 
-      {/* 6. Left Project Ribbon Banners (Project 1, 2, 3) */}
+      {/* 7. Left Project Ribbon Banners (Project 1, 2, 3) */}
       <div className="skill-projects-list">
         {PROJECTS.map((proj, idx) => {
           const isSelected = activeProjectIndex === idx;
+          const isConfirmed = isSelected && navMode === 'skill';
+
+          // Accent wedge color: Gray (#757575) when confirmed in skill mode, Red (#E03636) when browsing projects
+          const accentFill = isConfirmed ? '#757575' : '#E03636';
+
           return (
             <div
               key={proj.id}
-              className={`skill-project-item ${isSelected ? 'selected' : 'unselected'}`}
+              className={`skill-project-item ${isSelected ? 'selected' : 'unselected'} ${isConfirmed ? 'confirmed' : ''}`}
               style={{
                 top: `${proj.top}px`,
                 animationDelay: `${idx * 50}ms`
               }}
-              onClick={() => setActiveProjectIndex(idx)}
+              onClick={() => {
+                if (!isSelected) {
+                  setActiveProjectIndex(idx);
+                  setNavMode('project');
+                } else {
+                  setNavMode('skill');
+                  setActiveSkillIndex(0);
+                }
+              }}
             >
               <svg width="871" height="91" viewBox="0 0 871 91" fill="none" className="skill-project-svg">
                 {isSelected ? (
                   <>
-                    {/* Red Selection Accent Wedge */}
-                    <path d="M185 0H871L857.831 86H185V0Z" fill="#E03636" />
+                    {/* Selection Accent Wedge: Red in project mode, Gray in skill mode */}
+                    <path d="M185 0H871L857.831 86H185V0Z" fill={accentFill} />
                     {/* White Banner Ribbon */}
                     <path d="M0 5H859.5L843 91H0V5Z" fill="#FFFFFF" />
                     {/* Black Selector Wedge */}
@@ -197,8 +258,10 @@ export default function SkillPage({ onBack }) {
                 )}
               </svg>
 
-              {/* Banner Text */}
-              <span className={`skill-project-label ${isSelected ? 'text-black' : 'text-white'}`}>
+              {/* Banner Text: subtle yellow glow when confirmed into skill mode */}
+              <span
+                className={`skill-project-label ${isSelected ? 'text-black' : 'text-white'} ${isConfirmed ? 'project-glow' : ''}`}
+              >
                 {proj.name}
               </span>
             </div>
@@ -206,13 +269,40 @@ export default function SkillPage({ onBack }) {
         })}
       </div>
 
-      {/* 7. Right Skill & SP Cost Displays */}
-      <div className="skill-cards-list skill-fall-elem">
-        <div className="skill-card-item skill-card-1">
-          <img src="/skill/skill-1.svg" alt="Skill 1" className="skill-card-img" />
+      {/* 8. Right Skill Displays with dynamic offset & animated skill selector */}
+      <div className={`skill-cards-container ${navMode === 'skill' ? 'focused-offset' : 'resting-offset'} skill-fall-elem`}>
+        {/* Dynamic Skill Selector Envelope Envelope (Figma node 142:431) */}
+        <div
+          className={`skill-selector-envelope ${navMode === 'skill' ? 'active' : 'inactive'}`}
+          style={{
+            top: `${currentSkills[activeSkillIndex]?.selectorTop || 131}px`
+          }}
+        >
+          <img
+            src="/skill/skill-selector.svg"
+            alt="Skill Selector Envelope"
+            className="skill-selector-img"
+          />
         </div>
-        <div className="skill-card-item skill-card-2">
-          <img src="/skill/skill-2.svg" alt="Skill 2" className="skill-card-img" />
+
+        {/* Skill Items List */}
+        <div className="skill-items-list">
+          {currentSkills.map((skill, sIdx) => {
+            const isSkillSelected = navMode === 'skill' && activeSkillIndex === sIdx;
+            return (
+              <div
+                key={skill.id}
+                className={`skill-card-item skill-card-${sIdx + 1} ${isSkillSelected ? 'selected-skill' : ''}`}
+                style={{ top: `${skill.itemTop}px` }}
+                onClick={() => {
+                  setNavMode('skill');
+                  setActiveSkillIndex(sIdx);
+                }}
+              >
+                <img src={skill.img} alt={skill.name} className="skill-card-img" />
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>

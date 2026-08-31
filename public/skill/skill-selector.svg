@@ -1,0 +1,8 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="845" height="77" viewBox="0 0 845 77" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="skill-selector">
+<path d="M0.5 7.5C0.5 3.63401 3.63401 0.5 7.5 0.5H844.5V67.5H7.50002C3.63403 67.5 0.5 64.366 0.5 60.5V7.5Z" fill="#E03636"/>
+<path d="M0.5 9.5H844.5V76.5H7.50002C3.63403 76.5 0.5 73.366 0.5 69.5V9.5Z" fill="white"/>
+<path d="M0.5 7.5C0.5 3.63401 3.63401 0.5 7.5 0.5H844.5V67.5H7.50002C3.63403 67.5 0.5 64.366 0.5 60.5V7.5Z" stroke="black"/>
+<path d="M0.5 9.5H844.5V76.5H7.50002C3.63403 76.5 0.5 73.366 0.5 69.5V9.5Z" stroke="black"/>
+</g>
+</svg>
