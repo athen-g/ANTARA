@@ -652,10 +652,10 @@ body {
 /* 5. Rotating Lens Flare Light Rays around the Evoker */
 .skill-rays-wrapper {
   position: absolute;
-  left: 28px;
-  top: -515px;
-  width: 2006.407px;
-  height: 1600.523px;
+  left: 0;
+  top: -538.06px;
+  width: 2042.21px;
+  height: 1623.96px;
   z-index: 7;
   pointer-events: none;
   overflow: visible;
@@ -698,7 +698,7 @@ body {
   width: 100%;
   height: 100%;
   display: block;
-  transform-origin: 1027px 829px;
+  transform-origin: 1026.85px 828.69px;
   will-change: transform, opacity;
 }
 
