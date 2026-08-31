@@ -2,37 +2,69 @@ import React, { useEffect } from 'react';
 
 /**
  * DoubleCircleTransition: Authentic Persona 3 Reload return transition
- * Two transparent circular apertures expand from bottom-left (Makoto's portrait)
- * and top-right (ocean water), cutting holes through the Skill Menu to reveal the Main Menu underneath.
+ * Two expanding circular apertures from bottom-left (Makoto portrait)
+ * and top-right (ocean water) expand to reveal the Main Menu underneath.
  */
 export default function DoubleCircleTransition({ children, onComplete }) {
   useEffect(() => {
     const timer = setTimeout(() => {
       if (onComplete) onComplete();
-    }, 550);
+    }, 580);
 
     return () => clearTimeout(timer);
   }, [onComplete]);
 
   return (
     <div className="double-circle-transition-wrapper">
-      {/* SVG Mask Definition */}
-      <svg className="double-circle-mask-def" width="0" height="0" style={{ position: 'absolute' }}>
+      {/* SVG ClipPath Definition with native SVG <animate> for 100% reliable hardware acceleration */}
+      <svg width="0" height="0" style={{ position: 'absolute', width: 0, height: 0, overflow: 'hidden' }}>
         <defs>
-          <mask id="double-circle-reveal-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="1920" height="1080">
-            {/* White base = keep visible */}
-            <rect width="1920" height="1080" fill="white" />
-            {/* Two expanding black circles = make transparent to reveal main menu underneath */}
-            {/* Circle 1: Bottom-Left (Makoto's head/hair position in main menu) */}
-            <circle cx="240" cy="920" r="0" fill="black" className="reveal-circle-1" />
+          <clipPath id="double-circle-reveal-clip" clipPathUnits="userSpaceOnUse">
+            {/* Circle 1: Bottom-Left (Makoto's portrait in main menu) */}
+            <circle cx="240" cy="920" r="0">
+              <animate
+                attributeName="r"
+                from="0"
+                to="1900"
+                dur="0.55s"
+                begin="0s"
+                fill="freeze"
+                calcMode="spline"
+                keyTimes="0;1"
+                keySplines="0.2 0.8 0.2 1"
+              />
+            </circle>
             {/* Circle 2: Top-Right (Ocean water / menu side in main menu) */}
-            <circle cx="1450" cy="180" r="0" fill="black" className="reveal-circle-2" />
-          </mask>
+            <circle cx="1450" cy="180" r="0">
+              <animate
+                attributeName="r"
+                from="0"
+                to="1900"
+                dur="0.55s"
+                begin="0s"
+                fill="freeze"
+                calcMode="spline"
+                keyTimes="0;1"
+                keySplines="0.2 0.8 0.2 1"
+              />
+            </circle>
+          </clipPath>
         </defs>
       </svg>
 
-      {/* Masked Foreground (Skill Page) */}
-      <div className="skill-exit-masked">
+      {/* Main Menu revealed through expanding apertures */}
+      <div
+        className="main-menu-reveal-layer"
+        style={{
+          width: '1920px',
+          height: '1080px',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          clipPath: 'url(#double-circle-reveal-clip)',
+          WebkitClipPath: 'url(#double-circle-reveal-clip)'
+        }}
+      >
         {children}
       </div>
     </div>

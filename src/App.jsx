@@ -385,11 +385,11 @@ function App() {
         <div id="app" className={`app-root view-${viewState}`}>
           {isExitingToMenu ? (
             <>
-              {/* Main Menu rendered underneath */}
-              {renderMainMenuContent()}
-              {/* Skill Menu rendered on top with DoubleCircleTransition reveal mask */}
+              {/* Skill Menu rendered underneath as exit backdrop */}
+              <SkillPage onBack={() => {}} />
+              {/* Main Menu rendered on top, revealed by expanding double circular apertures */}
               <DoubleCircleTransition onComplete={handleTransitionComplete}>
-                <SkillPage onBack={() => {}} />
+                {renderMainMenuContent()}
               </DoubleCircleTransition>
             </>
           ) : viewState === 'skill' ? (

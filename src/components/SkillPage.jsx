@@ -168,7 +168,7 @@ export default function SkillPage({ onBack }) {
   }, [navMode, currentSkills.length, handleBack]);
 
   return (
-    <div id="skill-page" className="skill-page-container">
+    <div id="skill-page" className="skill-page-container skill-entering">
 
       {/* 1. Protagonist Shadow Silhouette */}
       <div className="skill-shadow-layer skill-fall-elem">
