@@ -78,6 +78,7 @@ export default function SkillPage({ onBack }) {
   const [navMode, setNavMode] = useState('project'); // 'project' | 'skill'
   const [activeSkillIndex, setActiveSkillIndex] = useState(0);
   const [eyeFrameIndex, setEyeFrameIndex] = useState(0);
+  const [shakeKey, setShakeKey] = useState(0); // increments to re-trigger envelope shake
 
   const handleBack = onBack || (() => {});
 
@@ -129,9 +130,11 @@ export default function SkillPage({ onBack }) {
         if (e.key === 'ArrowUp') {
           e.preventDefault();
           setActiveProjectIndex((prev) => (prev > 0 ? prev - 1 : PROJECTS.length - 1));
+          setShakeKey((k) => k + 1);
         } else if (e.key === 'ArrowDown') {
           e.preventDefault();
           setActiveProjectIndex((prev) => (prev < PROJECTS.length - 1 ? prev + 1 : 0));
+          setShakeKey((k) => k + 1);
         } else if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
           setNavMode('skill');
@@ -242,7 +245,9 @@ export default function SkillPage({ onBack }) {
                 {isSelected ? (
                   <>
                     {/* Selection Accent Wedge: Red in project mode, Gray in skill mode */}
-                    <path d="M185 0H871L857.831 86H185V0Z" fill={accentFill} />
+                    <g key={shakeKey} className="envelope-shake">
+                      <path d="M185 0H871L857.831 86H185V0Z" fill={accentFill} />
+                    </g>
                     {/* White Banner Ribbon */}
                     <path d="M0 5H859.5L843 91H0V5Z" fill="#FFFFFF" />
                     {/* Black Selector Wedge */}

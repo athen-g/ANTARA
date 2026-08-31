@@ -736,8 +736,22 @@ body {
 /* Subtle yellow glow when project is confirmed and user is in skill selection mode */
 .skill-project-label.project-glow {
   color: #000000;
-  text-shadow: 0 0 10px rgba(255, 220, 50, 0.85), 0 0 20px rgba(255, 200, 0, 0.6), 0 0 4px #FFF8C0;
-  filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.75));
+  text-shadow: 0 0 6px rgba(255, 220, 50, 0.4), 0 0 12px rgba(255, 200, 0, 0.2);
+}
+
+/* Red envelope shake animation on project scroll */
+@keyframes envelopeShake {
+  0%   { transform: translateX(0); }
+  15%  { transform: translateX(-3px); }
+  30%  { transform: translateX(2.5px); }
+  45%  { transform: translateX(-2px); }
+  60%  { transform: translateX(1.5px); }
+  75%  { transform: translateX(-1px); }
+  100% { transform: translateX(0); }
+}
+
+.skill-project-item.selected .envelope-shake {
+  animation: envelopeShake 0.35s ease-out;
 }
 
 /* 8. Right Skill SP Display Cards with Dynamic Offset & Selector */
@@ -761,12 +775,12 @@ body {
   transform: translateX(0px);
 }
 
-/* Dynamic Skill Selector Envelope (Figma node 142:431) */
+/* Dynamic Skill Selector Envelope (Figma node 144:434) */
 .skill-selector-envelope {
   position: absolute;
   left: 1076px;
-  width: 845px;
-  height: 77px;
+  width: 844px;
+  height: 76px;
   pointer-events: none;
   z-index: 1;
   transition: top 0.22s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.25s ease, transform 0.25s ease;
