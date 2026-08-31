@@ -125,17 +125,7 @@ export default function SkillPage({ onBack }) {
         </div>
       </div>
 
-      {/* Water overlay video + texture image — kept below the SKILL text */}
-      <SkillWaterOverlay />
-
-      {/* 3. Rotated 'SKILL' Typography (Above video overlay) */}
-      <div className="skill-typo-wrapper skill-fall-elem">
-        <div className="skill-typo-rotator">
-          <span className="skill-typo-text">SKILL</span>
-        </div>
-      </div>
-
-      {/* 4. Protagonist Silhouette & 10-Frame Blinking Eye Group */}
+      {/* 3. Protagonist Silhouette & 10-Frame Blinking Eye Group */}
       <div className="skill-protagonist-wrapper skill-fall-elem">
         {/* Base body without eye */}
         <img
@@ -151,6 +141,16 @@ export default function SkillPage({ onBack }) {
             alt="Eye Frame"
             className="skill-eye-frame"
           />
+        </div>
+      </div>
+
+      {/* 4. Water overlay video + texture image — above protagonist & eye, below SKILL text */}
+      <SkillWaterOverlay />
+
+      {/* 5. Rotated 'SKILL' Typography (Above video overlay) */}
+      <div className="skill-typo-wrapper skill-fall-elem">
+        <div className="skill-typo-rotator">
+          <span className="skill-typo-text">SKILL</span>
         </div>
       </div>
 
