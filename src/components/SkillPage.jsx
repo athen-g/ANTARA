@@ -79,6 +79,8 @@ export default function SkillPage({ onBack }) {
   const [activeSkillIndex, setActiveSkillIndex] = useState(0);
   const [eyeFrameIndex, setEyeFrameIndex] = useState(0);
   const [shakeKey, setShakeKey] = useState(0); // increments to re-trigger envelope shake
+  const [raysSpinKey, setRaysSpinKey] = useState(0); // increments to re-trigger rays rotation
+  const [hasProjectSelected, setHasProjectSelected] = useState(false);
 
   const handleBack = onBack || (() => {});
 
@@ -139,6 +141,8 @@ export default function SkillPage({ onBack }) {
           e.preventDefault();
           setNavMode('skill');
           setActiveSkillIndex(0);
+          setHasProjectSelected(true);
+          setRaysSpinKey((k) => k + 1);
         } else if (e.key === 'Escape' || e.key === 'Backspace') {
           e.preventDefault();
           handleBack();
@@ -208,9 +212,10 @@ export default function SkillPage({ onBack }) {
       {/* 6. Rotating Lens Flare Light Rays around the Evoker */}
       <div className="skill-rays-wrapper">
         <img
+          key={raysSpinKey}
           src="/skill/rays.svg"
           alt="Light Rays"
-          className="skill-rays-img skill-rays-spinning"
+          className={`skill-rays-img ${hasProjectSelected ? 'skill-rays-project-spin' : 'skill-rays-initial-spin'}`}
         />
       </div>
 
@@ -238,6 +243,8 @@ export default function SkillPage({ onBack }) {
                 } else {
                   setNavMode('skill');
                   setActiveSkillIndex(0);
+                  setHasProjectSelected(true);
+                  setRaysSpinKey((k) => k + 1);
                 }
               }}
             >
