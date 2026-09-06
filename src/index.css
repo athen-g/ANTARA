@@ -599,11 +599,10 @@ body {
 /* 3. Rotated 'SKILL' Typography (Above video overlay) */
 .skill-typo-wrapper {
   position: absolute;
-  left: -154px;
-  top: 570.56px;
+  left: 373.015px;
+  top: -8.548px;
   width: 527.015px;
   height: 1383.129px;
-  transform: translateY(-50%);
   display: flex;
   align-items: center;
   justify-content: center;
