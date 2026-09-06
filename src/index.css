@@ -599,28 +599,13 @@ body {
 /* 3. Rotated 'SKILL' Typography (Above video overlay) */
 .skill-typo-wrapper {
   position: absolute;
-  left: 373.015px;
-  top: -8.548px;
-  width: 527.015px;
-  height: 1383.129px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  top: 0;
+  left: 0;
+  width: 1920px;
+  height: 1080px;
   z-index: 6;
   pointer-events: none;
-}
-
-.skill-typo-rotator {
-  transform: rotate(98.79deg) skewX(-10deg) scaleY(0.98);
-}
-
-.skill-typo-text {
-  font-family: 'Almarai', sans-serif;
-  font-weight: 800;
-  font-size: 430px;
-  letter-spacing: -30.1px;
-  color: #a6a6a6;
-  line-height: normal;
+  overflow: visible;
 }
 
 /* 4. Protagonist Silhouette & Eye Group */

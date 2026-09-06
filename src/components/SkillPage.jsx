@@ -206,9 +206,25 @@ export default function SkillPage({ onBack }) {
 
       {/* 5. Rotated 'SKILL' Typography (Above video overlay) */}
       <div className="skill-typo-wrapper skill-fall-elem">
-        <div className="skill-typo-rotator">
-          <span className="skill-typo-text">SKILL</span>
-        </div>
+        <svg
+          viewBox="0 0 1920 1080"
+          className="skill-typo-svg"
+          style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, overflow: 'visible' }}
+        >
+          <g transform="translate(373.015, -8.548) rotate(98.79) skewX(-10) scale(1, 0.98)">
+            <text
+              x="0"
+              y="350"
+              fontFamily="'Almarai', sans-serif"
+              fontWeight="800"
+              fontSize="430px"
+              letterSpacing="-30.1px"
+              fill="#a6a6a6"
+            >
+              SKILL
+            </text>
+          </g>
+        </svg>
       </div>
 
       {/* 6. Rotating Lens Flare Light Rays around the Evoker */}
