@@ -73,7 +73,7 @@ function SkillWaterOverlay() {
   );
 }
 
-export default function SkillPage({ onBack }) {
+export default function SkillPage({ onBack, isExiting }) {
   const [activeProjectIndex, setActiveProjectIndex] = useState(0);
   const [navMode, setNavMode] = useState('project'); // 'project' | 'skill'
   const [activeSkillIndex, setActiveSkillIndex] = useState(0);
@@ -128,6 +128,7 @@ export default function SkillPage({ onBack }) {
   // In 'skill' mode: ArrowUp/Down to browse skills, Esc to return to project mode (with reverse rays spin)
   useEffect(() => {
     const handleKeyDown = (e) => {
+      if (isExiting) return;
       if (navMode === 'project') {
         if (e.key === 'ArrowUp') {
           e.preventDefault();
@@ -165,10 +166,10 @@ export default function SkillPage({ onBack }) {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [navMode, currentSkills.length, handleBack]);
+  }, [navMode, currentSkills.length, handleBack, isExiting]);
 
   return (
-    <div id="skill-page" className="skill-page-container skill-entering">
+    <div id="skill-page" className={`skill-page-container ${isExiting ? 'skill-exiting' : 'skill-entering'}`}>
 
       {/* 1. Protagonist Shadow Silhouette */}
       <div className="skill-shadow-layer skill-fall-elem">
@@ -283,7 +284,7 @@ export default function SkillPage({ onBack }) {
               className={`skill-project-item ${isSelected ? 'selected' : 'unselected'} ${isConfirmed ? 'confirmed' : ''}`}
               style={{
                 top: `${proj.top}px`,
-                animationDelay: `${idx * 50}ms`
+                animationDelay: isExiting ? `${(PROJECTS.length - 1 - idx) * 40}ms` : `${idx * 50}ms`
               }}
               onClick={() => {
                 if (!isSelected) {

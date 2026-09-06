@@ -227,13 +227,13 @@ function App() {
   }, [viewState, isExitingToMenu, activeIndex]);
 
   const handleBackToMenu = useCallback(() => {
+    if (isExitingToMenu) return;
     setIsExitingToMenu(true);
-  }, []);
-
-  const handleTransitionComplete = useCallback(() => {
-    setViewState('menu');
-    setIsExitingToMenu(false);
-  }, []);
+    setTimeout(() => {
+      setViewState('menu');
+      setIsExitingToMenu(false);
+    }, 550);
+  }, [isExitingToMenu]);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -383,19 +383,9 @@ function App() {
         }}
       >
         <div id="app" className={`app-root view-${viewState}`}>
-          {isExitingToMenu ? (
-            <>
-              {/* Skill Menu rendered underneath as exit backdrop */}
-              <SkillPage onBack={() => {}} />
-              {/* Main Menu rendered on top, revealed by expanding double circular apertures */}
-              <DoubleCircleTransition onComplete={handleTransitionComplete}>
-                {renderMainMenuContent()}
-              </DoubleCircleTransition>
-            </>
-          ) : viewState === 'skill' ? (
-            <SkillPage onBack={handleBackToMenu} />
-          ) : (
-            renderMainMenuContent()
+          {(viewState === 'menu' || isExitingToMenu) && renderMainMenuContent()}
+          {(viewState === 'skill' || isExitingToMenu) && (
+            <SkillPage onBack={handleBackToMenu} isExiting={isExitingToMenu} />
           )}
         </div>
       </div>
@@ -404,3 +394,4 @@ function App() {
 }
 
 export default App;
+

@@ -555,6 +555,80 @@ body {
   will-change: transform, opacity;
 }
 
+/* Exit animations for Skill Page (exact reverse of enter animations) */
+@keyframes skillFallOut {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  40% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(-80px);
+    opacity: 0;
+  }
+}
+
+@keyframes skillRibbonSlideOut {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-140px);
+    opacity: 0;
+  }
+}
+
+@keyframes raysSpinOut {
+  0% {
+    transform: rotate(0deg) scale(1.0);
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(-120deg) scale(0.65);
+    opacity: 0;
+  }
+}
+
+@keyframes skillContainerFadeOut {
+  0% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.skill-exiting {
+  animation: skillContainerFadeOut 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  pointer-events: none !important;
+}
+
+.skill-exiting .skill-fall-elem {
+  animation: skillFallOut 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  will-change: transform, opacity;
+}
+
+.skill-exiting .skill-project-item {
+  animation: skillRibbonSlideOut 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  pointer-events: none !important;
+}
+
+.skill-exiting .skill-rays-img {
+  animation: raysSpinOut 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) forwards !important;
+}
+
+.skill-exiting .skill-water-overlay-video,
+.skill-exiting .skill-image6-overlay {
+  animation: skillFallOut 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+
 /* 1. Protagonist Shadow */
 .skill-shadow-layer {
   position: absolute;
