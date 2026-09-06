@@ -703,22 +703,16 @@ body {
   }
 }
 
-/* Ambient underwater floating buoyancy bobbing */
+/* Ambient underwater floating buoyancy bobbing — smooth harmonic sinusoidal wave */
 @keyframes slowAmbientFloat {
   0% {
-    transform: translate(0px, 0px) rotate(0deg);
-  }
-  30% {
-    transform: translate(3px, -15px) rotate(0.8deg);
+    transform: translate3d(0px, 0px, 0) rotate(0deg);
   }
   50% {
-    transform: translate(0px, -24px) rotate(0.3deg);
-  }
-  75% {
-    transform: translate(-3px, -12px) rotate(-0.6deg);
+    transform: translate3d(2px, -22px, 0) rotate(0.6deg);
   }
   100% {
-    transform: translate(0px, 0px) rotate(0deg);
+    transform: translate3d(0px, 0px, 0) rotate(0deg);
   }
 }
 
@@ -740,7 +734,7 @@ body {
   width: 100%;
   height: 100%;
   pointer-events: none;
-  animation: slowAmbientFloat 5s ease-in-out infinite;
+  animation: slowAmbientFloat 5.6s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
   will-change: transform;
 }
 
