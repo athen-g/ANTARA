@@ -16,32 +16,132 @@ const EYE_FRAMES = [
 const PROJECTS = [
   {
     id: 0,
-    name: 'Project 1',
+    name: 'Hyperspace XR SIG',
     top: 471,
     skills: [
-      { id: 0, name: 'Skill 1', img: '/skill/skill-1.svg', selectorTop: 131, itemTop: 156 },
-      { id: 1, name: 'Skill 2', img: '/skill/skill-2.svg', selectorTop: 186, itemTop: 211 }
+      { id: 0, name: 'UNITY', logo: 'unity', selectorTop: 131, itemTop: 156 },
+      { id: 1, name: 'C#', logo: 'csharp', selectorTop: 186, itemTop: 211 },
+      { id: 2, name: 'WEBXR', logo: 'webxr', selectorTop: 241, itemTop: 266 },
+      { id: 3, name: 'THREE.JS', logo: 'threejs', selectorTop: 296, itemTop: 321 }
     ]
   },
   {
     id: 1,
-    name: 'Project 2',
+    name: 'FutureU',
     top: 566,
     skills: [
-      { id: 0, name: 'Skill 1', img: '/skill/skill-1.svg', selectorTop: 131, itemTop: 156 },
-      { id: 1, name: 'Skill 2', img: '/skill/skill-2.svg', selectorTop: 186, itemTop: 211 }
+      { id: 0, name: 'REACT', logo: 'react', selectorTop: 131, itemTop: 156 },
+      { id: 1, name: 'TYPESCRIPT', logo: 'typescript', selectorTop: 186, itemTop: 211 },
+      { id: 2, name: 'NEXT.JS', logo: 'nextjs', selectorTop: 241, itemTop: 266 },
+      { id: 3, name: 'NODE.JS', logo: 'nodejs', selectorTop: 296, itemTop: 321 }
     ]
   },
   {
     id: 2,
-    name: 'Project 3',
+    name: 'unimark',
     top: 656,
     skills: [
-      { id: 0, name: 'Skill 1', img: '/skill/skill-1.svg', selectorTop: 131, itemTop: 156 },
-      { id: 1, name: 'Skill 2', img: '/skill/skill-2.svg', selectorTop: 186, itemTop: 211 }
+      { id: 0, name: 'PYTHON', logo: 'python', selectorTop: 131, itemTop: 156 },
+      { id: 1, name: 'PYTORCH', logo: 'pytorch', selectorTop: 186, itemTop: 211 },
+      { id: 2, name: 'FASTAPI', logo: 'fastapi', selectorTop: 241, itemTop: 266 },
+      { id: 3, name: 'POSTGRESQL', logo: 'postgresql', selectorTop: 296, itemTop: 321 }
     ]
   }
 ];
+
+function SkillLogo({ logo }) {
+  switch (logo) {
+    case 'unity':
+      return (
+        <g transform="translate(51.75, 6.5)" fill="white">
+          <path d="M12 0.5L3.5 5.5v13l8.5 5 8.5-5v-13L12 0.5zm0 3.2l5.8 3.4-3.2 1.9-5.8-3.4 3.2-1.9zm-6.8 4.7l5.8 3.4v6.8l-5.8-3.4V8.4zm13.6 6.8l-5.8 3.4v-6.8l5.8-3.4v6.8z" />
+        </g>
+      );
+    case 'csharp':
+      return (
+        <g transform="translate(51.75, 6.5)">
+          <path d="M12 1L2 6.8v11.4L12 24l10-5.8V6.8L12 1z" fill="#9B4F96" stroke="white" strokeWidth="1.2"/>
+          <text x="12" y="16.5" fill="white" fontSize="11" fontWeight="900" fontFamily="sans-serif" textAnchor="middle">C#</text>
+        </g>
+      );
+    case 'webxr':
+      return (
+        <g transform="translate(50, 7)" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="1" y="4" width="22" height="13" rx="3.5" fill="rgba(255,255,255,0.15)"/>
+          <circle cx="7.5" cy="10.5" r="2.2" fill="white"/>
+          <circle cx="16.5" cy="10.5" r="2.2" fill="white"/>
+          <path d="M10 17c1-1 3-1 4 0"/>
+        </g>
+      );
+    case 'threejs':
+      return (
+        <g transform="translate(52, 6.5)" fill="none" stroke="white" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M11.5 1L1 21h21L11.5 1z" fill="rgba(255,255,255,0.18)"/>
+          <path d="M11.5 1v20M1 21l10.5-9.5L22 21"/>
+        </g>
+      );
+    case 'react':
+      return (
+        <g transform="translate(51.75, 6.5)" fill="none" stroke="#00D8FF" strokeWidth="1.4">
+          <ellipse cx="12" cy="12" rx="10.5" ry="4"/>
+          <ellipse cx="12" cy="12" rx="10.5" ry="4" transform="rotate(60 12 12)"/>
+          <ellipse cx="12" cy="12" rx="10.5" ry="4" transform="rotate(120 12 12)"/>
+          <circle cx="12" cy="12" r="2.2" fill="#00D8FF"/>
+        </g>
+      );
+    case 'typescript':
+      return (
+        <g transform="translate(51.75, 6.5)">
+          <rect width="24" height="24" rx="4" fill="#3178C6"/>
+          <text x="12" y="17" fill="white" fontSize="13" fontWeight="bold" fontFamily="sans-serif" textAnchor="middle">TS</text>
+        </g>
+      );
+    case 'nextjs':
+      return (
+        <g transform="translate(51.75, 6.5)">
+          <circle cx="12" cy="12" r="11.5" fill="black" stroke="white" strokeWidth="1.2"/>
+          <path d="M7.5 7v10h2.3v-5.8l6.2 5.8h1.8V7h-2.3v5.8L9.3 7H7.5z" fill="white"/>
+        </g>
+      );
+    case 'nodejs':
+      return (
+        <g transform="translate(51.75, 6.5)">
+          <path d="M12 1.5l9.5 5.5v11L12 23.5l-9.5-5.5v-11L12 1.5z" fill="#339933" stroke="white" strokeWidth="1"/>
+          <text x="12" y="16" fill="white" fontSize="11" fontWeight="900" fontFamily="sans-serif" textAnchor="middle">N</text>
+        </g>
+      );
+    case 'python':
+      return (
+        <g transform="translate(51.75, 6.5)">
+          <path d="M11.5 2c-4.5 0-4.2 2-4.2 2l.01 2.1h4.4v.7H4.8S2 6.4 2 11c0 4.5 2.5 4.3 2.5 4.3h1.4v-2.1s-.08-2.5 2.5-2.5h4.2s2.4.04 2.4-2.4V4.4s.36-2.4-3.8-2.4zm-1.2 1.3a.8.8 0 110 1.6.8.8 0 010-1.6z" fill="#387EB8"/>
+          <path d="M12.5 22c4.5 0 4.2-2 4.2-2l-.01-2.1h-4.4v-.7h6.9s2.8.4 2.8-4.2c0-4.5-2.5-4.3-2.5-4.3h-1.4v2.1s.08 2.5-2.5 2.5h-4.2s-2.4-.04-2.4 2.4v4.2s-.36 2.4 3.8 2.4zm1.2-1.3a.8.8 0 110-1.6.8.8 0 010 1.6z" fill="#FFE052"/>
+        </g>
+      );
+    case 'pytorch':
+      return (
+        <g transform="translate(51.75, 6.5)" fill="none">
+          <path d="M14.2 2.5a7.8 7.8 0 013.3 8.6 8 8 0 01-8.5 5.6A7.9 7.9 0 013 9.7a8 8 0 014.3-6.7l-.6 1.8a6.1 6.1 0 00-2.4 4.9 6.2 6.2 0 006.2 6.2 6.2 6.2 0 006.2-6.2 6 6 0 00-2.9-5.2l.4-2z" fill="#EE4C2C"/>
+          <circle cx="16.2" cy="3.5" r="1.4" fill="#EE4C2C"/>
+        </g>
+      );
+    case 'fastapi':
+      return (
+        <g transform="translate(51.75, 6.5)">
+          <circle cx="12" cy="12" r="11.5" fill="#059669" stroke="white" strokeWidth="1"/>
+          <path d="M13 3L5.5 13.5h5.5l-1 7.5 9-11H12.5L13 3z" fill="white"/>
+        </g>
+      );
+    case 'postgresql':
+      return (
+        <g transform="translate(51.75, 6.5)">
+          <circle cx="12" cy="12" r="11.5" fill="#336791" stroke="white" strokeWidth="1"/>
+          <text x="12" y="16.5" fill="white" fontSize="10" fontWeight="900" fontFamily="sans-serif" textAnchor="middle">SQL</text>
+        </g>
+      );
+    default:
+      return null;
+  }
+}
 
 /* Water Overlay for skill page — same looping blend as main menu */
 function SkillWaterOverlay() {
@@ -361,7 +461,29 @@ export default function SkillPage({ onBack, isExiting }) {
                   setActiveSkillIndex(sIdx);
                 }}
               >
-                <img src={skill.img} alt={skill.name} className="skill-card-img" />
+                <svg width="663" height="38" viewBox="0 0 663 38" fill="none" className="skill-card-svg">
+                  {/* Black Parallelogram Box on the left */}
+                  <path d="M19 1H125.5L110.5 36H0L19 1Z" fill="black" />
+
+                  {/* Tech Stack Logo inside the black box */}
+                  <SkillLogo logo={skill.logo} />
+
+                  {/* Skill / Tech Name */}
+                  <text
+                    x="145"
+                    y="19"
+                    dominantBaseline="central"
+                    fill={isSkillSelected ? '#000000' : '#72FFFF'}
+                    fontFamily="'Almarai', 'Archivo Black', 'Fira Sans Extra Condensed', sans-serif"
+                    fontWeight="800"
+                    fontSize="22px"
+                    letterSpacing="-0.03em"
+                    fontStyle="italic"
+                    style={{ transition: 'fill 0.15s ease' }}
+                  >
+                    {skill.name}
+                  </text>
+                </svg>
               </div>
             );
           })}
