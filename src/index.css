@@ -619,6 +619,51 @@ body {
   pointer-events: none;
 }
 
+/* Slow upward rise animation (~100px) when Skill page is opened */
+@keyframes protagonistSlowRise {
+  0% {
+    transform: translateY(0px);
+  }
+  100% {
+    transform: translateY(-100px);
+  }
+}
+
+/* Ambient underwater floating bobbing */
+@keyframes protagonistAmbientFloat {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(0.35deg);
+  }
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+}
+
+.skill-protagonist-rise {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  animation: protagonistSlowRise 9s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  will-change: transform;
+}
+
+.skill-protagonist-ambient {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  animation: protagonistAmbientFloat 4.2s ease-in-out infinite;
+  will-change: transform;
+}
+
 .skill-protagonist-vector {
   position: absolute;
   top: 0;

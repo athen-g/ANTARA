@@ -184,32 +184,36 @@ export default function SkillPage({ onBack }) {
 
       {/* 3. Protagonist Silhouette, Blinking Eye & Animated Hair Group */}
       <div className="skill-protagonist-wrapper skill-fall-elem">
-        {/* Base body without eye */}
-        <img
-          src="/skill/vector(without eye).svg"
-          alt="Protagonist Vector"
-          className="skill-protagonist-vector"
-        />
+        <div className="skill-protagonist-rise">
+          <div className="skill-protagonist-ambient">
+            {/* Base body without eye */}
+            <img
+              src="/skill/vector(without eye).svg"
+              alt="Protagonist Vector"
+              className="skill-protagonist-vector"
+            />
 
-        {/* 10-Frame Blinking Right Eye (Layered below hair, above protagonist) */}
-        <div className="skill-eye-container">
-          <img
-            src={EYE_FRAMES[eyeFrameIndex]}
-            alt="Eye Frame"
-            className="skill-eye-frame"
-          />
-        </div>
+            {/* 10-Frame Blinking Right Eye (Layered below hair, above protagonist) */}
+            <div className="skill-eye-container">
+              <img
+                src={EYE_FRAMES[eyeFrameIndex]}
+                alt="Eye Frame"
+                className="skill-eye-frame"
+              />
+            </div>
 
-        {/* Animated Hair Group with organic wave effect (Layered on top of eye) */}
-        <div className="skill-animated-hair-group">
-          {/* Dark Blue Hair Piece */}
-          <div className="skill-dark-blue-hair">
-            <img src="/skill/dark-blue-hair.svg" alt="Dark Blue Hair" />
-          </div>
+            {/* Animated Hair Group with organic wave effect (Layered on top of eye) */}
+            <div className="skill-animated-hair-group">
+              {/* Dark Blue Hair Piece */}
+              <div className="skill-dark-blue-hair">
+                <img src="/skill/dark-blue-hair.svg" alt="Dark Blue Hair" />
+              </div>
 
-          {/* Light Blue Hair Piece */}
-          <div className="skill-light-blue-hair">
-            <img src="/skill/light-blue-hair.svg" alt="Light Blue Hair" />
+              {/* Light Blue Hair Piece */}
+              <div className="skill-light-blue-hair">
+                <img src="/skill/light-blue-hair.svg" alt="Light Blue Hair" />
+              </div>
+            </div>
           </div>
         </div>
       </div>
