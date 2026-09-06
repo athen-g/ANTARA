@@ -706,13 +706,19 @@ body {
 /* Ambient underwater floating buoyancy bobbing */
 @keyframes slowAmbientFloat {
   0% {
-    transform: translateY(0px) rotate(0deg);
+    transform: translate(0px, 0px) rotate(0deg);
+  }
+  30% {
+    transform: translate(3px, -15px) rotate(0.8deg);
   }
   50% {
-    transform: translateY(-8px) rotate(0.3deg);
+    transform: translate(0px, -24px) rotate(0.3deg);
+  }
+  75% {
+    transform: translate(-3px, -12px) rotate(-0.6deg);
   }
   100% {
-    transform: translateY(0px) rotate(0deg);
+    transform: translate(0px, 0px) rotate(0deg);
   }
 }
 
@@ -734,7 +740,7 @@ body {
   width: 100%;
   height: 100%;
   pointer-events: none;
-  animation: slowAmbientFloat 6.5s ease-in-out infinite;
+  animation: slowAmbientFloat 5s ease-in-out infinite;
   will-change: transform;
 }
 
