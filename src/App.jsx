@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import SkillPage from './components/SkillPage';
+import UnderConstructionPage from './components/UnderConstructionPage';
 import DoubleCircleTransition from './components/DoubleCircleTransition';
 
 /* ── 16:9 Viewport Scaler Hook ── */
@@ -189,8 +190,9 @@ function App() {
   const [introComplete, setIntroComplete] = useState(false);
   const [menuFadeIn, setMenuFadeIn] = useState(false);
 
-  // View state: 'menu' | 'skill'
+  // View state: 'menu' | 'skill' | 'construction'
   const [viewState, setViewState] = useState('menu');
+  const [selectedMenuName, setSelectedMenuName] = useState('SKILL');
 
   const handleFadeStart = useCallback(() => setMenuFadeIn(true), []);
   const handleIntroComplete = useCallback(() => { setIntroComplete(true); setMenuFadeIn(true); }, []);
@@ -221,8 +223,13 @@ function App() {
   const handleConfirm = useCallback(() => {
     if (viewState !== 'menu' || isExitingToMenu) return;
     const currentOption = menuOptions[activeIndex];
-    if (currentOption && currentOption.name === 'SKILL') {
-      setViewState('skill');
+    if (currentOption) {
+      if (currentOption.name === 'SKILL') {
+        setViewState('skill');
+      } else {
+        setSelectedMenuName(currentOption.name);
+        setViewState('construction');
+      }
     }
   }, [viewState, isExitingToMenu, activeIndex]);
 
@@ -384,8 +391,15 @@ function App() {
       >
         <div id="app" className={`app-root view-${viewState}`}>
           {(viewState === 'menu' || isExitingToMenu) && renderMainMenuContent()}
-          {(viewState === 'skill' || isExitingToMenu) && (
+          {(viewState === 'skill' || (isExitingToMenu && viewState === 'skill')) && (
             <SkillPage onBack={handleBackToMenu} isExiting={isExitingToMenu} />
+          )}
+          {(viewState === 'construction' || (isExitingToMenu && viewState === 'construction')) && (
+            <UnderConstructionPage
+              title={selectedMenuName}
+              onBack={handleBackToMenu}
+              isExiting={isExitingToMenu}
+            />
           )}
         </div>
       </div>
