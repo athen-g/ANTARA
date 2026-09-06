@@ -182,7 +182,7 @@ export default function SkillPage({ onBack }) {
         </div>
       </div>
 
-      {/* 3. Protagonist Silhouette & 10-Frame Blinking Eye Group */}
+      {/* 3. Protagonist Silhouette, Animated Hair Group & 10-Frame Blinking Eye Group */}
       <div className="skill-protagonist-wrapper skill-fall-elem">
         {/* Base body without eye */}
         <img
@@ -190,6 +190,19 @@ export default function SkillPage({ onBack }) {
           alt="Protagonist Vector"
           className="skill-protagonist-vector"
         />
+
+        {/* Animated Hair Group with organic wave effect */}
+        <div className="skill-animated-hair-group">
+          {/* Dark Blue Hair Piece */}
+          <div className="skill-dark-blue-hair">
+            <img src="/skill/dark-blue-hair.svg" alt="Dark Blue Hair" />
+          </div>
+
+          {/* Light Blue Hair Piece */}
+          <div className="skill-light-blue-hair">
+            <img src="/skill/light-blue-hair.svg" alt="Light Blue Hair" />
+          </div>
+        </div>
 
         {/* 10-Frame Blinking Right Eye */}
         <div className="skill-eye-container">

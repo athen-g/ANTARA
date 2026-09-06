@@ -608,7 +608,7 @@ body {
   overflow: visible;
 }
 
-/* 4. Protagonist Silhouette & Eye Group */
+/* 4. Protagonist Silhouette, Animated Hair Group & Eye Group */
 .skill-protagonist-wrapper {
   position: absolute;
   left: 561.5px;
@@ -628,6 +628,65 @@ body {
   display: block;
 }
 
+/* Organic hair wave animation for Skill menu */
+@keyframes skillHairWave {
+  0% {
+    transform: translate(0px, 0px) rotate(0deg) scale(1) skewX(0deg);
+  }
+  28% {
+    transform: translate(-3px, -2px) rotate(0.6deg) scale(1.008, 1.006) skewX(-0.5deg);
+  }
+  64% {
+    transform: translate(2px, 1.5px) rotate(-0.5deg) scale(0.996, 1.004) skewX(0.4deg);
+  }
+  100% {
+    transform: translate(0px, 0px) rotate(0deg) scale(1) skewX(0deg);
+  }
+}
+
+.skill-animated-hair-group {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+  animation: skillHairWave 5s ease-in-out infinite;
+  transform-origin: 500px 930px;
+  will-change: transform;
+}
+
+.skill-dark-blue-hair {
+  position: absolute;
+  left: 326px;
+  top: 812.5px;
+  width: 360px;
+  height: 277px;
+  pointer-events: none;
+}
+
+.skill-dark-blue-hair img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.skill-light-blue-hair {
+  position: absolute;
+  left: 580px;
+  top: 843px;
+  width: 145px;
+  height: 206px;
+  pointer-events: none;
+}
+
+.skill-light-blue-hair img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
 /* 10-Frame Blinking Right Eye overlay over vector eye socket */
 .skill-eye-container {
   position: absolute;
@@ -635,7 +694,7 @@ body {
   top: 934px;
   width: 34.67px;
   height: 28px;
-  z-index: 4;
+  z-index: 5;
   pointer-events: none;
 }
 
