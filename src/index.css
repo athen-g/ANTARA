@@ -625,6 +625,7 @@ body {
   left: 0;
   width: 725px;
   height: 1075px;
+  z-index: 1;
   display: block;
 }
 
@@ -650,7 +651,7 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 2;
+  z-index: 3;
   pointer-events: none;
   animation: skillHairWave 5s ease-in-out infinite;
   transform-origin: 500px 930px;
@@ -687,14 +688,14 @@ body {
   display: block;
 }
 
-/* 10-Frame Blinking Right Eye overlay over vector eye socket */
+/* 10-Frame Blinking Right Eye overlay over vector eye socket (layered below hair, above protagonist) */
 .skill-eye-container {
   position: absolute;
   left: 527px;
   top: 934px;
   width: 34.67px;
   height: 28px;
-  z-index: 5;
+  z-index: 2;
   pointer-events: none;
 }
 
