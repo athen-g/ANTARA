@@ -172,7 +172,11 @@ export default function SkillPage({ onBack }) {
 
       {/* 1. Protagonist Shadow Silhouette */}
       <div className="skill-shadow-layer skill-fall-elem">
-        <img src="/skill/shadow.svg" alt="Shadow" className="skill-shadow-img" />
+        <div className="skill-slow-rise">
+          <div className="skill-ambient-float">
+            <img src="/skill/shadow.svg" alt="Shadow" className="skill-shadow-img" />
+          </div>
+        </div>
       </div>
 
       {/* 2. Tilted Deep Blue Polygon Background */}
@@ -184,8 +188,8 @@ export default function SkillPage({ onBack }) {
 
       {/* 3. Protagonist Silhouette, Blinking Eye & Animated Hair Group */}
       <div className="skill-protagonist-wrapper skill-fall-elem">
-        <div className="skill-protagonist-rise">
-          <div className="skill-protagonist-ambient">
+        <div className="skill-slow-rise">
+          <div className="skill-ambient-float">
             {/* Base body without eye */}
             <img
               src="/skill/vector(without eye).svg"
@@ -245,19 +249,23 @@ export default function SkillPage({ onBack }) {
       </div>
 
       {/* 6. Rotating Lens Flare Light Rays around the Evoker */}
-      <div className="skill-rays-wrapper">
-        <img
-          key={raysSpinKey}
-          src="/skill/rays.svg"
-          alt="Light Rays"
-          className={`skill-rays-img ${
-            raysSpinType === 'forward'
-              ? 'skill-rays-project-spin'
-              : raysSpinType === 'reverse'
-              ? 'skill-rays-reverse-spin'
-              : 'skill-rays-initial-spin'
-          }`}
-        />
+      <div className="skill-rays-wrapper skill-fall-elem">
+        <div className="skill-slow-rise">
+          <div className="skill-ambient-float">
+            <img
+              key={raysSpinKey}
+              src="/skill/rays.svg"
+              alt="Light Rays"
+              className={`skill-rays-img ${
+                raysSpinType === 'forward'
+                  ? 'skill-rays-project-spin'
+                  : raysSpinType === 'reverse'
+                  ? 'skill-rays-reverse-spin'
+                  : 'skill-rays-initial-spin'
+              }`}
+            />
+          </div>
+        </div>
       </div>
 
       {/* 7. Left Project Ribbon Banners (Project 1, 2, 3) */}

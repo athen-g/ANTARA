@@ -619,8 +619,8 @@ body {
   pointer-events: none;
 }
 
-/* Slow upward rise animation (~100px) when Skill page is opened */
-@keyframes protagonistSlowRise {
+/* Very slow graceful upward rise animation (~100px) when Skill page is opened */
+@keyframes slowFloatRise {
   0% {
     transform: translateY(0px);
   }
@@ -629,38 +629,38 @@ body {
   }
 }
 
-/* Ambient underwater floating bobbing */
-@keyframes protagonistAmbientFloat {
+/* Ambient underwater floating buoyancy bobbing */
+@keyframes slowAmbientFloat {
   0% {
     transform: translateY(0px) rotate(0deg);
   }
   50% {
-    transform: translateY(-8px) rotate(0.35deg);
+    transform: translateY(-8px) rotate(0.3deg);
   }
   100% {
     transform: translateY(0px) rotate(0deg);
   }
 }
 
-.skill-protagonist-rise {
+.skill-slow-rise {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   pointer-events: none;
-  animation: protagonistSlowRise 9s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  animation: slowFloatRise 32s cubic-bezier(0.15, 0.85, 0.25, 1) forwards;
   will-change: transform;
 }
 
-.skill-protagonist-ambient {
+.skill-ambient-float {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   pointer-events: none;
-  animation: protagonistAmbientFloat 4.2s ease-in-out infinite;
+  animation: slowAmbientFloat 4.8s ease-in-out infinite;
   will-change: transform;
 }
 
