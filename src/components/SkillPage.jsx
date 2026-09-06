@@ -13,16 +13,24 @@ const EYE_FRAMES = [
   '/skill/eye-right-9.svg'  // Frame 10: Fully reopened
 ];
 
+const BASE_ITEM_TOP = 156;
+const BASE_SELECTOR_TOP = 131;
+const ITEM_HEIGHT_STEP = 55;
+const SLANT_STEP = 7.5;
+const BASE_ITEM_LEFT = 1123.5;
+const BASE_SELECTOR_LEFT = 1076;
+
 const PROJECTS = [
   {
     id: 0,
-    name: 'Hyperspace XR SIG',
+    name: 'Hyperspace SIG Website',
     top: 471,
     skills: [
-      { id: 0, name: 'UNITY', logo: 'unity', selectorTop: 131, itemTop: 156 },
-      { id: 1, name: 'C#', logo: 'csharp', selectorTop: 186, itemTop: 211 },
-      { id: 2, name: 'WEBXR', logo: 'webxr', selectorTop: 241, itemTop: 266 },
-      { id: 3, name: 'THREE.JS', logo: 'threejs', selectorTop: 296, itemTop: 321 }
+      { id: 0, name: 'REACT', logo: 'react' },
+      { id: 1, name: 'TYPESCRIPT', logo: 'typescript' },
+      { id: 2, name: 'VITE', logo: 'vite' },
+      { id: 3, name: 'SUPABASE', logo: 'supabase' },
+      { id: 4, name: 'POSTGRESQL', logo: 'postgresql' }
     ]
   },
   {
@@ -30,10 +38,11 @@ const PROJECTS = [
     name: 'FutureU',
     top: 566,
     skills: [
-      { id: 0, name: 'REACT', logo: 'react', selectorTop: 131, itemTop: 156 },
-      { id: 1, name: 'TYPESCRIPT', logo: 'typescript', selectorTop: 186, itemTop: 211 },
-      { id: 2, name: 'NEXT.JS', logo: 'nextjs', selectorTop: 241, itemTop: 266 },
-      { id: 3, name: 'NODE.JS', logo: 'nodejs', selectorTop: 296, itemTop: 321 }
+      { id: 0, name: 'REACT', logo: 'react' },
+      { id: 1, name: 'JAVASCRIPT / TYPESCRIPT', logo: 'js_ts' },
+      { id: 2, name: 'CODE SPLITTING', logo: 'codesplit' },
+      { id: 3, name: 'LAZY LOADING', logo: 'lazyload' },
+      { id: 4, name: 'PERFORMANCE OPTIMIZATION', logo: 'perf' }
     ]
   },
   {
@@ -41,45 +50,20 @@ const PROJECTS = [
     name: 'unimark',
     top: 656,
     skills: [
-      { id: 0, name: 'PYTHON', logo: 'python', selectorTop: 131, itemTop: 156 },
-      { id: 1, name: 'PYTORCH', logo: 'pytorch', selectorTop: 186, itemTop: 211 },
-      { id: 2, name: 'FASTAPI', logo: 'fastapi', selectorTop: 241, itemTop: 266 },
-      { id: 3, name: 'POSTGRESQL', logo: 'postgresql', selectorTop: 296, itemTop: 321 }
+      { id: 0, name: 'NEXT.JS', logo: 'nextjs' },
+      { id: 1, name: 'REACT', logo: 'react' },
+      { id: 2, name: 'TYPESCRIPT', logo: 'typescript' },
+      { id: 3, name: 'GRAPHQL', logo: 'graphql' },
+      { id: 4, name: 'REST APIS', logo: 'restapi' },
+      { id: 5, name: 'MYSQL', logo: 'mysql' },
+      { id: 6, name: 'JWT', logo: 'jwt' },
+      { id: 7, name: 'BCRYPT', logo: 'bcrypt' }
     ]
   }
 ];
 
 function SkillLogo({ logo }) {
   switch (logo) {
-    case 'unity':
-      return (
-        <g transform="translate(51.75, 6.5)" fill="white">
-          <path d="M12 0.5L3.5 5.5v13l8.5 5 8.5-5v-13L12 0.5zm0 3.2l5.8 3.4-3.2 1.9-5.8-3.4 3.2-1.9zm-6.8 4.7l5.8 3.4v6.8l-5.8-3.4V8.4zm13.6 6.8l-5.8 3.4v-6.8l5.8-3.4v6.8z" />
-        </g>
-      );
-    case 'csharp':
-      return (
-        <g transform="translate(51.75, 6.5)">
-          <path d="M12 1L2 6.8v11.4L12 24l10-5.8V6.8L12 1z" fill="#9B4F96" stroke="white" strokeWidth="1.2"/>
-          <text x="12" y="16.5" fill="white" fontSize="11" fontWeight="900" fontFamily="sans-serif" textAnchor="middle">C#</text>
-        </g>
-      );
-    case 'webxr':
-      return (
-        <g transform="translate(50, 7)" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-          <rect x="1" y="4" width="22" height="13" rx="3.5" fill="rgba(255,255,255,0.15)"/>
-          <circle cx="7.5" cy="10.5" r="2.2" fill="white"/>
-          <circle cx="16.5" cy="10.5" r="2.2" fill="white"/>
-          <path d="M10 17c1-1 3-1 4 0"/>
-        </g>
-      );
-    case 'threejs':
-      return (
-        <g transform="translate(52, 6.5)" fill="none" stroke="white" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M11.5 1L1 21h21L11.5 1z" fill="rgba(255,255,255,0.18)"/>
-          <path d="M11.5 1v20M1 21l10.5-9.5L22 21"/>
-        </g>
-      );
     case 'react':
       return (
         <g transform="translate(51.75, 6.5)" fill="none" stroke="#00D8FF" strokeWidth="1.4">
@@ -96,6 +80,61 @@ function SkillLogo({ logo }) {
           <text x="12" y="17" fill="white" fontSize="13" fontWeight="bold" fontFamily="sans-serif" textAnchor="middle">TS</text>
         </g>
       );
+    case 'vite':
+      return (
+        <g transform="translate(51.75, 6.5)">
+          <path d="M22.5 3.5l-10 19-10-19 8.5 2.5 1.5 6 1.5-6 8.5-2.5z" fill="#646CFF" stroke="white" strokeWidth="0.8"/>
+          <path d="M15.5 2.5L8 14h5l-2 7.5 9-11h-5.5l1-8z" fill="#FFD62E"/>
+        </g>
+      );
+    case 'supabase':
+      return (
+        <g transform="translate(51.75, 6.5)">
+          <rect width="24" height="24" rx="4" fill="#1C1C1C" stroke="#3ECF8E" strokeWidth="1"/>
+          <path d="M13.5 2.5L3.5 14.5h8.5l-1.5 7 10-12h-8.5l1.5-7z" fill="#3ECF8E"/>
+        </g>
+      );
+    case 'postgresql':
+      return (
+        <g transform="translate(51.75, 6.5)">
+          <circle cx="12" cy="12" r="11.5" fill="#336791" stroke="white" strokeWidth="1"/>
+          <text x="12" y="16.5" fill="white" fontSize="9.5" fontWeight="900" fontFamily="sans-serif" textAnchor="middle">SQL</text>
+        </g>
+      );
+    case 'js_ts':
+      return (
+        <g transform="translate(51.75, 6.5)">
+          <rect width="11.5" height="24" rx="3" fill="#F7DF1E"/>
+          <rect x="12.5" width="11.5" height="24" rx="3" fill="#3178C6"/>
+          <text x="5.75" y="16" fill="black" fontSize="9" fontWeight="900" fontFamily="sans-serif" textAnchor="middle">JS</text>
+          <text x="18.25" y="16" fill="white" fontSize="9" fontWeight="900" fontFamily="sans-serif" textAnchor="middle">TS</text>
+        </g>
+      );
+    case 'codesplit':
+      return (
+        <g transform="translate(51.75, 6.5)" fill="none" stroke="#60A5FA" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="1" y="2" width="9" height="9" rx="2" fill="rgba(96,165,250,0.3)"/>
+          <rect x="14" y="2" width="9" height="9" rx="2" fill="rgba(96,165,250,0.3)"/>
+          <rect x="7.5" y="14" width="9" height="9" rx="2" fill="#60A5FA"/>
+          <path d="M5.5 11v1.5a1.5 1.5 0 001.5 1.5h1M18.5 11v1.5a1.5 1.5 0 01-1.5 1.5h-1"/>
+        </g>
+      );
+    case 'lazyload':
+      return (
+        <g transform="translate(51.75, 6.5)" fill="none" stroke="#F59E0B" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="10" stroke="#F59E0B" strokeDasharray="3 3"/>
+          <polyline points="12 7 12 12 15.5 14" stroke="white" strokeWidth="1.8"/>
+          <circle cx="12" cy="12" r="1.5" fill="white"/>
+        </g>
+      );
+    case 'perf':
+      return (
+        <g transform="translate(51.75, 6.5)" fill="none" stroke="#10B981" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M3 16a9.5 9.5 0 1118 0" stroke="white" strokeWidth="1.8"/>
+          <path d="M12 13l4-5" stroke="#10B981" strokeWidth="2.2"/>
+          <circle cx="12" cy="13" r="2" fill="#10B981"/>
+        </g>
+      );
     case 'nextjs':
       return (
         <g transform="translate(51.75, 6.5)">
@@ -103,39 +142,47 @@ function SkillLogo({ logo }) {
           <path d="M7.5 7v10h2.3v-5.8l6.2 5.8h1.8V7h-2.3v5.8L9.3 7H7.5z" fill="white"/>
         </g>
       );
-    case 'nodejs':
+    case 'graphql':
       return (
-        <g transform="translate(51.75, 6.5)">
-          <path d="M12 1.5l9.5 5.5v11L12 23.5l-9.5-5.5v-11L12 1.5z" fill="#339933" stroke="white" strokeWidth="1"/>
-          <text x="12" y="16" fill="white" fontSize="11" fontWeight="900" fontFamily="sans-serif" textAnchor="middle">N</text>
+        <g transform="translate(51.75, 6.5)" fill="none" stroke="#E535AB" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+          <polygon points="12,2 22,7.8 22,19.2 12,25 2,19.2 2,7.8" fill="rgba(229,53,171,0.15)"/>
+          <circle cx="12" cy="2" r="1.8" fill="#E535AB"/>
+          <circle cx="22" cy="7.8" r="1.8" fill="#E535AB"/>
+          <circle cx="22" cy="19.2" r="1.8" fill="#E535AB"/>
+          <circle cx="12" cy="25" r="1.8" fill="#E535AB"/>
+          <circle cx="2" cy="19.2" r="1.8" fill="#E535AB"/>
+          <circle cx="2" cy="7.8" r="1.8" fill="#E535AB"/>
+          <polygon points="12,6.5 18,17 6,17"/>
         </g>
       );
-    case 'python':
+    case 'restapi':
       return (
         <g transform="translate(51.75, 6.5)">
-          <path d="M11.5 2c-4.5 0-4.2 2-4.2 2l.01 2.1h4.4v.7H4.8S2 6.4 2 11c0 4.5 2.5 4.3 2.5 4.3h1.4v-2.1s-.08-2.5 2.5-2.5h4.2s2.4.04 2.4-2.4V4.4s.36-2.4-3.8-2.4zm-1.2 1.3a.8.8 0 110 1.6.8.8 0 010-1.6z" fill="#387EB8"/>
-          <path d="M12.5 22c4.5 0 4.2-2 4.2-2l-.01-2.1h-4.4v-.7h6.9s2.8.4 2.8-4.2c0-4.5-2.5-4.3-2.5-4.3h-1.4v2.1s.08 2.5-2.5 2.5h-4.2s-2.4-.04-2.4 2.4v4.2s-.36 2.4 3.8 2.4zm1.2-1.3a.8.8 0 110-1.6.8.8 0 010 1.6z" fill="#FFE052"/>
+          <rect width="24" height="24" rx="4" fill="#009688"/>
+          <text x="12" y="16.5" fill="white" fontSize="9" fontWeight="900" fontFamily="sans-serif" textAnchor="middle" letterSpacing="-0.5px">REST</text>
         </g>
       );
-    case 'pytorch':
-      return (
-        <g transform="translate(51.75, 6.5)" fill="none">
-          <path d="M14.2 2.5a7.8 7.8 0 013.3 8.6 8 8 0 01-8.5 5.6A7.9 7.9 0 013 9.7a8 8 0 014.3-6.7l-.6 1.8a6.1 6.1 0 00-2.4 4.9 6.2 6.2 0 006.2 6.2 6.2 6.2 0 006.2-6.2 6 6 0 00-2.9-5.2l.4-2z" fill="#EE4C2C"/>
-          <circle cx="16.2" cy="3.5" r="1.4" fill="#EE4C2C"/>
-        </g>
-      );
-    case 'fastapi':
+    case 'mysql':
       return (
         <g transform="translate(51.75, 6.5)">
-          <circle cx="12" cy="12" r="11.5" fill="#059669" stroke="white" strokeWidth="1"/>
-          <path d="M13 3L5.5 13.5h5.5l-1 7.5 9-11H12.5L13 3z" fill="white"/>
+          <rect width="24" height="24" rx="4" fill="#00758F"/>
+          <text x="12" y="16.5" fill="#F29111" fontSize="9" fontWeight="900" fontFamily="sans-serif" textAnchor="middle" letterSpacing="-0.5px">MySQL</text>
         </g>
       );
-    case 'postgresql':
+    case 'jwt':
       return (
         <g transform="translate(51.75, 6.5)">
-          <circle cx="12" cy="12" r="11.5" fill="#336791" stroke="white" strokeWidth="1"/>
-          <text x="12" y="16.5" fill="white" fontSize="10" fontWeight="900" fontFamily="sans-serif" textAnchor="middle">SQL</text>
+          <rect width="24" height="24" rx="4" fill="#D63AFF"/>
+          <text x="12" y="16.5" fill="white" fontSize="10" fontWeight="900" fontFamily="sans-serif" textAnchor="middle">JWT</text>
+        </g>
+      );
+    case 'bcrypt':
+      return (
+        <g transform="translate(51.75, 6.5)" fill="none" stroke="#FFB300" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="3" y="10" width="18" height="12" rx="2.5" fill="#FFB300"/>
+          <path d="M7 10V6a5 5 0 0110 0v4" stroke="white" strokeWidth="2"/>
+          <circle cx="12" cy="15.5" r="1.5" fill="black"/>
+          <path d="M12 17v2.5" stroke="black" strokeWidth="1.5"/>
         </g>
       );
     default:
@@ -437,7 +484,8 @@ export default function SkillPage({ onBack, isExiting }) {
         <div
           className={`skill-selector-envelope ${navMode === 'skill' ? 'active' : 'inactive'}`}
           style={{
-            top: `${currentSkills[activeSkillIndex]?.selectorTop || 131}px`
+            top: `${BASE_SELECTOR_TOP + activeSkillIndex * ITEM_HEIGHT_STEP}px`,
+            left: `${BASE_SELECTOR_LEFT - activeSkillIndex * SLANT_STEP}px`
           }}
         >
           <img
@@ -454,8 +502,11 @@ export default function SkillPage({ onBack, isExiting }) {
             return (
               <div
                 key={skill.id}
-                className={`skill-card-item skill-card-${sIdx + 1} ${isSkillSelected ? 'selected-skill' : ''}`}
-                style={{ top: `${skill.itemTop}px` }}
+                className={`skill-card-item ${isSkillSelected ? 'selected-skill' : ''}`}
+                style={{
+                  top: `${BASE_ITEM_TOP + sIdx * ITEM_HEIGHT_STEP}px`,
+                  left: `${BASE_ITEM_LEFT - sIdx * SLANT_STEP}px`
+                }}
                 onClick={() => {
                   setNavMode('skill');
                   setActiveSkillIndex(sIdx);
@@ -476,7 +527,7 @@ export default function SkillPage({ onBack, isExiting }) {
                     fill={isSkillSelected ? '#000000' : '#72FFFF'}
                     fontFamily="'Almarai', 'Archivo Black', 'Fira Sans Extra Condensed', sans-serif"
                     fontWeight="800"
-                    fontSize="22px"
+                    fontSize={skill.name.length > 20 ? '16px' : skill.name.length > 14 ? '19px' : '22px'}
                     letterSpacing="-0.03em"
                     fontStyle="italic"
                     style={{ transition: 'fill 0.15s ease' }}
