@@ -16,7 +16,6 @@ const EYE_FRAMES = [
 const BASE_ITEM_TOP = 156;
 const BASE_SELECTOR_TOP = 131;
 const ITEM_HEIGHT_STEP = 55;
-const SLANT_STEP = 7.5;
 const BASE_ITEM_LEFT = 1123.5;
 const BASE_SELECTOR_LEFT = 1076;
 
@@ -485,7 +484,7 @@ export default function SkillPage({ onBack, isExiting }) {
           className={`skill-selector-envelope ${navMode === 'skill' ? 'active' : 'inactive'}`}
           style={{
             top: `${BASE_SELECTOR_TOP + activeSkillIndex * ITEM_HEIGHT_STEP}px`,
-            left: `${BASE_SELECTOR_LEFT - activeSkillIndex * SLANT_STEP}px`
+            left: `${BASE_SELECTOR_LEFT}px`
           }}
         >
           <img
@@ -505,7 +504,7 @@ export default function SkillPage({ onBack, isExiting }) {
                 className={`skill-card-item ${isSkillSelected ? 'selected-skill' : ''}`}
                 style={{
                   top: `${BASE_ITEM_TOP + sIdx * ITEM_HEIGHT_STEP}px`,
-                  left: `${BASE_ITEM_LEFT - sIdx * SLANT_STEP}px`
+                  left: `${BASE_ITEM_LEFT}px`
                 }}
                 onClick={() => {
                   setNavMode('skill');

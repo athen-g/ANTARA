@@ -1027,27 +1027,12 @@ body {
 
 .skill-card-item {
   position: absolute;
+  left: 1123.5px;
   width: 662.5px;
   height: 38px;
   cursor: pointer;
   pointer-events: auto;
   transition: transform 0.15s ease;
-}
-
-.skill-card-1 {
-  left: 1123.5px;
-}
-
-.skill-card-2 {
-  left: 1116px;
-}
-
-.skill-card-3 {
-  left: 1108.5px;
-}
-
-.skill-card-4 {
-  left: 1101px;
 }
 
 .skill-card-svg {
