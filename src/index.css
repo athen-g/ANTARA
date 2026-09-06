@@ -693,13 +693,16 @@ body {
   pointer-events: none;
 }
 
-/* Very slow graceful upward rise animation (~100px) when Skill page is opened */
+/* Very slow graceful upward macro ocean swell & descent cycle (~100px) */
 @keyframes slowFloatRise {
   0% {
-    transform: translateY(0px);
+    transform: translate3d(0px, 0px, 0);
+  }
+  50% {
+    transform: translate3d(0px, -100px, 0);
   }
   100% {
-    transform: translateY(-100px);
+    transform: translate3d(0px, 0px, 0);
   }
 }
 
@@ -723,7 +726,7 @@ body {
   width: 100%;
   height: 100%;
   pointer-events: none;
-  animation: slowFloatRise 80s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
+  animation: slowFloatRise 75s cubic-bezier(0.42, 0, 0.58, 1) infinite;
   will-change: transform;
 }
 
